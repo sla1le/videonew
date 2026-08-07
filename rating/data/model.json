@@ -1,0 +1,47 @@
+{
+  "_note": "Единая конфигурация всех движков ECHORATE. Формулы и веса публикуются в выпусках.",
+  "version": "4.0",
+  "rounding": "floor(x + 0.5)",
+  "clamp": [30, 99],
+  "stat_order": ["T", "S", "D", "H", "L", "I"],
+  "stat_labels": {"T": "ТЕКСТЫ", "S": "ЗВУК", "D": "ПОДАЧА", "H": "ХИТЫ", "L": "ЛАЙВЫ", "I": "ВЛИЯНИЕ"},
+  "position_labels": {
+    "ST": "хитмейкер", "CAM": "текстовик", "CM": "связующий", "CDM": "продакшн",
+    "LW": "эксперимент", "RW": "эксперимент", "CB": "старая гвардия", "REF": "судья"
+  },
+  "league_weights": {
+    "ST":  {"T": 0.10, "S": 0.10, "D": 0.20, "H": 0.30, "L": 0.20, "I": 0.10},
+    "CAM": {"T": 0.25, "S": 0.10, "D": 0.15, "H": 0.15, "L": 0.15, "I": 0.20},
+    "CM":  {"T": 0.15, "S": 0.15, "D": 0.20, "H": 0.20, "L": 0.10, "I": 0.20},
+    "CDM": {"T": 0.10, "S": 0.25, "D": 0.15, "H": 0.15, "L": 0.10, "I": 0.25},
+    "LW":  {"T": 0.10, "S": 0.25, "D": 0.15, "H": 0.20, "L": 0.10, "I": 0.20},
+    "RW":  {"T": 0.10, "S": 0.25, "D": 0.15, "H": 0.20, "L": 0.10, "I": 0.20},
+    "CB":  {"T": 0.15, "S": 0.10, "D": 0.15, "H": 0.20, "L": 0.20, "I": 0.20}
+  },
+  "referee_formulas": {
+    "REACH": "70 + 6 * log2(subscribers / 300000)",
+    "TENURE": "70 + 8 * log2(years / 3)",
+    "RECOGNITION": "70 + 6 * log2(likes / 5000)"
+  },
+  "season_weights": {"T": 0.15, "S": 0.15, "D": 0.15, "H": 0.25, "I": 0.30},
+  "season_outside_top10": 62,
+  "season_role_penalty": {"lead": 0, "colead": -3, "guest": -9},
+  "season_vote_bonus_max_rank": 5,
+  "season_tiebreak_threshold": 1.0,
+  "season_cutoff": "Все официальные итоги сезона, опубликованные до 31 января следующего года",
+  "age_bonus": [[21, 8], [24, 6], [27, 4], [30, 2], [33, 1]],
+  "age_bonus_default": 0,
+  "age_bonus_unknown": 2,
+  "form_bonus": {"up_threshold": 10, "up": 3, "down_threshold": -10, "down": -2},
+  "price": {
+    "_formula": "ЦЕНА = 3 * 2^((OVR - 55) / 5) * (1 + (ПОТЕНЦИАЛ - OVR) / 40)",
+    "base": 3.0, "pivot": 55.0, "halving": 5.0, "potential_divisor": 40.0,
+    "budget_mln": 200, "currency": "EUR", "squad_size": 3, "distinct_positions": true
+  },
+  "wonderkid": {"max_age": 24, "min_gap": 4},
+  "hidden": {"min_gap": 8, "_formula": "РАЗРЫВ = (ТЕКСТЫ + ЗВУК + ПОДАЧА) / 3 - (ХИТЫ + ВЛИЯНИЕ) / 2"},
+  "rookie": {"max_years_since_debut": 1, "max_age": 26},
+  "icon": {"min_years_since_debut": 10},
+  "puskas": {"jury_weight": 0.5, "vote_weight": 0.5, "nominees": 5},
+  "toty": {"slots": ["ST", "LW", "RW", "CAM", "CM", "CDM", "CB"], "scheme": "3-3-1"}
+}
