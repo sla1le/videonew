@@ -1,14 +1,141 @@
 {
-  "_note": "Справочник артистов. Любая цифра обязана иметь src. Нет источника - нет цифры на кадре.",
-  "snapshot": "2026-08-06",
+  "_note": "Единственный источник правды по артистам. До версии 4.0 те же цифры дублировались в echorate.py и расходились.",
+  "version": "4.0",
+  "snapshot": "2026-08-07",
+  "accuracy_scale": {
+    "A": "все три источника проверены и свежие",
+    "B": "источники есть, один из них оценочный или старше полугода",
+    "C": "есть цифра под вопросом, в выпуске пометка обязательна"
+  },
   "artists": [
-    {"key":"kreed","name":"ЕГОР КРИД","pos":"ST","real":"Егор Булаткин","born":"1994-06-25","crew":null,"spotify_total":639305028,"spotify_lead":503968095,"monthly":1644896,"catalog":639305028,"top5":190000000,"cap":80000,"cities":10,"scene":4,"form":0,"venue":"Лужники","spotify_id":null,"src":["kworb Spotify snapshot 2026-08-06","Лужники 10-11.07.2026"],"accuracy":"A"},
-    {"key":"buda","name":"OG BUDA","pos":"CM","real":"Григорий Ляхов","born":"1994-01-10","crew":"RANDOM CREW","spotify_total":642755820,"spotify_lead":464304452,"monthly":607612,"catalog":642755820,"top5":107000000,"cap":10000,"cities":5,"scene":3,"form":0,"venue":null,"spotify_id":"4HVffUWlHdRmS5dpOvDVyJ","src":["kworb Spotify snapshot 2026-08-06","RANDOM FEST is a Random Crew festival"],"accuracy":"A"},
-    {"key":"kai","name":"KAI ANGEL","pos":"CDM","real":"Дмитрий Ицков","born":"1997-02-04","crew":null,"spotify_total":294317417,"spotify_lead":null,"monthly":349988,"catalog":294317417,"top5":48000000,"cap":8500,"cities":5,"scene":5,"form":0,"venue":"МТС Live Холл","spotify_id":"2KoLmBXwsgMkfAvoPBlPmb","src":["kworb Spotify snapshot 2026-08-06","ticketland.ru"],"accuracy":"A"},
-    {"key":"mice","name":"9MICE","pos":"LW","real":null,"born":null,"crew":null,"spotify_total":218477740,"spotify_lead":null,"monthly":null,"catalog_est":300000000,"top5":52000000,"cap":8500,"cities":5,"scene":5,"form":0,"venue":"МТС Live Холл","spotify_id":"1pxLlPRiWRUBGdSOrVL4f0","src":["stale kworb snapshot","ticketland.ru"],"accuracy":"C"},
-    {"key":"dhill","name":"LILDRUGHILL","pos":"CDM","real":"Михаил Струев","born":"2000-11-21","crew":"SHMONEY SOUND","spotify_total":null,"spotify_lead":null,"monthly":103978,"catalog":95300000,"top5":34000000,"cap":1200,"cities":5,"scene":4,"form":-20,"venue":null,"spotify_id":"3v0qTkZvuro4johOZyIhOm","src":["kworb Spotify snapshot 2026-08-06","drughill.ru"],"accuracy":"B"},
-    {"key":"thrill","name":"THRILL PILL","pos":"ST","real":"Тимур Тофикович Самедов","born":"2000-10-22","crew":"Десептиконы","spotify_total":null,"spotify_lead":null,"monthly":133273,"catalog_est":50300000,"top5":44133690,"cap":2000,"cities":9,"scene":4,"form":-20,"venue":"ЦГК Графит","spotify_id":"3pONzjQKqFrh3zTQBTMeWd","src":["Spotify counters 2026-08-06","earlybird.su","graphite.moscow","decepticonz.ru"],"accuracy":"B"},
-    {"key":"platina","name":"ПЛАТИНА","pos":null,"real":"Роберт Плаудис","born":"1995-04-19","crew":null,"spotify_total":484709350,"spotify_lead":null,"monthly":586878,"catalog":484709350,"top5":null,"cap":null,"cities":null,"scene":null,"form":null,"venue":null,"spotify_id":"4TzGOY9RpErzedN02w8Boh","src":["kworb Spotify snapshot 2026-08-06","the-flow.ru/features/fenomen-platiny"],"accuracy":"B"}
-  ],
-  "reserve": ["PHARAOH", "OXXXYMIRON", "БАСТА", "MIYAGI", "ЛСП", "ROCKET", "ТЁМНЫЙ ПРИНЦ"]
+    {
+      "key": "kreed", "name": "ЕГОР КРИД", "pos": "ST", "in_league": true,
+      "born": "1994-06-25", "age": 32, "debut_year": 2011,
+      "T": 68, "S": 82, "D": 86,
+      "top5": 190000000, "cap": 80000, "cities": 10, "fest": false,
+      "catalog": 639305028, "scene": 4, "form": 0, "was": 87, "accuracy": "A",
+      "src_top5": "Spotify топ-треки артиста, сумма пяти лучших, снимок 2026-08-06",
+      "src_live": "Лужники 2025, анонсы тура",
+      "src_scene": "редакционная оценка автора, шкала от -6 до 6",
+      "note": "Самый высокий балл ЛАЙВОВ в лиге. Самый низкий балл ТЕКСТОВ в топ-4."
+    },
+    {
+      "key": "buda", "name": "OG BUDA", "pos": "CM", "in_league": true,
+      "born": "1994-01-10", "age": 32, "debut_year": 2018,
+      "T": 76, "S": 85, "D": 88,
+      "top5": 107000000, "cap": 10000, "cities": 5, "fest": false,
+      "catalog": 642755820, "scene": 3, "form": 0, "was": null, "accuracy": "A",
+      "src_top5": "Spotify топ-треки артиста, сумма пяти лучших, снимок 2026-08-06",
+      "src_live": "анонсы площадок сольных шоу",
+      "src_scene": "редакционная оценка автора, шкала от -6 до 6",
+      "note": "Самый большой каталог в лиге, выше Крида."
+    },
+    {
+      "key": "kai", "name": "KAI ANGEL", "pos": "CDM", "in_league": true,
+      "born": "1997-02-04", "age": 29, "debut_year": 2019,
+      "T": 72, "S": 90, "D": 88,
+      "top5": 48000000, "cap": 8500, "cities": 5, "fest": false,
+      "catalog": 294317417, "scene": 5, "form": 0, "was": 84, "accuracy": "A",
+      "src_top5": "Spotify топ-треки артиста, сумма пяти лучших, снимок 2026-08-06",
+      "src_live": "анонсы площадок сольных шоу",
+      "src_scene": "редакционная оценка автора, шкала от -6 до 6",
+      "note": "Было 84 в выпуске про дуэль. Стало 79 после пересчёта по v2.1."
+    },
+    {
+      "key": "mice", "name": "9MICE", "pos": "LW", "in_league": true,
+      "born": null, "age": 28, "debut_year": 2020,
+      "T": 74, "S": 88, "D": 85,
+      "top5": 52000000, "cap": 8500, "cities": 5, "fest": false,
+      "catalog": 300000000, "scene": 5, "form": 0, "was": 86, "accuracy": "C",
+      "spotify_total": 218477740,
+      "src_top5": "Spotify топ-треки артиста, сумма пяти лучших, снимок 2026-08-06",
+      "src_live": "анонсы площадок сольных шоу",
+      "src_scene": "редакционная оценка автора, шкала от -6 до 6",
+      "open_issues": [
+        "catalog 300 000 000 это оценка. По Spotify видно 218 477 740. Разница бьёт по ВЛИЯНИЮ.",
+        "возраст 28 без даты рождения и без источника. Влияет на ПОТЕНЦИАЛ и на Wonderkids."
+      ],
+      "note": "Было 86 в первом выпуске. Стало 78. Точность C, на кадре нужна пометка."
+    },
+    {
+      "key": "dhill", "name": "LILDRUGHILL", "pos": "CDM", "in_league": true,
+      "born": "2000-11-21", "age": 25, "debut_year": 2017,
+      "T": 78, "S": 90, "D": 86,
+      "top5": 34000000, "cap": 1200, "cities": 5, "fest": false,
+      "catalog": 95300000, "scene": 4, "form": -20, "was": null, "accuracy": "B",
+      "src_top5": "Spotify топ-треки артиста, сумма пяти лучших, снимок 2026-08-06",
+      "src_live": "анонсы площадок сольных шоу",
+      "src_scene": "редакционная оценка автора, шкала от -6 до 6",
+      "note": "Самый большой разрыв между судейскими баллами и охватом. Герой СКРЫТОГО ПОТЕНЦИАЛА."
+    },
+    {
+      "key": "thrill", "name": "THRILL PILL", "pos": "ST", "in_league": true,
+      "born": "2000-10-22", "age": 25, "debut_year": 2018,
+      "T": 64, "S": 74, "D": 80,
+      "top5": 44133690, "cap": 2000, "cities": 9, "fest": false,
+      "catalog": 50300000, "scene": 4, "form": -20, "was": null, "accuracy": "B",
+      "src_top5": "Spotify топ-треки артиста, сумма пяти лучших, снимок 2026-08-06",
+      "src_live": "анонсы тура, девять городов",
+      "src_scene": "редакционная оценка автора, шкала от -6 до 6",
+      "open_issues": ["нужно свежее фото, текущее старое"],
+      "note": "Девять городов при зале на 2 000 человек."
+    },
+    {
+      "key": "platina", "name": "ПЛАТИНА", "pos": "CDM", "in_league": false,
+      "born": "1995-04-19", "age": null, "debut_year": null,
+      "T": null, "S": null, "D": null,
+      "top5": null, "cap": null, "cities": null, "fest": false,
+      "catalog": null, "scene": null, "form": null, "was": null, "accuracy": "B",
+      "spotify_id": "4TzGOY9RpErzedN02w8Boh",
+      "spotify_total": 484709350, "spotify_monthly": 586878,
+      "real_name": "Роберт Плаудис", "birthplace": "Рига",
+      "src_top5": null, "src_live": null, "src_scene": null,
+      "needs": ["top5", "cap", "cities", "catalog", "scene", "T", "S", "D", "debut_year"],
+      "note": "Резерв. Не считается, пока нет трёх источников."
+    },
+    {
+      "key": "pharaoh", "name": "PHARAOH", "pos": "LW", "in_league": false,
+      "born": null, "age": null, "debut_year": 2013,
+      "T": null, "S": null, "D": null,
+      "top5": null, "cap": null, "cities": null, "fest": false,
+      "catalog": null, "scene": null, "form": null, "was": null, "accuracy": "B",
+      "src_top5": null, "src_live": null, "src_scene": null,
+      "needs": ["top5", "cap", "cities", "catalog", "scene", "T", "S", "D"],
+      "icon_candidate": true,
+      "note": "Резерв. Кандидат в ICONS, пик 2017."
+    },
+    {
+      "key": "oxxxymiron", "name": "OXXXYMIRON", "pos": "CAM", "in_league": false,
+      "born": null, "age": null, "debut_year": 2011,
+      "T": null, "S": null, "D": null,
+      "top5": null, "cap": null, "cities": null, "fest": false,
+      "catalog": null, "scene": null, "form": null, "was": null, "accuracy": "B",
+      "src_top5": null, "src_live": null, "src_scene": null,
+      "needs": ["top5", "cap", "cities", "catalog", "scene", "T", "S", "D"],
+      "icon_candidate": true,
+      "note": "Резерв. Кандидат в ICONS, пик 2015."
+    },
+    {
+      "key": "skriptonit", "name": "СКРИПТОНИТ", "pos": "CDM", "in_league": false,
+      "born": null, "age": null, "debut_year": 2014,
+      "T": null, "S": null, "D": null,
+      "top5": null, "cap": null, "cities": null, "fest": false,
+      "catalog": null, "scene": null, "form": null, "was": null, "accuracy": "B",
+      "src_top5": null, "src_live": null, "src_scene": null,
+      "needs": ["top5", "cap", "cities", "catalog", "scene", "T", "S", "D"],
+      "icon_candidate": true,
+      "note": "Резерв. Кандидат в ICONS, пик 2015."
+    },
+    {
+      "key": "lsp", "name": "ЛСП", "pos": "RW", "in_league": false,
+      "born": null, "age": null, "debut_year": 2011,
+      "T": null, "S": null, "D": null,
+      "top5": null, "cap": null, "cities": null, "fest": false,
+      "catalog": null, "scene": null, "form": null, "was": null, "accuracy": "B",
+      "src_top5": null, "src_live": null, "src_scene": null,
+      "needs": ["top5", "cap", "cities", "catalog", "scene", "T", "S", "D"],
+      "icon_candidate": true,
+      "note": "Резерв. Единственный, кто в призах и 2015, и 2017."
+    }
+  ]
 }

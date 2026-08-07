@@ -1,0 +1,64 @@
+{
+  "_note": "Пулы сезонов вынесены из кода в данные. tr это место в топ-10 треков, alb в топ-10 альбомов, vote в голосовании.",
+  "_warning": "Цифры перенесены бит в бит из season.py v3.0. Менять только вместе с тестами и записью в corrections.md.",
+  "version": "4.0",
+  "cutoff": "Официальные итоги, опубликованные до 31 января следующего года",
+  "seasons": {
+    "2015": {
+      "status": "published",
+      "source": "the-flow.ru, итоги 2015 года, топ треков и топ альбомов",
+      "published_top3": [["СКРИПТОНИТ", 90], ["ЛСП", 86], ["OXXXYMIRON", 86]],
+      "pool": [
+        {"n": "СКРИПТОНИТ", "pos": "CDM", "T": 84, "S": 96, "D": 90, "tr": 3, "alb": 1, "vote": null, "spots": [3, 1]},
+        {"n": "OXXXYMIRON", "pos": "CAM", "T": 96, "S": 82, "D": 94, "tr": 6, "alb": 2, "vote": null, "spots": [6, 2]},
+        {"n": "ЛСП", "pos": "RW", "T": 84, "S": 86, "D": 82, "tr": 1, "alb": 5, "vote": null, "role": "lead", "spots": [1, 5]},
+        {"n": "ATL", "pos": "CDM", "T": 90, "S": 92, "D": 82, "tr": 5, "alb": 3, "vote": null, "spots": [5, 3]},
+        {"n": "КАСПИЙСКИЙ ГРУЗ", "pos": "CB", "T": 86, "S": 84, "D": 84, "tr": 10, "alb": 4, "vote": null, "spots": [10, 4]},
+        {"n": "4 ПОЗИЦИИ БРУНО", "pos": "CDM", "T": 80, "S": 88, "D": 72, "tr": 4, "alb": 10, "vote": null, "spots": [4, 10]},
+        {"n": "PHARAOH", "pos": "LW", "T": 72, "S": 88, "D": 86, "tr": 2, "alb": null, "vote": null, "spots": [2]},
+        {"n": "ВЛАДИ", "pos": "CAM", "T": 84, "S": 78, "D": 76, "tr": 8, "alb": 7, "vote": null, "role": "colead", "spots": [8, 7]},
+        {"n": "HORUS", "pos": "CAM", "T": 88, "S": 82, "D": 76, "tr": 9, "alb": 9, "vote": null, "spots": [9, 9]},
+        {"n": "ГРОТ", "pos": "CB", "T": 82, "S": 76, "D": 74, "tr": 8, "alb": 6, "vote": null, "role": "colead", "spots": [8, 6]},
+        {"n": "GUF", "pos": "CB", "T": 76, "S": 84, "D": 78, "tr": null, "alb": 8, "vote": null, "spots": [8]},
+        {"n": "НОГГАНО", "pos": "ST", "T": 74, "S": 70, "D": 84, "tr": 7, "alb": null, "vote": null, "spots": [7]}
+      ]
+    },
+    "2016": {
+      "status": "needs_sources",
+      "source": null,
+      "legacy_result": {"OXXXYMIRON": 91, "PHARAOH": 88, "БАСТА": 87, "MIYAGI": 82, "ЛСП": 78},
+      "legacy_model": "старая модель до v3, баллы несравнимы с 2015 и 2017",
+      "blocked_by": [
+        "нужен опубликованный топ-10 треков 2016 года",
+        "нужен опубликованный топ-10 альбомов 2016 года",
+        "нужны судейские баллы ТЕКСТЫ, ЗВУК, ПОДАЧА от автора на весь пул"
+      ],
+      "pool": []
+    },
+    "2017": {
+      "status": "published",
+      "source": "the-flow.ru, итоги 2017 года, топ треков и топ альбомов",
+      "published_top3": [["ЛСП", 88], ["PHARAOH", 87], ["СКРИПТОНИТ", 85]],
+      "pool": [
+        {"n": "ЛСП", "pos": "RW", "T": 88, "S": 86, "D": 84, "tr": 4, "alb": 1, "vote": 1, "spots": [4, 1, 1]},
+        {"n": "PHARAOH", "pos": "LW", "T": 76, "S": 92, "D": 90, "tr": 1, "alb": 5, "vote": null, "spots": [1, 5]},
+        {"n": "СКРИПТОНИТ", "pos": "CDM", "T": 86, "S": 96, "D": 90, "tr": 5, "alb": 4, "vote": 2, "role": "colead", "spots": [5, 4, 7, 2]},
+        {"n": "ХАСКИ", "pos": "CAM", "T": 92, "S": 84, "D": 88, "tr": 10, "alb": 3, "vote": null, "spots": [10, 3]},
+        {"n": "ATL", "pos": "CDM", "T": 88, "S": 88, "D": 80, "tr": 8, "alb": 10, "vote": null, "spots": [8, 10]},
+        {"n": "ЭЛДЖЕЙ", "pos": "ST", "T": 68, "S": 86, "D": 88, "tr": 2, "alb": null, "vote": null, "role": "colead", "spots": [2]},
+        {"n": "ПОШЛАЯ МОЛЛИ", "pos": "LW", "T": 70, "S": 74, "D": 82, "tr": null, "alb": 2, "vote": null, "spots": [2]},
+        {"n": "АИГЕЛ", "pos": "CAM", "T": 86, "S": 88, "D": 84, "tr": 6, "alb": null, "vote": null, "spots": [6]},
+        {"n": "FEDUK", "pos": "ST", "T": 70, "S": 80, "D": 82, "tr": 2, "alb": null, "vote": null, "role": "colead", "spots": [2]},
+        {"n": "МАКС КОРЖ", "pos": "ST", "T": 74, "S": 76, "D": 84, "tr": null, "alb": 6, "vote": 3, "spots": [6, 3]},
+        {"n": "25/17", "pos": "CB", "T": 86, "S": 78, "D": 78, "tr": null, "alb": 8, "vote": null, "spots": [8]},
+        {"n": "КАСПИЙСКИЙ ГРУЗ", "pos": "CB", "T": 84, "S": 80, "D": 80, "tr": null, "alb": 9, "vote": null, "spots": [9]},
+        {"n": "OXXXYMIRON", "pos": "CAM", "T": 96, "S": 80, "D": 92, "tr": null, "alb": null, "vote": 4, "spots": [4]},
+        {"n": "ГРИБЫ", "pos": "ST", "T": 66, "S": 82, "D": 80, "tr": 3, "alb": null, "vote": null, "spots": [3]},
+        {"n": "T-FEST", "pos": "RW", "T": 76, "S": 82, "D": 82, "tr": 5, "alb": null, "vote": null, "role": "colead", "spots": [5]},
+        {"n": "СЛАВА КПСС", "pos": "CAM", "T": 88, "S": 70, "D": 80, "tr": 7, "alb": null, "vote": null, "spots": [7]},
+        {"n": "FACE", "pos": "ST", "T": 62, "S": 74, "D": 88, "tr": 9, "alb": 48, "vote": null, "spots": [9]},
+        {"n": "NOIZE MC", "pos": "CAM", "T": 84, "S": 74, "D": 80, "tr": null, "alb": null, "vote": 5, "spots": [5]}
+      ]
+    }
+  }
+}
