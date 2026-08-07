@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+html/
+out/
+assets/*.png
+probe*.png
+.DS_Store
