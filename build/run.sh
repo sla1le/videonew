@@ -14,7 +14,7 @@ if [[ -f "$WORK/gen_card.py" ]]; then
   rm -rf "$WORK/html/photos"
   [[ -d "$WORK/photos" ]] && cp -r "$WORK/photos" "$WORK/html/photos"
   rm -f "$WORK/assets"/*.png
-  node "$ROOT/shot.js" "$WORK/html/cards.html" "$WORK/assets" card_ .wrap 1080 1350 2>&1 | grep -v Floss || true
+  node "$ROOT/shot.js" "$WORK/html/cards.html" "$WORK/assets" card_ .wrap 1080 1350 2>&1 | sed '/Floss/d'
 fi
 
 (cd "$WORK" && python3 gen_deck.py)
@@ -23,7 +23,7 @@ rm -rf "$WORK/html/photos" "$WORK/html/assets"
 [[ -d "$WORK/photos" ]] && cp -r "$WORK/photos" "$WORK/html/photos"
 cp -r "$WORK/assets" "$WORK/html/assets"
 rm -f "$WORK/out"/*.png
-node "$ROOT/shot.js" "$WORK/html/slides.html" "$WORK/out" "$PREFIX" .s 1080 1440 2>&1 | grep -v Floss || true
+node "$ROOT/shot.js" "$WORK/html/slides.html" "$WORK/out" "$PREFIX" .s 1080 1440 2>&1 | sed '/Floss/d'
 python3 "$ROOT/qa.py" "$WORK/out" "$WORK/html/slides.html" "$WORK/deck.css"
 magick montage "$WORK/out"/*.png -tile x1 -geometry 330x440+6+6 -background '#cccccc' "$WORK/probe.png"
 echo "DONE $WORK/probe.png"

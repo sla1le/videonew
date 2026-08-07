@@ -38,7 +38,7 @@ def main() -> None:
     winner, second = rows[0], rows[1]
     slides = []
     slides.append(frame(1, head("ECHORATE", f'КТО СЕЙЧАС {u("ПЕРВЫЙ")}?') + '<div class="note">Шесть статов. Один общий балл.</div>'))
-    slides.append(frame(2, head("КОНФЛИКТ", f'{html.escape(winner["name"])} ПРОТИВ {html.escape(second["name"])}') + f'<div class="bd"><div class="big r">{winner["ovr"]}</div><div class="note">Лидер текущей таблицы</div></div>'))
+    slides.append(frame(2, head("КОНФЛИКТ", f'{u(winner["name"])} ПРОТИВ {html.escape(second["name"])}') + f'<div class="bd"><div class="big r">{winner["ovr"]}</div><div class="note">Лидер текущей таблицы</div></div>'))
     slides.append(frame(3, head("ПЕРВЫЙ АРГУМЕНТ", "ХИТЫ ДАЮТ ТРЕТЬ") + '<div class="frm"><div class="l">ST получает <b>30%</b> итогового балла за хиты.</div></div>'))
     slides.append(frame(4, head("ОДНА ФОРМУЛА", "ВСЕ СЧИТАЮТСЯ ОДИНАКОВО") + '<div class="wts"><div><div class="k">СУДЬИ</div><div class="v">50%</div></div><div><div class="k">ЦИФРЫ</div><div class="v">50%</div></div></div>'))
     top = ''.join(row(i + 1, item["name"], item["ovr"], "r" if i == 0 else "") for i, item in enumerate(rows[:4]))
