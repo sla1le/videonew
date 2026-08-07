@@ -1,0 +1,67 @@
+{
+  "_note": "Реестр готовности форматов. Поле ready дублирует вывод rating/formats.py на дату снимка.",
+  "version": "4.0",
+  "snapshot": "2026-08-07",
+  "formats": [
+    {
+      "key": "hidden", "name": "СКРЫТЫЙ ПОТЕНЦИАЛ", "engine": "formats.hidden",
+      "ready": true, "priority": 1,
+      "formula": "РАЗРЫВ = (ТЕКСТЫ + ЗВУК + ПОДАЧА) / 3 - (ХИТЫ + ВЛИЯНИЕ) / 2",
+      "threshold": 8, "winners": 4, "leader": "LILDRUGHILL",
+      "slides": 7, "blocked_by": []
+    },
+    {
+      "key": "icons", "name": "ICONS", "engine": "formats.icons",
+      "ready": true, "priority": 2,
+      "rule": "дебют не позже 2016",
+      "slides": 7, "blocked_by": [],
+      "merged_from": ["Heroes"]
+    },
+    {
+      "key": "toty", "name": "TOTY РУССКОЙ МУЗЫКИ", "engine": "formats.toty",
+      "ready": false, "priority": 3,
+      "scheme": "3-3-1", "slots": ["ST", "LW", "RW", "CAM", "CM", "CDM", "CB"],
+      "slides": 7,
+      "blocked_by": ["в пулах 2015 и 2017 нет ни одного CM"],
+      "note": "Пустая позиция остаётся пустой. На кадре говорим об этом прямо.",
+      "totw": "еженедельный вариант отклонён по трудозатратам, вместо него месячный"
+    },
+    {
+      "key": "squad", "name": "У ТЕБЯ 200 МЛН", "engine": "formats.squad",
+      "ready": true, "priority": 4,
+      "formula": "ЦЕНА = 3 * 2^((OVR - 55) / 5) * (1 + (ПОТЕНЦИАЛ - OVR) / 40)",
+      "budget_mln": 200, "squad_size": 3, "combos": 4,
+      "slides": 7,
+      "blocked_by": ["вариантов всего 4, для игры со зрителем нужно от 6",
+                     "лигу надо расширить минимум до 9 артистов"],
+      "risk": "Механика трансферной стоимости была отклонена навсегда. Формат допустим только с формулой на кадре."
+    },
+    {
+      "key": "rookies", "name": "НОВИЧКИ 2026", "engine": "formats.rookies",
+      "ready": false, "priority": 5,
+      "rule": "дебют не раньше 2025, возраст до 26",
+      "slides": 7,
+      "blocked_by": ["в базе нет артистов с дебютом под ценз",
+                     "нужно добавить 6 до 8 артистов дебюта 2025 и 2026 с тремя источниками каждый"]
+    },
+    {
+      "key": "wonderkids", "name": "WONDERKIDS", "engine": "formats.wonderkids",
+      "ready": false, "priority": 6,
+      "rule": "возраст до 24 и запас от 4",
+      "slides": 7,
+      "blocked_by": ["самый молодой в лиге старше 24",
+                     "формат требует минимум 5 артистов до 24 лет в базе",
+                     "у 9MICE возраст без источника"],
+      "merged_from": ["АКАДЕМИЯ ЭХО"]
+    },
+    {
+      "key": "puskas", "name": "МУЗЫКАЛЬНЫЙ PUSKAS", "engine": "formats.puskas",
+      "ready": false, "priority": 7,
+      "formula": "БАЛЛ = СУДЕЙСКАЯ ОЦЕНКА * 0.5 + ГОЛОСОВАНИЕ * 0.5",
+      "nominees": 5, "slides": 7,
+      "blocked_by": ["нет файла rating/data/puskas.json",
+                     "голосование при 489 подписчиках даст выборку в десятки голосов"],
+      "launch_after": "2000 подписчиков"
+    }
+  ]
+}
