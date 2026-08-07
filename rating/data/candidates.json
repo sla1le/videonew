@@ -1,0 +1,233 @@
+{
+  "_note": "Скамейка. Артист переезжает в artists.json только когда закрыты все три обязательных источника: src_top5, src_live, src_scene. До этого он существует только для форматов, которым хватает даты рождения и дебюта: НОВИЧКИ, WONDERKIDS, ДУЭЛЬ. Балл без трёх источников на кадр не выносится.",
+  "version": "4.0",
+  "snapshot": "2026-08-07",
+  "collected": "2026-08-07",
+  "candidates": [
+    {
+      "key": "darkprince",
+      "name": "ТЁМНЫЙ ПРИНЦ",
+      "real_name": "Артём Алексеевич Бондарев",
+      "born": "2005-11-26",
+      "age_at_snapshot": 20,
+      "city": "Ногинск",
+      "pos": "CDM",
+      "debut_beats": 2019,
+      "debut_tracks": 2023,
+      "debut_release": 2025,
+      "debut": 2025,
+      "debut_note": "Три разные даты в источниках. Биты с 2019 под псевдонимами Jonathan Blad и origon. Свои треки с 2023. Дебютный релиз мрачные треды 13 июня 2025, 8 треков, 11 минут, лейбл rplus и РАСКАТ. Для ценза новичка берём дату первого релиза под текущим именем. Эту оговорку обязательно проговорить на кадре, иначе её проговорят в комментариях.",
+      "qualifies": ["rookies", "wonderkids"],
+      "needs": ["src_top5", "src_live", "src_scene"],
+      "aliases": ["Jonathan Blad", "origon", "ashleyrossmith", "darkprinceee"],
+      "story": "Продавал биты через Discord. Купили Lovv66 и Bushido Zho. Через семь лет попал в Forbes 30 до 30 за 2026 год. Сингл ананасовые глаза около 1 млн прослушиваний на SoundCloud.",
+      "sources": {
+        "born": ["ru.wikipedia.org/wiki/Тёмный_принц", "30-under-30.forbes.ru/2026/557865-artem-bondarev-temnyj-princ"],
+        "debut": ["zvuk.com/release/38959401", "the-flow.ru/releases/temnyy-princ-mrachnye-tredy"],
+        "scene": ["the-flow.ru/features/soundcloud-rap-2025", "srsly.ru итоги года Яндекс Музыки 2025"]
+      },
+      "already_in_repo": true,
+      "repo_note": "Числился в резерве как тёмный принц. Теперь у него есть дата рождения и дебют."
+    },
+    {
+      "key": "elyaplugg",
+      "name": "ELYAPLUGG!",
+      "real_name": "Елисей Валерьевич Артемьев",
+      "born": "2004-12-14",
+      "age_at_snapshot": 21,
+      "city": "Москва",
+      "pos": "LW",
+      "debut": 2022,
+      "genres": ["PluggnB", "Digicore", "Rage"],
+      "qualifies": ["wonderkids"],
+      "needs": ["src_top5", "src_live", "src_scene"],
+      "story": "Одиннадцать релизов за четыре года. Альбом НИКИТА ЗВЕРЕВ вышел 15 мая 2026, семнадцать треков, делюкс 23 июля 2026. Совместный сингл mamma mia с BUSHIDO ZHO.",
+      "sources": {
+        "born": ["rateyourmusic.com/artist/elyaplugg"],
+        "debut": ["genius.com/artists/Elyaplugg/albums", "albumoftheyear.org/artist/289742-elyaplugg"],
+        "scene": ["the-flow.ru интервью об альбоме Никита Зверев"]
+      }
+    },
+    {
+      "key": "icegergert",
+      "name": "ICEGERGERT",
+      "real_name": "Георгий Евгеньевич Гергерт",
+      "born": "2001-08-24",
+      "age_at_snapshot": 24,
+      "born_conflict": "srsly.ru указывает 21 сентября 2001. Три источника против одного дают 24 августа. Берём 24 августа, конфликт фиксируем.",
+      "city": "Братск, затем Санкт-Петербург",
+      "pos": "ST",
+      "debut": 2019,
+      "label": "Gazgolder с 2024",
+      "qualifies": ["wonderkids"],
+      "deadline": "2026-08-24",
+      "deadline_note": "24 августа 2026 ему исполняется 25 и он выпадает из ценза Wonderkids. Выпуск про молодых надо ставить до этой даты.",
+      "needs": ["src_top5", "src_live", "src_scene"],
+      "story": "Родителей лишили родительских прав, когда ему было шесть. Рос у бабушки, дедушки и тёти. Суворовское училище назвал колонией для детей. Наследство с SKY RAE набрало 1,49 млн распознаваний Shazam за всё время. Пятый в топе Яндекс Музыки на 1 марта 2026.",
+      "chart_position": {
+        "source": "Яндекс Музыка, данные на 2026-03-01",
+        "rank": 5,
+        "above": ["Jakone", "Григорий Лепс", "Ваня Дмитриенко"],
+        "below": ["Баста", "Дима Билан", "МОТ", "Женя Трофимов"]
+      },
+      "sources": {
+        "born": ["ru.ruwiki.ru/wiki/Icegergert", "24smi.org/celebrity/378952-icegergert.html", "biogr.net/icegergert"],
+        "debut": ["ru.wikipedia.org/wiki/Icegergert"],
+        "scene": ["30-under-30.forbes.ru/2025/536356-georgij-gergert-icegergert", "vk.com топ Яндекс Музыки на 01.03.2026"],
+        "hits": ["shazam.com/artist/icegergert/1563426461"]
+      }
+    },
+    {
+      "key": "hellovercavi",
+      "name": "HELLOVERCAVI",
+      "real_name": "Егор Игоревич Корниенко",
+      "born": null,
+      "born_partial": "16 сентября, год неизвестен",
+      "city": "Москва",
+      "pos": "ST",
+      "debut": 2025,
+      "qualifies": ["rookies"],
+      "blocked_from": ["wonderkids"],
+      "needs": ["born_year", "src_top5", "src_live", "src_scene"],
+      "story": "Трек СВАГА с SODA LUV вышел 6 июня 2025 и разошёлся в TikTok. Слово свага стало мемом. Самый чистый дебютант 2025 в базе.",
+      "sources": {
+        "debut": ["genius.com/Hellovercavi-and-soda-luv-swaga-lyrics", "shazam.com/song/1817661216"],
+        "scene": ["maximonline.ru самые громкие новые имена 2025", "psychologies.ru интервью 13 августа 2025"]
+      }
+    },
+    {
+      "key": "rizza",
+      "name": "RIZZA",
+      "real_name": "Даниил Эдуардович Васильев",
+      "born": "1999-06-21",
+      "age_at_snapshot": 27,
+      "pos": "LW",
+      "debut": 2020,
+      "genres": ["хайперпоп", "глитч-кор"],
+      "qualifies": [],
+      "needs": ["src_top5", "src_live", "src_scene"],
+      "duel_target": "darkprince",
+      "duel_note": "24СМИ прямо пишет об очевидном стилевом родстве с тёмным принцем и о том, что совместных треков между ними не выходило. Готовый конфликт без единой выдуманной детали.",
+      "story": "Один из основателей творческого объединения pixiesquad, позже вышел из него.",
+      "sources": {
+        "born": ["genius.com/artists/Rizza", "last.fm/ru/music/Rizza/+wiki"],
+        "scene": ["24smi.org/celebrity/393701-rizza.html"]
+      }
+    },
+    {
+      "key": "lovv66",
+      "name": "LOVV66",
+      "real_name": "Иван Константинович Шабашов",
+      "born": "1997-09-20",
+      "age_at_snapshot": 28,
+      "born_conflict": "Википедия и dtf указывают 22 сентября 1997. РУВИКИ, Афиша и официальный сайт указывают 20 сентября. Берём 20 сентября как версию официального сайта, конфликт фиксируем.",
+      "city": "Брянск, затем Москва",
+      "pos": "RW",
+      "debut": 2020,
+      "qualifies": ["hidden"],
+      "needs": ["src_top5", "src_live", "src_scene"],
+      "story": "Фрешмен 2021 по версии Афиши и ТНТ Music. Дебютный альбом Lovv Planet 2020, PUZZLES 2021. Около 2,5 млн слушателей в Яндекс Музыке. Мать умерла, когда он учился в старших классах. Семь реабилитаций.",
+      "sources": {
+        "born": ["ru.ruwiki.ru/wiki/Lovv66", "afisha.ru/people/lovv66-753024", "lovv-66.com/biography"],
+        "debut": ["lovv66-concert.ru"],
+        "scene": ["dtf.ru/music/4035061-lovv66-biografiya-i-interesnye-fakty"]
+      }
+    },
+    {
+      "key": "bushidozho",
+      "name": "BUSHIDO ZHO",
+      "real_name": "Жоас Львович Маскуров",
+      "born": "1999-01-28",
+      "age_at_snapshot": 27,
+      "city": "Москва",
+      "pos": "CM",
+      "debut": 2019,
+      "qualifies": [],
+      "needs": ["src_top5", "src_live", "src_scene"],
+      "connects": ["buda", "darkprince", "elyaplugg"],
+      "story": "Forbes 30 до 30 за 2024 год. Признание пришло с мини-альбомом К сожалению это трап в 2019. Фит SAMP с OG BUDA, который уже в лиге. Покупал биты у тёмного принца. Сингл mamma mia с elyaplugg! в 2026. Это узел, через который связаны три поколения сцены.",
+      "sources": {
+        "born": ["ru.wikipedia.org/wiki/Bushido_Zho", "genius.com/artists/Bushido-zho", "famousbirthdays.com/people/bushido-zho.html"],
+        "debut": ["afisha.yandex.ru/artist/bushido-zho"],
+        "scene": ["30-under-30.forbes.ru/2024/510543-zoas-maskurov-bushido-zho"]
+      }
+    },
+    {
+      "key": "mona",
+      "name": "MONA",
+      "real_name": "Дарья Андреевна Кустовская",
+      "born": "1996-11-05",
+      "age_at_snapshot": 29,
+      "city": "Ростов-на-Дону",
+      "pos": "ST",
+      "debut": 2022,
+      "label": "RAAVA Music и VK Records",
+      "genre": "поп",
+      "qualifies": [],
+      "needs": ["src_top5", "src_live", "src_scene"],
+      "gap_note": "В лиге шесть карточек и ноль женщин. MONA закрывает эту дыру с самым сильным резюме: самая прослушиваемая артистка 2024 года по Яндекс Музыке, свыше 7 млн слушателей в месяц, артистка года 2025.",
+      "story": "Мать радиоведущая, отец диджей. Второе место в шестом сезоне Маски в апреле 2025. Альбом Дневник памяти.",
+      "sources": {
+        "born": ["ru.wikipedia.org/wiki/Mona_(певица)", "wikidata.org/wiki/Q131628729", "vokrug.tv/person/show/17041856531"],
+        "scene": ["30-under-30.forbes.ru/2025 Дарья Кустовская", "entermedia.io итоги Яндекс Музыки 2024", "t-j.ru/news/yandex-music-2025"]
+      }
+    },
+    {
+      "key": "uniqe",
+      "name": "UNIQE",
+      "real_name": "Егор Юницкий",
+      "born": null,
+      "country": "Беларусь",
+      "pos": "CAM",
+      "qualifies": [],
+      "needs": ["born", "debut", "src_top5", "src_live", "src_scene"],
+      "story": "Артист года из Беларуси по версии Яндекс Музыки за 2025 год. Треки Толпы кричат и Гламур.",
+      "audience_note": "Беларусь это первая страна аудитории канала во всех восьми публикациях, в среднем 21,7 процента.",
+      "sources": {
+        "scene": ["people.onliner.by/2025/12/07/yandeks-muzyka-nazvala"]
+      }
+    },
+    {
+      "key": "shilovets",
+      "name": "ARTEM SHILOVETS",
+      "real_name": "Артём Шиловец",
+      "born": null,
+      "country": "Беларусь",
+      "pos": "CM",
+      "qualifies": [],
+      "needs": ["born", "debut", "src_top5", "src_live", "src_scene"],
+      "sources": {
+        "scene": ["people.onliner.by/2025/12/07/yandeks-muzyka-nazvala"]
+      }
+    },
+    {
+      "key": "nkeeei",
+      "name": "NKEEEI",
+      "real_name": "Никита Коробыко",
+      "born": null,
+      "country": "Беларусь",
+      "pos": "LW",
+      "qualifies": [],
+      "needs": ["born", "debut", "src_top5", "src_live", "src_scene"],
+      "sources": {
+        "scene": ["people.onliner.by/2025/12/07/yandeks-muzyka-nazvala"]
+      }
+    },
+    {
+      "key": "dmitrienko",
+      "name": "ВАНЯ ДМИТРИЕНКО",
+      "born": null,
+      "pos": "ST",
+      "qualifies": [],
+      "needs": ["born", "debut", "src_top5", "src_live", "src_scene"],
+      "story": "Артист года по версии Яндекс Музыки за 2025 год вместе с MONA. Восьмой в топе на 1 марта 2026.",
+      "sources": {
+        "scene": ["t-j.ru/news/yandex-music-2025", "vk.com топ Яндекс Музыки на 01.03.2026"]
+      }
+    }
+  ],
+  "second_tier": {
+    "_note": "Имена всплыли в поиске, данных пока нет. Проверять по мере надобности.",
+    "names": ["SKY RAE", "silver gloria", "ashleyrossmith", "4n Way", "Sqwore", "fallen777angel", "Villian", "SLXUGHTER", "LONOWN", "reidenshi", "KVRXD", "Rakhim", "FRIENDLY THUG 52", "BEARWOLF", "Бонд с кнопкой", "MACAN", "Jakone", "Женя Трофимов"]
+  }
+}
