@@ -1,0 +1,25 @@
+/* Подключается вторым файлом после deck.css. Без deck.css не работает. */
+.s .bd{justify-content:flex-start}
+.s[data-name='01'] .bd,.s[data-name='02'] .bd{justify-content:center}
+.s[data-name='01'] .frm{padding:52px 44px}
+.s[data-name='01'] .frm .l{font-size:35px;line-height:1.56}
+.s[data-name='01'] .note{font-size:33px}
+.s[data-name='02'] .frm .l{font-size:32px;line-height:1.58}
+.s[data-name='02'] .wts div{padding:44px 8px}
+.s .h2{font-size:66px;line-height:1.04}
+
+.duel{margin-top:34px}
+.duel .a{display:flex;align-items:flex-end;gap:26px;padding:78px 0;border-bottom:3px solid var(--ln)}
+.duel .a:last-child{border-bottom:none}
+.duel .a .i{flex:1;min-width:0}
+.duel .a .ar{font-family:var(--num);font-size:78px;line-height:1;letter-spacing:-2px}
+.duel .a .tt{font-family:var(--txt);font-weight:700;font-size:30px;color:#4a4a4a;margin-top:16px;line-height:1.26}
+.duel .a .v{font-family:var(--num);font-size:158px;line-height:.8;flex:0 0 auto}
+.duel .a.w .v{color:var(--grn)}
+.duel .a.l .ar{color:var(--g)}
+.duel .a.l .tt{color:#a8a8a8}
+.duel .a.l .v{color:var(--g)}
+.vs{font-family:var(--disp);font-size:28px;letter-spacing:10px;color:var(--g);padding:34px 0 14px}
+
+.s .note{font-size:30px;margin-top:38px}
+.cta{margin-top:34px}

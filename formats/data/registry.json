@@ -4,22 +4,34 @@
   "snapshot": "2026-08-07",
   "formats": [
     {
-      "key": "hidden", "name": "СКРЫТЫЙ ПОТЕНЦИАЛ", "engine": "formats.hidden",
+      "key": "worldcup", "name": "КУБОК АЛЬБОМОВ", "engine": "worldcup.round_of",
       "ready": true, "priority": 1,
+      "formula": "ОЦЕНКА = 0.18*ТЕКСТЫ + 0.18*ЗВУК + 0.14*ПОДАЧА + 0.50*ВЛИЯНИЕ",
+      "data": "rating/data/albums.json", "spec": "formats/worldcup-albums.md",
+      "generator": "build/gen_worldcup.py", "css": "build/worldcup.css",
+      "pool": 32, "rounds": ["1/16", "1/8", "1/4", "1/2", "ФИНАЛ"],
+      "episodes": 5, "slides": 18, "blocked_by": [],
+      "note": "Первый выпуск только 1/16. Восемнадцать кадров против оптимума глубины в шесть или семь. Цельный раунд важнее глубины, запасной вариант есть в спеке.",
+      "debt": ["десять позиций двадцатки The Flow не прочитаны",
+               "годы альбомов с меткой accuracy B надо сверить перед эфиром"]
+    },
+    {
+      "key": "hidden", "name": "СКРЫТЫЙ ПОТЕНЦИАЛ", "engine": "formats.hidden",
+      "ready": true, "priority": 2,
       "formula": "РАЗРЫВ = (ТЕКСТЫ + ЗВУК + ПОДАЧА) / 3 - (ХИТЫ + ВЛИЯНИЕ) / 2",
       "threshold": 8, "winners": 4, "leader": "LILDRUGHILL",
       "slides": 7, "blocked_by": []
     },
     {
       "key": "icons", "name": "ICONS", "engine": "formats.icons",
-      "ready": true, "priority": 2,
+      "ready": true, "priority": 3,
       "rule": "дебют не позже 2016",
       "slides": 7, "blocked_by": [],
       "merged_from": ["Heroes"]
     },
     {
       "key": "toty", "name": "TOTY РУССКОЙ МУЗЫКИ", "engine": "formats.toty",
-      "ready": false, "priority": 3,
+      "ready": false, "priority": 4,
       "scheme": "3-3-1", "slots": ["ST", "LW", "RW", "CAM", "CM", "CDM", "CB"],
       "slides": 7,
       "blocked_by": ["в пулах 2015 и 2017 нет ни одного CM"],
@@ -28,7 +40,7 @@
     },
     {
       "key": "squad", "name": "У ТЕБЯ 200 МЛН", "engine": "formats.squad",
-      "ready": true, "priority": 4,
+      "ready": true, "priority": 5,
       "formula": "ЦЕНА = 3 * 2^((OVR - 55) / 5) * (1 + (ПОТЕНЦИАЛ - OVR) / 40)",
       "budget_mln": 200, "squad_size": 3, "combos": 4,
       "slides": 7,
@@ -38,7 +50,7 @@
     },
     {
       "key": "rookies", "name": "НОВИЧКИ 2026", "engine": "formats.rookies",
-      "ready": false, "priority": 5,
+      "ready": false, "priority": 6,
       "rule": "дебют не раньше 2025, возраст до 26",
       "slides": 7,
       "blocked_by": ["в базе нет артистов с дебютом под ценз",
@@ -46,7 +58,7 @@
     },
     {
       "key": "wonderkids", "name": "WONDERKIDS", "engine": "formats.wonderkids",
-      "ready": false, "priority": 6,
+      "ready": false, "priority": 7,
       "rule": "возраст до 24 и запас от 4",
       "slides": 7,
       "blocked_by": ["самый молодой в лиге старше 24",
@@ -56,7 +68,7 @@
     },
     {
       "key": "puskas", "name": "МУЗЫКАЛЬНЫЙ PUSKAS", "engine": "formats.puskas",
-      "ready": false, "priority": 7,
+      "ready": false, "priority": 8,
       "formula": "БАЛЛ = СУДЕЙСКАЯ ОЦЕНКА * 0.5 + ГОЛОСОВАНИЕ * 0.5",
       "nominees": 5, "slides": 7,
       "blocked_by": ["нет файла rating/data/puskas.json",
