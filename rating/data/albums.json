@@ -1,0 +1,95 @@
+{
+  "_note": "КУБОК АЛЬБОМОВ. Окно с 2000 года. Русскоязычные релизы, паспорт артиста не важен. Один альбом от артиста: если у артиста несколько записей в списках, берётся та, что выше. Судейские баллы T/S/D мои, шкала 30..99. ВЛИЯНИЕ не судейское, оно считается из двух опубликованных списков. accuracy A: год и место подтверждены прочитанными страницами. accuracy B: место подтверждено, год взят из общего знания и требует перепроверки перед эфиром.",
+  "version": "4.0",
+  "format": "КУБОК АЛЬБОМОВ",
+  "snapshot": "2026-08-07",
+  "window": {
+    "from": 2000,
+    "language": "русский",
+    "one_album_per_artist": true,
+    "entry_rule": "альбом попадает в пул только если он есть хотя бы в одном опубликованном списке из lists"
+  },
+  "model": {
+    "weights": {"T": 0.18, "S": 0.18, "D": 0.14, "I": 0.50},
+    "influence_base": 70.0,
+    "influence_step": 9.0,
+    "influence_anchor": 0.5,
+    "influence_outside": 52.0,
+    "clamp": {"lo": 30, "hi": 99},
+    "bracket_size": 32,
+    "tiebreak": ["raw", "I", "year_asc", "artist"],
+    "_formula_score": "ОЦЕНКА = 0.18*ТЕКСТЫ + 0.18*ЗВУК + 0.14*ПОДАЧА + 0.50*ВЛИЯНИЕ",
+    "_formula_influence": "ВЛИЯНИЕ = 70 + 9*log2(КАНОН / 0.5), clamp 30..99, КАНОН = 0 даёт 52",
+    "_formula_canon": "ранжированный список: (размер + 1 - место) / размер. неранжированный список: 1.0. складываем по всем спискам",
+    "_why_no_streams": "Прослушивания как ось отклонены. У альбомов 2000-х нет сопоставимых открытых цифр: сертификация в РФ появилась только в 2003, НФПФ ликвидирована в 2018, стриминговые чарты начинаются заметно позже релизов нулевых. Считать по ним весь кубок значит наказать старые записи за то, что их эпоха не оцифрована."
+  },
+  "lists": [
+    {
+      "key": "afisha100",
+      "name": "Афиша Daily, 100 лучших постсоветских альбомов",
+      "short": "АФИША 100",
+      "year": 2022,
+      "size": 100,
+      "ranked": true,
+      "src": [
+        "https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/",
+        "https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/",
+        "https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/"
+      ],
+      "verification": "Места восстановлены сплошным перечислением от опорных номеров 100, 90, 74, 71, 70, 64, 59, 50, 48, 47, 43, 42, 40, 39, 38, 35, 34, 30, 29, 25, 21 и далее 20..1. Все опорные номера сошлись. Две независимые сверки по Википедии: Лиловый день = 50, Magic City = 31."
+    },
+    {
+      "key": "flow20",
+      "name": "The Flow, 20 главных рэп-альбомов 2000-2020",
+      "short": "THE FLOW 20",
+      "year": 2020,
+      "size": 20,
+      "ranked": false,
+      "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020"],
+      "verification": "Список хронологический, мест в нём нет, поэтому попадание засчитывается флагом. Прочитаны позиции с Триагрутрики до Boulevard Depo. Ранняя часть списка не прочитана, поэтому флаг стоит только там, где запись видел своими глазами.",
+      "coverage": "partial"
+    }
+  ],
+  "albums": [
+    {"key": "zemfira_pmml", "artist": "ЗЕМФИРА", "title": "ПРОСТИ МЕНЯ МОЯ ЛЮБОВЬ", "year": 2000, "T": 88, "S": 84, "D": 92, "lists": {"afisha100": 22}, "streams": 37502000, "accuracy": "A", "note": "Самый продаваемый диск в России 2000 года, свыше 1,5 млн копий.", "src": ["https://ru.wikipedia.org/wiki/Прости_меня_моя_любовь", "https://bestsellingalbums.org/streaming/year/2000"]},
+    {"key": "leningrad_dachniki", "artist": "ЛЕНИНГРАД", "title": "ДАЧНИКИ", "year": 2000, "T": 82, "S": 76, "D": 90, "lists": {"afisha100": 26}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "decl_ktoty", "artist": "ДЕЦЛ", "title": "КТО? ТЫ", "year": 2000, "T": 62, "S": 70, "D": 78, "lists": {"afisha100": 98}, "accuracy": "B", "note": "Место 98 из 100. Сетка ставит его последним номером посева.", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "tatu_200", "artist": "t.A.T.u.", "title": "200 ПО ВСТРЕЧНОЙ", "year": 2001, "T": 70, "S": 88, "D": 94, "lists": {"afisha100": 9}, "accuracy": "A", "note": "Год и хронометраж подтверждены самой статьёй Афиши: 50 минут, 12 треков, 2001.", "src": ["https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/"]},
+    {"key": "kasta_gvvt", "artist": "КАСТА", "title": "ГРОМЧЕ ВОДЫ ВЫШЕ ТРАВЫ", "year": 2002, "T": 92, "S": 80, "D": 84, "lists": {"afisha100": 41}, "accuracy": "A", "note": "22 трека, 16 композиций и 6 скитов. Период записи в источниках расходится: Википедия даёт ноябрь 1999 по ноябрь 2001, РУВИКИ даёт 1997 по 2001. В сетке участвует только год релиза.", "src": ["https://ru.wikipedia.org/wiki/Громче_воды,_выше_травы", "https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "smokymo_karate", "artist": "СМОКИ МО", "title": "КАРА-ТЭ", "year": 2004, "T": 86, "S": 74, "D": 82, "lists": {"afisha100": 51}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "krovostok_reka", "artist": "КРОВОСТОК", "title": "РЕКА КРОВИ", "year": 2005, "T": 90, "S": 72, "D": 86, "lists": {"afisha100": 46}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "maksim_trudnyi", "artist": "МакSим", "title": "ТРУДНЫЙ ВОЗРАСТ", "year": 2006, "T": 60, "S": 72, "D": 84, "lists": {"afisha100": 80}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "guf_goroddorog", "artist": "ГУФ", "title": "ГОРОД ДОРОГ", "year": 2007, "T": 84, "S": 76, "D": 88, "lists": {"afisha100": 68}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "go_zachem", "artist": "ГРАЖДАНСКАЯ ОБОРОНА", "title": "ЗАЧЕМ СНЯТСЯ СНЫ", "year": 2007, "T": 90, "S": 68, "D": 80, "lists": {"afisha100": 61}, "accuracy": "B", "note": "У группы в сотне есть ещё Реанимация на месте 76 и Солнцеворот на 48. Солнцеворот 1997 года, окно кубка его не берёт. Из двух оставшихся правило одного альбома оставляет более высокий.", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "delfin_zvezda", "artist": "ДЕЛЬФИН", "title": "ЗВЕЗДА", "year": 2007, "T": 86, "S": 82, "D": 80, "lists": {"afisha100": 32}, "accuracy": "B", "note": "В сотне у Дельфина четыре альбома: Глубина резкости 15, Звезда 32, Юность 36, Не в фокусе 73. Первый и последний вне окна с 2000 года.", "src": ["https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "noizemc_gh1", "artist": "NOIZE MC", "title": "THE GREATEST HITS VOL. 1", "year": 2008, "T": 84, "S": 74, "D": 86, "lists": {"afisha100": 49}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "nrktk_planeta", "artist": "NRKTK", "title": "ПЛАНЕТА ЛЮБОВЬ", "year": 2009, "T": 80, "S": 84, "D": 88, "lists": {"afisha100": 6}, "accuracy": "A", "note": "Год и хронометраж из самой статьи: 43 минуты, 11 треков, 2009.", "src": ["https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/"]},
+    {"key": "ptitsuem_dzom", "artist": "ПТИЦУ ЕМЪ", "title": "ДАВАЙ ЗАБУДЕМ О МОРАЛИ", "year": 2012, "T": 90, "S": 76, "D": 84, "lists": {"afisha100": 19}, "accuracy": "A", "note": "Год и хронометраж из самой статьи: 43 минуты, 14 треков, 2012.", "src": ["https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/"]},
+    {"key": "triagrutrika_vecher", "artist": "ТРИАГРУТРИКА", "title": "ВЕЧЕРНИЙ ЧЕЛЯБИНСК", "year": 2012, "T": 82, "S": 78, "D": 80, "lists": {"flow20": true}, "accuracy": "B", "year_conflict": "The Flow в тексте 2020 года пишет про альбом фразу спустя десять лет после выхода, что даёт 2010. Год 2012 взят из общего знания и требует сверки перед эфиром.", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020"]},
+    {"key": "petlya_fobos", "artist": "ПЕТЛЯ ПРИСТРАСТИЯ", "title": "ФОБОС", "year": 2013, "T": 84, "S": 82, "D": 78, "lists": {"afisha100": 85}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "2517_podorozhnik", "artist": "25/17", "title": "РУССКИЙ ПОДОРОЖНИК", "year": 2014, "T": 88, "S": 80, "D": 86, "lists": {"flow20": true}, "accuracy": "A", "note": "Год из заголовка The Flow. К каждой песне альбома снят клип.", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020"]},
+    {"key": "4pb_zakazan", "artist": "4 ПОЗИЦИИ БРУНО", "title": "Я ЗАКАЗАН", "year": 2014, "T": 86, "S": 74, "D": 78, "lists": {"afisha100": 67}, "accuracy": "A", "note": "Дата премьеры альбома на Афише: 13 февраля 2014.", "src": ["https://daily.afisha.ru/person/nikolay-babak/", "https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "dorn_randorn", "artist": "ИВАН ДОРН", "title": "RANDORN", "year": 2014, "T": 68, "S": 90, "D": 86, "lists": {"afisha100": 10}, "accuracy": "A", "note": "Год и хронометраж из самой статьи: 1 час 1 минута, 16 треков, 2014.", "src": ["https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/"]},
+    {"key": "skryptonite_dsny", "artist": "СКРИПТОНИТ", "title": "ДОМ С НОРМАЛЬНЫМИ ЯВЛЕНИЯМИ", "year": 2015, "T": 86, "S": 96, "D": 90, "lists": {"afisha100": 11, "flow20": true}, "streams": 67247000, "accuracy": "A", "note": "Единственный альбом в пуле, попавший и в топ-20 Афиши, и в двадцатку The Flow. Правило одного альбома отсекло Уроборос на месте 79 и Solitude на 77.", "src": ["https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/", "https://the-flow.ru/features/20-rep-albomov-2000-2020", "https://bestsellingalbums.org/streaming/decade/2010"]},
+    {"key": "oxxxymiron_gorgorod", "artist": "OXXXYMIRON", "title": "ГОРГОРОД", "year": 2015, "T": 96, "S": 82, "D": 92, "lists": {"flow20": true}, "accuracy": "A", "note": "Горгорода нет в сотне Афиши. Все сто мест перечитаны от 100 до 1, его там нет ни на одной строке. Весь его канон в этой модели держится на одной записи The Flow.", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020", "https://ru.wikipedia.org/wiki/Горгород", "https://meduza.io/news/2015/11/13/oxxxymiron-vylozhil-novyy-albom"]},
+    {"key": "atl_marabu", "artist": "ATL", "title": "МАРАБУ", "year": 2015, "T": 90, "S": 88, "D": 82, "lists": {"afisha100": 25, "flow20": true}, "accuracy": "A", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020", "https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "kaspiy_storona", "artist": "КАСПИЙСКИЙ ГРУЗ", "title": "СТОРОНА А СТОРОНА Б", "year": 2015, "T": 84, "S": 76, "D": 80, "lists": {"afisha100": 99, "flow20": true}, "accuracy": "A", "note": "Разлёт оценок между списками максимальный в пуле: предпоследнее место у Афиши и попадание в двадцатку у The Flow.", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020", "https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "lsp_tragiccity", "artist": "ЛСП", "title": "TRAGIC CITY", "year": 2017, "T": 88, "S": 90, "D": 86, "lists": {"afisha100": 12, "flow20": true}, "accuracy": "A", "note": "Год и хронометраж из статьи: 45 минут, 13 треков, 2017. Правило одного альбома отсекло Magic City на месте 31 и Виселицца на 57.", "src": ["https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/", "https://the-flow.ru/features/20-rep-albomov-2000-2020"]},
+    {"key": "griby_dom", "artist": "ГРИБЫ", "title": "ДОМ НА КОЛЕСАХ Ч. 1", "year": 2016, "T": 70, "S": 86, "D": 88, "lists": {"afisha100": 17}, "accuracy": "A", "note": "Год и хронометраж из статьи: 28 минут, 9 треков, 2016.", "src": ["https://daily.afisha.ru/specials/22031-20-luchshih-postsovetskih-albomov-ot-mumiy-trollya-do-kino-ot-nrktk-do-tatu/"]},
+    {"key": "husky_lubimye", "artist": "ХАСКИ", "title": "ЛЮБИМЫЕ ПЕСНИ ВООБРАЖАЕМЫХ ЛЮДЕЙ", "year": 2017, "T": 94, "S": 80, "D": 88, "lists": {"afisha100": 42, "flow20": true}, "accuracy": "A", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020", "https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "pharaoh_pinkphloyd", "artist": "PHARAOH", "title": "PINK PHLOYD", "year": 2017, "T": 74, "S": 90, "D": 88, "lists": {"flow20": true}, "accuracy": "A", "note": "В сотне Афиши PHARAOH нет ни одной строкой.", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020"]},
+    {"key": "mnogoznaal_kosmos", "artist": "MNOGOZNAAL", "title": "ГОСТИНИЦА КОСМОС", "year": 2017, "T": 86, "S": 84, "D": 74, "lists": {"afisha100": 62}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "monatik_zvuchit", "artist": "MONATIK", "title": "ЗВУЧИТ", "year": 2017, "T": 62, "S": 84, "D": 88, "lists": {"afisha100": 37}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"]},
+    {"key": "monetochka_raskraski", "artist": "МОНЕТОЧКА", "title": "РАСКРАСКИ ДЛЯ ВЗРОСЛЫХ", "year": 2018, "T": 84, "S": 76, "D": 82, "lists": {"afisha100": 30}, "streams": 45618000, "accuracy": "A", "src": ["https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/", "https://bestsellingalbums.org/streaming/decade/2010"]},
+    {"key": "ic3peak_skazka", "artist": "IC3PEAK", "title": "СКАЗКА", "year": 2018, "T": 74, "S": 86, "D": 84, "lists": {"afisha100": 82}, "accuracy": "B", "src": ["https://daily.afisha.ru/specials/22056-100-luchshih-postsovetskih-albomov-za-30-let-vybor-afishi-daily/"]},
+    {"key": "depo_oldblood", "artist": "BOULEVARD DEPO", "title": "OLD BLOOD", "year": 2020, "T": 86, "S": 84, "D": 78, "lists": {"flow20": true}, "accuracy": "A", "src": ["https://the-flow.ru/features/20-rep-albomov-2000-2020"]}
+  ],
+  "rejected": [
+    {"artist": "ИВАН ДОРН", "title": "CO N DORN", "why": "Первое место сотни Афиши по всем признакам принадлежит альбому 2012 года на 16 треков и 1 час 1 минуту, но название в статье вырезано вёрсткой. Пока номер один не подтверждён вторым источником, альбом в сетку не берётся."},
+    {"artist": "POMPEYA", "title": "TROPICAL", "why": "Место 84 в сотне, но альбом англоязычный. Кубок только для русского языка."},
+    {"artist": "ОКЕАН ЕЛЬЗИ", "title": "ТАМ ДЕ НАС НЕМА", "why": "Украиноязычный релиз, вне языкового окна."},
+    {"artist": "BIG BABY TAPE", "title": "DRAGONBORN", "why": "В статье Афиши упомянут в проходной фразе, но в сотню не входит и в двадцатку The Flow тоже. Без записи в списке канон равен нулю, а выдумывать место запрещено."},
+    {"artist": "СКРИПТОНИТ", "title": "УРОБОРОС УЛИЦА 36 ЗЕРКАЛА", "why": "Место 79 у Афиши и первое место стриминга 2017 года с 85 530 000 прослушиваний, но правило одного альбома от артиста оставляет Дом с нормальными явлениями."},
+    {"artist": "ЛСП", "title": "MAGIC CITY", "why": "Место 31, подтверждено Википедией отдельно. Уступает Tragic City по правилу одного альбома."}
+  ]
+}
