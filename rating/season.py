@@ -1,122 +1,133 @@
 #!/usr/bin/env python3
-"""ECHORATE SEASON v3. Golden Ball engine with fixed cross-position weights."""
+# -*- coding: utf-8 -*-
+"""Золотой мяч сезона v4.0.
+
+    python3 season.py 2017            таблица сезона
+    python3 season.py --all           все доступные сезоны
+    python3 season.py 2017 --toty     сборная года
+    python3 season.py 2017 --json     машинный вывод
+
+Сезон без опубликованных итогов не считается. Он печатает список того, чего не хватает.
+"""
 from __future__ import annotations
 
+import argparse
 import json
-import math
-from pathlib import Path
 
-VERSION = "3.0"
-CUTOFF = "Все официальные итоги сезона, опубликованные до 31 января следующего года"
-W = {"T": .15, "S": .15, "D": .15, "H": .25, "I": .30}
-OUT = 62.0
-assert abs(sum(W.values()) - 1.0) < 1e-9
+import core
+
+SEASONS = core._load("seasons_input.json")["seasons"]
 
 
-def rnd(x: float) -> int:
-    return int(math.floor(x + .5))
+def available() -> list[str]:
+    return sorted(SEASONS)
 
 
-def clamp(x: float) -> float:
-    return max(30.0, min(99.0, x))
+def solve_year(year: str | int) -> dict:
+    year = str(year)
+    if year not in SEASONS:
+        raise core.DataError(f"сезон {year} не описан. Есть: {', '.join(available())}")
+    season = SEASONS[year]
+    if season["status"] != "published":
+        return {"year": year, "status": season["status"], "rows": [],
+                "blocked_by": season.get("blocked_by", []),
+                "legacy_result": season.get("legacy_result"),
+                "legacy_model": season.get("legacy_model")}
+    rows = core.season_solve(season["pool"])
+    return {"year": year, "status": "ok", "source": season.get("source"),
+            "published_top3": season.get("published_top3"), "rows": rows}
 
 
-def hits(rank: int | None, role: str = "lead") -> float:
-    value = OUT if rank is None or rank > 10 else 96 - 8 * math.log2(rank)
-    if rank is not None and rank <= 10:
-        if role == "colead":
-            value -= 3
-        if role == "guest":
-            value -= 9
-    return clamp(value)
-
-
-def influence(album_rank: int | None, vote_rank: int | None = None) -> float:
-    base = OUT if album_rank is None or album_rank > 10 else 96 - 7 * math.log2(album_rank)
-    bonus = max(0.0, 6 - vote_rank) if vote_rank is not None and vote_rank <= 5 else 0.0
-    return clamp(base + bonus)
-
-
-def score(a: dict) -> dict:
-    h = hits(a.get("tr"), a.get("role", "lead"))
-    i = influence(a.get("alb"), a.get("vote"))
-    raw = a["T"] * W["T"] + a["S"] * W["S"] + a["D"] * W["D"] + h * W["H"] + i * W["I"]
-    sp = a.get("spots") or []
-    return {**a, "H": round(h, 2), "I": round(i, 2), "raw": round(raw, 2), "ovr": rnd(raw),
-            "tie_count": len(sp), "tie_best": min(sp) if sp else 99}
-
-
-def solve(title: str, pool: list[dict]) -> list[dict]:
-    rows = sorted((score(a) for a in pool), key=lambda x: -x["raw"])
-    groups, current = [], []
-    for row in rows:
-        if not current or current[0]["raw"] - row["raw"] < 1.0:
-            current.append(row)
+def toty(year: str | int) -> dict:
+    """Сборная года. Пустая позиция остаётся пустой, чужая туда не ставится."""
+    result = solve_year(year)
+    slots = core.MODEL["toty"]["slots"]
+    if result["status"] != "ok":
+        return {"year": str(year), "status": result["status"],
+                "slots": {s: None for s in slots}, "blocked_by": result.get("blocked_by", [])}
+    taken: set[str] = set()
+    picks: dict[str, dict | None] = {}
+    for slot in slots:
+        pool = [r for r in result["rows"] if r["pos"] == slot and r["n"] not in taken]
+        if pool:
+            best = max(pool, key=lambda r: (r["ovr"], r["raw"]))
+            picks[slot] = {"name": best["n"], "ovr": best["ovr"], "place": best["place"]}
+            taken.add(best["n"])
         else:
-            groups.append(current)
-            current = [row]
-    if current:
-        groups.append(current)
-
-    ordered = []
-    for group in groups:
-        if len(group) > 1:
-            group.sort(key=lambda x: (-x["tie_count"], x["tie_best"], x.get("vote") or 99, -x["raw"]))
-            for row in group:
-                row["tiebreak"] = True
-        ordered.extend(group)
-
-    print(title)
-    for place, row in enumerate(ordered, 1):
-        print(place, row["n"], row["pos"], row["raw"], row["ovr"], "TB" if row.get("tiebreak") else "")
-    return ordered
+            picks[slot] = None
+    filled = [v for v in picks.values() if v]
+    return {"year": str(year), "status": "ok", "scheme": core.MODEL["toty"]["scheme"],
+            "slots": picks, "filled": len(filled), "empty": [k for k, v in picks.items() if not v],
+            "team_ovr": round(sum(v["ovr"] for v in filled) / len(filled), 2) if filled else None}
 
 
-P2015 = [
-    dict(n="СКРИПТОНИТ", pos="CDM", T=84, S=96, D=90, tr=3, alb=1, vote=None, spots=[3, 1]),
-    dict(n="OXXXYMIRON", pos="CAM", T=96, S=82, D=94, tr=6, alb=2, vote=None, spots=[6, 2]),
-    dict(n="ЛСП", pos="RW", T=84, S=86, D=82, tr=1, alb=5, vote=None, role="lead", spots=[1, 5]),
-    dict(n="ATL", pos="CDM", T=90, S=92, D=82, tr=5, alb=3, vote=None, spots=[5, 3]),
-    dict(n="КАСПИЙСКИЙ ГРУЗ", pos="CB", T=86, S=84, D=84, tr=10, alb=4, vote=None, spots=[10, 4]),
-    dict(n="4 ПОЗИЦИИ БРУНО", pos="CDM", T=80, S=88, D=72, tr=4, alb=10, vote=None, spots=[4, 10]),
-    dict(n="PHARAOH", pos="LW", T=72, S=88, D=86, tr=2, alb=None, vote=None, spots=[2]),
-    dict(n="ВЛАДИ", pos="CAM", T=84, S=78, D=76, tr=8, alb=7, vote=None, role="colead", spots=[8, 7]),
-    dict(n="HORUS", pos="CAM", T=88, S=82, D=76, tr=9, alb=9, vote=None, spots=[9, 9]),
-    dict(n="ГРОТ", pos="CB", T=82, S=76, D=74, tr=8, alb=6, vote=None, role="colead", spots=[8, 6]),
-    dict(n="GUF", pos="CB", T=76, S=84, D=78, tr=None, alb=8, vote=None, spots=[8]),
-    dict(n="НОГГАНО", pos="ST", T=74, S=70, D=84, tr=7, alb=None, vote=None, spots=[7]),
-]
-
-P2017 = [
-    dict(n="ЛСП", pos="RW", T=88, S=86, D=84, tr=4, alb=1, vote=1, spots=[4, 1, 1]),
-    dict(n="PHARAOH", pos="LW", T=76, S=92, D=90, tr=1, alb=5, vote=None, spots=[1, 5]),
-    dict(n="СКРИПТОНИТ", pos="CDM", T=86, S=96, D=90, tr=5, alb=4, vote=2, role="colead", spots=[5, 4, 7, 2]),
-    dict(n="ХАСКИ", pos="CAM", T=92, S=84, D=88, tr=10, alb=3, vote=None, spots=[10, 3]),
-    dict(n="ATL", pos="CDM", T=88, S=88, D=80, tr=8, alb=10, vote=None, spots=[8, 10]),
-    dict(n="ЭЛДЖЕЙ", pos="ST", T=68, S=86, D=88, tr=2, alb=None, vote=None, role="colead", spots=[2]),
-    dict(n="ПОШЛАЯ МОЛЛИ", pos="LW", T=70, S=74, D=82, tr=None, alb=2, vote=None, spots=[2]),
-    dict(n="АИГЕЛ", pos="CAM", T=86, S=88, D=84, tr=6, alb=None, vote=None, spots=[6]),
-    dict(n="FEDUK", pos="ST", T=70, S=80, D=82, tr=2, alb=None, vote=None, role="colead", spots=[2]),
-    dict(n="МАКС КОРЖ", pos="ST", T=74, S=76, D=84, tr=None, alb=6, vote=3, spots=[6, 3]),
-    dict(n="25/17", pos="CB", T=86, S=78, D=78, tr=None, alb=8, vote=None, spots=[8]),
-    dict(n="КАСПИЙСКИЙ ГРУЗ", pos="CB", T=84, S=80, D=80, tr=None, alb=9, vote=None, spots=[9]),
-    dict(n="OXXXYMIRON", pos="CAM", T=96, S=80, D=92, tr=None, alb=None, vote=4, spots=[4]),
-    dict(n="ГРИБЫ", pos="ST", T=66, S=82, D=80, tr=3, alb=None, vote=None, spots=[3]),
-    dict(n="T-FEST", pos="RW", T=76, S=82, D=82, tr=5, alb=None, vote=None, role="colead", spots=[5]),
-    dict(n="СЛАВА КПСС", pos="CAM", T=88, S=70, D=80, tr=7, alb=None, vote=None, spots=[7]),
-    dict(n="FACE", pos="ST", T=62, S=74, D=88, tr=9, alb=48, vote=None, spots=[9]),
-    dict(n="NOIZE MC", pos="CAM", T=84, S=74, D=80, tr=None, alb=None, vote=5, spots=[5]),
-]
+def print_year(result: dict) -> None:
+    year = result["year"]
+    if result["status"] != "ok":
+        print(f"ЗОЛОТОЙ МЯЧ {year}: не считается, статус {result['status']}")
+        for item in result.get("blocked_by", []):
+            print(f"  требуется: {item}")
+        if result.get("legacy_result"):
+            print(f"  старый результат по дореформенной модели: {result['legacy_result']}")
+            print("  эти баллы несравнимы с 2015 и 2017, в выпуск их брать нельзя")
+        return
+    print(f"ЗОЛОТОЙ МЯЧ {year}   источник: {result.get('source')}")
+    print("-" * 78)
+    print(f"{'#':>2} {'АРТИСТ':<20} {'ПОЗ':<4} {'Т':>3} {'З':>3} {'П':>3} {'ХИТЫ':>6} {'ВЛИЯ':>6} {'RAW':>7} {'OVR':>4}")
+    print("-" * 78)
+    for row in result["rows"]:
+        mark = " TB" if row.get("tiebreak") else ""
+        print(f"{row['place']:>2} {row['n']:<20} {row['pos']:<4} {row['T']:>3} {row['S']:>3} {row['D']:>3} "
+              f"{row['H']:>6.2f} {row['I']:>6.2f} {row['raw']:>7.2f} {row['ovr']:>4}{mark}")
+    print("-" * 78)
+    if result.get("published_top3"):
+        got = [(r["n"], r["ovr"]) for r in result["rows"][:3]]
+        want = [tuple(x) for x in result["published_top3"]]
+        print(f"  опубликовано: {want}")
+        print(f"  посчитано:   {got}")
+        print(f"  совпадение: {'да' if got == want else 'НЕТ, разбираемся до выпуска'}")
+    if any(r.get("tiebreak") for r in result["rows"]):
+        print("  TB это тайбрейк: число попаданий в топы, затем лучшее место, затем голосование")
 
 
-def main() -> None:
-    r15 = solve("ЗОЛОТОЙ МЯЧ 2015, пул 12", P2015)
-    r17 = solve("ЗОЛОТОЙ МЯЧ 2017, пул 18", P2017)
-    payload = {"version": VERSION, "cutoff": CUTOFF, "weights": W, "seasons": {"2015": r15, "2017": r17}}
-    out = Path(__file__).parent / "data" / "seasons.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+def print_toty(team: dict) -> None:
+    if team["status"] != "ok":
+        print(f"СБОРНАЯ {team['year']}: не собирается, статус {team['status']}")
+        for item in team.get("blocked_by", []):
+            print(f"  требуется: {item}")
+        return
+    print(f"СБОРНАЯ {team['year']}   схема {team['scheme']}   средний балл {team['team_ovr']}")
+    print("-" * 60)
+    for slot, pick in team["slots"].items():
+        label = core.POSITION_LABELS.get(slot, "")
+        if pick:
+            print(f"  {slot:<3} {label:<15} {pick['name']:<18} {pick['ovr']:>3}")
+        else:
+            print(f"  {slot:<3} {label:<15} пусто, нет кандидатов")
+    if team["empty"]:
+        print(f"  Пустые позиции: {', '.join(team['empty'])}. На кадре говорим об этом прямо.")
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Золотой мяч сезона")
+    parser.add_argument("year", nargs="?", help="год, например 2017")
+    parser.add_argument("--all", action="store_true", help="все сезоны")
+    parser.add_argument("--toty", action="store_true", help="сборная года")
+    parser.add_argument("--json", action="store_true", help="машинный вывод")
+    args = parser.parse_args(argv)
+
+    years = available() if args.all or not args.year else [args.year]
+    payload = []
+    for year in years:
+        item = toty(year) if args.toty else solve_year(year)
+        payload.append(item)
+        if not args.json:
+            (print_toty if args.toty else print_year)(item)
+            print()
+    if args.json:
+        print(json.dumps(payload if len(payload) > 1 else payload[0], ensure_ascii=False, indent=2))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

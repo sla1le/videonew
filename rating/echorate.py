@@ -1,140 +1,151 @@
 #!/usr/bin/env python3
-"""ECHORATE league engine v2.1.1. Snapshot: 2026-08-06."""
+# -*- coding: utf-8 -*-
+"""Лига ECHORATE v4.0.
+
+    python3 echorate.py                 таблица лиги
+    python3 echorate.py --artist kai    карточка одного артиста
+    python3 echorate.py --check         проверка данных перед выпуском
+    python3 echorate.py --json          машинный вывод для генераторов
+    python3 echorate.py --write         обновить data/league.json
+
+Математика живёт только в core.py, данные только в data/artists.json.
+До v4.0 те же цифры лежали в двух местах и успели разойтись.
+"""
 from __future__ import annotations
 
+import argparse
 import json
-import math
-from pathlib import Path
+import sys
 
-SNAP = "2026-08-06"
-VER = "2.1.1"
-
-WEIGHTS = {
-    "ST":  {"T": .10, "S": .10, "D": .20, "H": .30, "L": .20, "I": .10},
-    "CAM": {"T": .25, "S": .10, "D": .15, "H": .15, "L": .15, "I": .20},
-    "CM":  {"T": .15, "S": .15, "D": .20, "H": .20, "L": .10, "I": .20},
-    "CDM": {"T": .10, "S": .25, "D": .15, "H": .15, "L": .10, "I": .25},
-    "LW":  {"T": .10, "S": .25, "D": .15, "H": .20, "L": .10, "I": .20},
-    "RW":  {"T": .10, "S": .25, "D": .15, "H": .20, "L": .10, "I": .20},
-    "CB":  {"T": .15, "S": .10, "D": .15, "H": .20, "L": .20, "I": .20},
-}
-for weights in WEIGHTS.values():
-    assert abs(sum(weights.values()) - 1.0) < 1e-9
-    assert weights["T"] + weights["S"] + weights["D"] <= .5
+import core
 
 
-def rnd(value: float) -> int:
-    return int(math.floor(value + .5))
+def bar(value: int, width: int = 28) -> str:
+    filled = int(round((value - 30) / 69 * width))
+    return "#" * max(0, min(width, filled))
 
 
-def clamp(value: float) -> float:
-    return max(30.0, min(99.0, value))
+def print_table(result: dict) -> None:
+    print(f"ECHORATE v{result['version']}   снимок {result['snapshot']}   округление {result['rounding']}")
+    print("-" * 96)
+    head = f"{'#':>2} {'АРТИСТ':<13} {'ПОЗ':<5}"
+    for key in core.STAT_ORDER:
+        head += f" {core.STAT_LABELS[key][:4]:>5}"
+    head += f" {'RAW':>7} {'OVR':>4} {'ПОТ':>4} {'ЦЕНА':>6} {'ТОЧ':>3}"
+    print(head)
+    print("-" * 96)
+    for row in result["rows"]:
+        line = f"{row['rank']:>2} {row['name']:<13} {row['pos']:<5}"
+        for key in core.STAT_ORDER:
+            line += f" {row['stats'][key]:>5}"
+        line += f" {row['raw']:>7.2f} {row['ovr']:>4} {row['potential']:>4} {row['price_mln']:>6} {row['accuracy']:>3}"
+        print(line)
+    print("-" * 96)
+    for row in result["rows"]:
+        if row["was"] and row["was"] != row["ovr"]:
+            print(f"  БЫЛО {row['was']}, СТАЛО {row['ovr']}: {row['name']}. Старый балл зачёркивается на кадре.")
+    for row in result["rows"]:
+        if row["accuracy"] == "C":
+            print(f"  ТОЧНОСТЬ C: {row['name']}. На кадре нужна пометка об оценке.")
+    for item in result["skipped"]:
+        print(f"  ПРОПУЩЕН {item['name']}: {item['reason']}")
 
 
-def hits(top5: int) -> float:
-    return clamp(70 + 6 * math.log2(top5 / 60_000_000))
+def print_card(row: dict) -> None:
+    print(f"{row['name']}   {row['pos']} {core.POSITION_LABELS.get(row['pos'], '')}")
+    print(f"OVR {row['ovr']}   ПОТЕНЦИАЛ {row['potential']}   ЦЕНА {row['price_mln']} млн")
+    if row["was"] and row["was"] != row["ovr"]:
+        print(f"БЫЛО {row['was']}")
+    print("-" * 52)
+    for key in core.STAT_ORDER:
+        value = row["stats"][key]
+        print(f"  {core.STAT_LABELS[key]:<9} {value:>3}  {bar(value)}")
+    print("-" * 52)
+    for name, text in row["sources"].items():
+        print(f"  {name}: {text}")
 
 
-def lives(capacity: int, cities: int, festival: bool = False) -> float:
-    cap_eff = capacity * (.6 if festival else 1.0)
-    return clamp(70 + 5 * math.log2(cap_eff / 10_000) + min(6, max(0, cities - 5)))
+def check() -> int:
+    """Ловит то, что раньше ловилось глазами или не ловилось вовсе."""
+    payload, artists = core.load_artists()
+    snapshot = payload["snapshot"]
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    for artist in artists:
+        who = artist["name"]
+        if not artist.get("in_league"):
+            if not artist.get("needs"):
+                warnings.append(f"{who}: резерв без списка недостающих полей")
+            continue
+        try:
+            row = core.rate(artist, snapshot)
+        except core.DataError as err:
+            errors.append(str(err))
+            continue
+        if artist.get("born"):
+            computed = core.age_at(artist["born"], snapshot)
+            if artist.get("age") is not None and artist["age"] != computed:
+                errors.append(f"{who}: возраст {artist['age']} в файле, но по дате рождения {computed}")
+        else:
+            warnings.append(f"{who}: нет даты рождения, возраст забит руками и устареет")
+        total = artist.get("spotify_total")
+        if total and artist.get("catalog"):
+            drift = abs(artist["catalog"] - total) / total
+            if drift > 0.15:
+                warnings.append(
+                    f"{who}: catalog {artist['catalog']:,} расходится с Spotify {total:,} на {drift:.0%}"
+                )
+        if row["accuracy"] not in ("A", "B", "C"):
+            errors.append(f"{who}: точность {row['accuracy']} вне шкалы")
+        for issue in artist.get("open_issues", []):
+            warnings.append(f"{who}: {issue}")
+
+    print(f"проверено артистов: {len(artists)}")
+    for text in warnings:
+        print(f"  ПРЕДУПРЕЖДЕНИЕ: {text}")
+    for text in errors:
+        print(f"  ОШИБКА: {text}")
+    print(f"итог: {'ошибок нет' if not errors else str(len(errors)) + ' ошибок'}")
+    return 1 if errors else 0
 
 
-def influence(catalog: int, scene: float) -> float:
-    assert -6 <= scene <= 6
-    return clamp(70 + 6 * math.log2(catalog / 300_000_000) + scene)
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Лига ECHORATE")
+    parser.add_argument("--artist", help="ключ артиста, например kai")
+    parser.add_argument("--json", action="store_true", help="машинный вывод")
+    parser.add_argument("--check", action="store_true", help="проверка данных")
+    parser.add_argument("--write", action="store_true", help="обновить data/league.json")
+    args = parser.parse_args(argv)
 
+    if args.check:
+        return check()
 
-def age_bonus(age: int | None) -> int:
-    if age is None:
-        return 2
-    if age <= 21:
-        return 8
-    if age <= 24:
-        return 6
-    if age <= 27:
-        return 4
-    if age <= 30:
-        return 2
-    if age <= 33:
-        return 1
-    return 0
+    result = core.league()
 
-
-def form_bonus(change: float | None) -> int:
-    if change is None:
+    if args.artist:
+        found = [r for r in result["rows"] if r["key"] == args.artist or r["name"] == args.artist.upper()]
+        if not found:
+            keys = ", ".join(r["key"] for r in result["rows"])
+            print(f"нет такого артиста. Есть: {keys}", file=sys.stderr)
+            return 1
+        if args.json:
+            print(json.dumps(found[0], ensure_ascii=False, indent=2))
+        else:
+            print_card(found[0])
         return 0
-    if change > 10:
-        return 3
-    if change < -10:
-        return -2
+
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    else:
+        print_table(result)
+
+    if args.write:
+        path = core.DATA / "league.json"
+        path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(f"записано {path}")
     return 0
-
-
-def rate(artist: dict) -> dict:
-    required_sources = ("src_top5", "src_live", "src_scene")
-    missing = [key for key in required_sources if not artist.get(key)]
-    if missing:
-        raise ValueError(f"{artist['name']}: missing sources {missing}")
-
-    stats = {
-        "T": int(artist["T"]),
-        "S": int(artist["S"]),
-        "D": int(artist["D"]),
-        "H": rnd(hits(int(artist["top5"]))),
-        "L": rnd(lives(int(artist["cap"]), int(artist["cities"]), bool(artist.get("fest")))),
-        "I": rnd(influence(int(artist["catalog"]), float(artist["scene"]))),
-    }
-    weights = WEIGHTS[artist["pos"]]
-    raw = sum(stats[key] * weights[key] for key in stats)
-    ovr = rnd(raw)
-    potential = min(99, max(ovr, ovr + age_bonus(artist.get("age")) + form_bonus(artist.get("form"))))
-    return {
-        "key": artist["key"], "name": artist["name"], "pos": artist["pos"],
-        "stats": stats, "raw": round(raw, 2), "ovr": ovr, "potential": potential,
-        "was": artist.get("was"), "accuracy": artist.get("accuracy", "B"),
-        "sources": {key: artist[key] for key in required_sources},
-    }
-
-
-ARTISTS = [
-    dict(key="kreed", name="ЕГОР КРИД", pos="ST", age=32, T=68, S=82, D=86,
-         top5=190_000_000, cap=80_000, cities=10, fest=False, catalog=639_305_028,
-         scene=4, form=0, was=87, accuracy="A", src_top5="kworb Spotify snapshot 2026-08-06",
-         src_live="Лужники, 10-11.07.2026", src_scene="Spotify catalog + scene modifier 4"),
-    dict(key="buda", name="OG BUDA", pos="CM", age=32, T=76, S=85, D=88,
-         top5=107_000_000, cap=10_000, cities=5, fest=False, catalog=642_755_820,
-         scene=3, form=0, accuracy="A", src_top5="kworb Spotify snapshot 2026-08-06",
-         src_live="confirmed solo venues through 2026-08-06", src_scene="Spotify catalog + scene modifier 3"),
-    dict(key="kai", name="KAI ANGEL", pos="CDM", age=29, T=72, S=90, D=88,
-         top5=48_000_000, cap=8_500, cities=5, fest=False, catalog=294_317_417,
-         scene=5, form=0, was=84, accuracy="A", src_top5="kworb Spotify snapshot 2026-08-06",
-         src_live="confirmed solo venues through 2026-08-06", src_scene="Spotify catalog + scene modifier 5"),
-    dict(key="mice", name="9MICE", pos="LW", age=28, T=74, S=88, D=85,
-         top5=52_000_000, cap=8_500, cities=5, fest=False, catalog=300_000_000,
-         scene=5, form=0, was=86, accuracy="C", src_top5="stale kworb snapshot, refresh required",
-         src_live="confirmed solo venues through 2026-08-06", src_scene="estimated catalog + scene modifier 5"),
-    dict(key="dhill", name="LILDRUGHILL", pos="CDM", age=25, T=78, S=90, D=86,
-         top5=34_000_000, cap=1_200, cities=5, fest=False, catalog=95_300_000,
-         scene=4, form=-20, accuracy="B", src_top5="kworb Spotify snapshot 2026-08-06",
-         src_live="confirmed solo venues through 2026-08-06", src_scene="Spotify catalog + scene modifier 4"),
-    dict(key="thrill", name="THRILL PILL", pos="ST", age=25, T=64, S=74, D=80,
-         top5=44_133_690, cap=2_000, cities=9, fest=False, catalog=50_300_000,
-         scene=4, form=-20, accuracy="B", src_top5="five Spotify counters, snapshot 2026-08-06",
-         src_live="earlybird.su tour + graphite.moscow", src_scene="catalog estimate + scene modifier 4"),
-]
-
-
-def main() -> None:
-    rows = sorted((rate(a) for a in ARTISTS), key=lambda row: (-row["ovr"], -row["raw"], row["name"]))
-    payload = {"version": VER, "snapshot": SNAP, "rows": rows}
-    out = Path(__file__).parent / "data" / "league.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    for number, row in enumerate(rows, 1):
-        s = row["stats"]
-        print(number, row["name"], row["pos"], *(s[k] for k in "TSDHLI"), row["raw"], row["ovr"], row["potential"])
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
