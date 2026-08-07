@@ -1,0 +1,13 @@
+{
+  "version": "2.1.1",
+  "snapshot": "2026-08-06",
+  "rounding": "floor(x + 0.5)",
+  "rows": [
+    {"rank": 1, "key": "kreed", "name": "ЕГОР КРИД", "pos": "ST", "stats": {"T": 68, "S": 82, "D": 86, "H": 80, "L": 90, "I": 81}, "raw": 82.30, "ovr": 82, "potential": 83, "was": 87, "accuracy": "A"},
+    {"rank": 2, "key": "buda", "name": "OG BUDA", "pos": "CM", "stats": {"T": 76, "S": 85, "D": 88, "H": 75, "L": 70, "I": 80}, "raw": 79.75, "ovr": 80, "potential": 81, "was": null, "accuracy": "A"},
+    {"rank": 3, "key": "kai", "name": "KAI ANGEL", "pos": "CDM", "stats": {"T": 72, "S": 90, "D": 88, "H": 68, "L": 69, "I": 75}, "raw": 78.75, "ovr": 79, "potential": 81, "was": 84, "accuracy": "A"},
+    {"rank": 4, "key": "mice", "name": "9MICE", "pos": "LW", "stats": {"T": 74, "S": 88, "D": 85, "H": 69, "L": 69, "I": 75}, "raw": 77.85, "ovr": 78, "potential": 80, "was": 86, "accuracy": "C"},
+    {"rank": 5, "key": "dhill", "name": "LILDRUGHILL", "pos": "CDM", "stats": {"T": 78, "S": 90, "D": 86, "H": 65, "L": 55, "I": 64}, "raw": 74.45, "ovr": 74, "potential": 76, "was": null, "accuracy": "B"},
+    {"rank": 6, "key": "thrill", "name": "THRILL PILL", "pos": "ST", "stats": {"T": 64, "S": 74, "D": 80, "H": 67, "L": 62, "I": 59}, "raw": 68.33, "ovr": 68, "potential": 70, "was": null, "accuracy": "B"}
+  ]
+}

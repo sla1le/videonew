@@ -1,0 +1,32 @@
+{
+  "key": "thrill",
+  "name": "THRILL PILL",
+  "pos": "ST",
+  "snapshot": "2026-08-06",
+  "age": 25,
+  "T": 64,
+  "S": 74,
+  "D": 80,
+  "top5_tracks": {
+    "Грустная Песня": 17831253,
+    "Миллионы": 15702673,
+    "Бентли": 5535738,
+    "Бабник": 3048324,
+    "Холостяк [Remix]": 2015702
+  },
+  "top5": 44133690,
+  "catalog_est": 50300000,
+  "cap": 2000,
+  "cities": 9,
+  "festival": false,
+  "scene": 4,
+  "form": -20,
+  "calculated": {"H": 67.34, "L": 62.39, "I": 58.54, "raw": 68.33, "ovr": 68, "potential": 70},
+  "sources": {
+    "top5": "Spotify counters, snapshot 2026-08-06",
+    "catalog": "estimate, kworb total unavailable",
+    "live": ["earlybird.su/thrill-pill-tour", "graphite.moscow"],
+    "identity": ["genius.com/artists/Thrill-pill", "decepticonz.ru"]
+  },
+  "accuracy": "B"
+}

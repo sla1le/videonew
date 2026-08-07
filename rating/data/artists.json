@@ -1,0 +1,14 @@
+{
+  "_note": "Справочник артистов. Любая цифра обязана иметь src. Нет источника - нет цифры на кадре.",
+  "snapshot": "2026-08-06",
+  "artists": [
+    {"key":"kreed","name":"ЕГОР КРИД","pos":"ST","real":"Егор Булаткин","born":"1994-06-25","crew":null,"spotify_total":639305028,"spotify_lead":503968095,"monthly":1644896,"catalog":639305028,"top5":190000000,"cap":80000,"cities":10,"scene":4,"form":0,"venue":"Лужники","spotify_id":null,"src":["kworb Spotify snapshot 2026-08-06","Лужники 10-11.07.2026"],"accuracy":"A"},
+    {"key":"buda","name":"OG BUDA","pos":"CM","real":"Григорий Ляхов","born":"1994-01-10","crew":"RANDOM CREW","spotify_total":642755820,"spotify_lead":464304452,"monthly":607612,"catalog":642755820,"top5":107000000,"cap":10000,"cities":5,"scene":3,"form":0,"venue":null,"spotify_id":"4HVffUWlHdRmS5dpOvDVyJ","src":["kworb Spotify snapshot 2026-08-06","RANDOM FEST is a Random Crew festival"],"accuracy":"A"},
+    {"key":"kai","name":"KAI ANGEL","pos":"CDM","real":"Дмитрий Ицков","born":"1997-02-04","crew":null,"spotify_total":294317417,"spotify_lead":null,"monthly":349988,"catalog":294317417,"top5":48000000,"cap":8500,"cities":5,"scene":5,"form":0,"venue":"МТС Live Холл","spotify_id":"2KoLmBXwsgMkfAvoPBlPmb","src":["kworb Spotify snapshot 2026-08-06","ticketland.ru"],"accuracy":"A"},
+    {"key":"mice","name":"9MICE","pos":"LW","real":null,"born":null,"crew":null,"spotify_total":218477740,"spotify_lead":null,"monthly":null,"catalog_est":300000000,"top5":52000000,"cap":8500,"cities":5,"scene":5,"form":0,"venue":"МТС Live Холл","spotify_id":"1pxLlPRiWRUBGdSOrVL4f0","src":["stale kworb snapshot","ticketland.ru"],"accuracy":"C"},
+    {"key":"dhill","name":"LILDRUGHILL","pos":"CDM","real":"Михаил Струев","born":"2000-11-21","crew":"SHMONEY SOUND","spotify_total":null,"spotify_lead":null,"monthly":103978,"catalog":95300000,"top5":34000000,"cap":1200,"cities":5,"scene":4,"form":-20,"venue":null,"spotify_id":"3v0qTkZvuro4johOZyIhOm","src":["kworb Spotify snapshot 2026-08-06","drughill.ru"],"accuracy":"B"},
+    {"key":"thrill","name":"THRILL PILL","pos":"ST","real":"Тимур Тофикович Самедов","born":"2000-10-22","crew":"Десептиконы","spotify_total":null,"spotify_lead":null,"monthly":133273,"catalog_est":50300000,"top5":44133690,"cap":2000,"cities":9,"scene":4,"form":-20,"venue":"ЦГК Графит","spotify_id":"3pONzjQKqFrh3zTQBTMeWd","src":["Spotify counters 2026-08-06","earlybird.su","graphite.moscow","decepticonz.ru"],"accuracy":"B"},
+    {"key":"platina","name":"ПЛАТИНА","pos":null,"real":"Роберт Плаудис","born":"1995-04-19","crew":null,"spotify_total":484709350,"spotify_lead":null,"monthly":586878,"catalog":484709350,"top5":null,"cap":null,"cities":null,"scene":null,"form":null,"venue":null,"spotify_id":"4TzGOY9RpErzedN02w8Boh","src":["kworb Spotify snapshot 2026-08-06","the-flow.ru/features/fenomen-platiny"],"accuracy":"B"}
+  ],
+  "reserve": ["PHARAOH", "OXXXYMIRON", "БАСТА", "MIYAGI", "ЛСП", "ROCKET", "ТЁМНЫЙ ПРИНЦ"]
+}
