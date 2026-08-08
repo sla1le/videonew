@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ECHORATE research result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scenario", "claims", "assets", "blockers"],
+  "properties": {
+    "scenario": {"type": "string"},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id", "status", "value", "source_url", "source_date", "quote_or_method"],
+        "properties": {
+          "claim_id": {"type": "string"},
+          "status": {"enum": ["confirmed", "rejected", "ambiguous"]},
+          "value": {},
+          "source_url": {"type": "string"},
+          "source_date": {"type": "string"},
+          "quote_or_method": {"type": "string"},
+          "second_source_url": {"type": "string"}
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["asset_id", "page_url", "image_url", "subject", "period", "license_note"],
+        "properties": {
+          "asset_id": {"type": "string"},
+          "page_url": {"type": "string"},
+          "image_url": {"type": "string"},
+          "subject": {"type": "string"},
+          "period": {"type": "string"},
+          "license_note": {"type": "string"}
+        }
+      }
+    },
+    "blockers": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ECHORATE task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["topic", "format"],
+  "properties": {
+    "topic": {"type": "string", "minLength": 3},
+    "format": {"type": "string", "minLength": 2},
+    "deadline": {"type": "string", "format": "date"},
+    "scenario_path": {"type": "string"}
+  }
+}

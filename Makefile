@@ -3,7 +3,7 @@
 PY ?= python3
 DECK ?= prime
 
-.PHONY: help setup check data test selfcheck refs decks render deck clean
+.PHONY: help setup check data scenarios test selfcheck refs decks render deck clean
 
 help:
 	@echo "make setup           зависимости python и node плюс chromium"
@@ -19,13 +19,16 @@ setup:
 	npm install
 	npx playwright install chromium
 
-check: data selfcheck test
+check: data scenarios selfcheck test
 
 decks:
 	$(PY) build/deck_guard.py build/decks/*.json
 
 data:
 	$(PY) ops/validate_data.py
+
+scenarios:
+	$(PY) ops/validate_scenarios.py
 
 selfcheck:
 	$(PY) ops/selfcheck.py
