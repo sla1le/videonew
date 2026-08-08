@@ -27,7 +27,11 @@ jobs:
 
       - name: Тесты движка рейтинга
         working-directory: rating
-        run: python -m unittest discover -p 'test_*.py'
+        run: |
+          for t in test_*.py; do
+            echo "== $t"
+            python "$t"
+          done
 
       - name: Эталонные кадры
         run: python refs/verify.py

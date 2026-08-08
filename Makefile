@@ -27,8 +27,10 @@ data:
 selfcheck:
 	$(PY) ops/selfcheck.py
 
+# тесты в этом репозитории запускаются как скрипты и печатают свой итог,
+# через unittest discover они не видны: внутри простые функции с assert
 test:
-	cd rating && $(PY) -m unittest discover -p 'test_*.py'
+	cd rating && for t in test_*.py; do echo "== $$t"; $(PY) $$t; done
 
 refs:
 	$(PY) refs/analyze.py
