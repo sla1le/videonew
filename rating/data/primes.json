@@ -1,0 +1,72 @@
+{
+ "version": "1.0",
+ "_note": "Прайм-карточки. Рейтинг считается на прайм-год, не на снимок лиги. Судейские баллы тоже за тот год.",
+ "engine": "season",
+ "weights": {
+  "T": 0.15,
+  "S": 0.15,
+  "D": 0.15,
+  "H": 0.25,
+  "I": 0.3
+ },
+ "primes": [
+  {
+   "key": "viperr_2024",
+   "name": "VIPERR",
+   "sub": "KAI ANGEL + 9MICE",
+   "pos": "CDM",
+   "pos2": "LW",
+   "year": 2024,
+   "album": "HEAVY METAL 2",
+   "album_date": "2024-09-13",
+   "tracks": 21,
+   "minutes": 38,
+   "judge": {
+    "T": 77,
+    "S": 92,
+    "D": 90
+   },
+   "peak": {
+    "chart": "APPLE MUSIC RU",
+    "position": 1,
+    "date": "2024-09-16"
+   },
+   "yearend": {
+    "album_rank": 14,
+    "song_rank": 19,
+    "list": "PHOENIX"
+   },
+   "face": "viperr_face.jpg",
+   "now_ovr": 79
+  },
+  {
+   "key": "thrill_2019",
+   "name": "THRILL PILL",
+   "sub": null,
+   "pos": "ST",
+   "pos2": null,
+   "year": 2019,
+   "album": "ОТКРОВЕНИЯ",
+   "album_date": "2019-11-08",
+   "tracks": null,
+   "minutes": null,
+   "judge": {
+    "T": 72,
+    "S": 80,
+    "D": 90
+   },
+   "peak": {
+    "chart": "GENIUS RU",
+    "position": 1,
+    "date": "2019-11-06"
+   },
+   "yearend": {
+    "album_rank": 21,
+    "song_rank": null,
+    "list": "THE FLOW"
+   },
+   "face": "thrill_otkr.jpg",
+   "now_ovr": 68
+  }
+ ]
+}
