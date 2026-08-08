@@ -1,0 +1,28 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "Айсберг артиста",
+ "type": "object",
+ "required": ["artist", "key", "status", "items"],
+ "properties": {
+  "artist": {"type": "string"},
+  "key": {"type": "string", "description": "совпадает с ключом в rating/data/artists.json, если артист там есть"},
+  "status": {"enum": ["draft", "ready"]},
+  "updated": {"type": "string"},
+  "items": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": ["title", "type", "level"],
+    "properties": {
+     "title": {"type": "string"},
+     "type": {"enum": ["release", "unreleased", "leak", "snippet", "demo", "feature"]},
+     "level": {"type": "integer", "minimum": 1, "maximum": 5},
+     "year": {"type": ["integer", "null"]},
+     "where": {"type": ["string", "null"]},
+     "note": {"type": ["string", "null"]}
+    },
+    "additionalProperties": false
+   }
+  }
+ }
+}

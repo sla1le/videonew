@@ -1,0 +1,49 @@
+{
+ "artist": "THRILL PILL",
+ "key": "thrill",
+ "status": "draft",
+ "updated": "2026-08-08",
+ "_note": "Стартовый файл. Верхние уровни взяты из rating/data/thrill_pill.json. Глубину заполняет автор.",
+ "items": [
+  {
+   "title": "Грустная Песня",
+   "type": "release",
+   "level": 1,
+   "year": 2019,
+   "where": "стриминги",
+   "note": null
+  },
+  {
+   "title": "Миллионы",
+   "type": "release",
+   "level": 1,
+   "year": null,
+   "where": "стриминги",
+   "note": null
+  },
+  {
+   "title": "Бентли",
+   "type": "release",
+   "level": 2,
+   "year": null,
+   "where": "стриминги",
+   "note": null
+  },
+  {
+   "title": "Бабник",
+   "type": "release",
+   "level": 2,
+   "year": null,
+   "where": "стриминги",
+   "note": null
+  },
+  {
+   "title": "Холостяк (Remix)",
+   "type": "release",
+   "level": 2,
+   "year": null,
+   "where": "стриминги",
+   "note": null
+  }
+ ]
+}
