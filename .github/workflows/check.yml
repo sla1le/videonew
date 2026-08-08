@@ -1,0 +1,33 @@
+name: проверка репозитория
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  repo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Зависимости
+        run: python -m pip install --upgrade pip -r requirements.txt
+
+      - name: Гигиена json
+        run: python ops/validate_data.py
+
+      - name: Самопроверка репозитория
+        run: python ops/selfcheck.py
+
+      - name: Тесты движка рейтинга
+        working-directory: rating
+        run: python -m unittest discover -p 'test_*.py'
+
+      - name: Эталонные кадры
+        run: python refs/verify.py

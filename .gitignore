@@ -1,7 +1,20 @@
 __pycache__/
 *.pyc
+node_modules/
+
+# сборка кадров
 html/
 out/
+build/html/
+build/out/
+build/final/
 assets/*.png
 probe*.png
+
+# замеры эталонов пересчитываются командой make refs,
+# в гит едет только refs/frames.csv
+refs/manifest.json
+refs/sheet_*.png
+refs/prev/
+
 .DS_Store
