@@ -134,7 +134,7 @@ def squad(budget: int | None = None) -> dict:
     if len(valid) < 6:
         blocked.append(f"вариантов всего {len(valid)}, для игры с зрителем нужно от 6")
         blocked.append("лигу надо расширить минимум до 9 артистов")
-    return {"format": "ТРИО ЗА 200 МЛН", "ready": bool(valid), "budget": budget,
+    return {"format": "ТРИО ЗА 200 МЛН", "ready": not blocked, "budget": budget,
             "formula": cfg["_formula"], "prices": [
                 {"name": r["name"], "pos": r["pos"], "ovr": r["ovr"],
                  "potential": r["potential"], "price_mln": r["price_mln"]} for r in rows],

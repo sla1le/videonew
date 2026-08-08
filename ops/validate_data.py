@@ -10,6 +10,7 @@
   4. В строках нет длинного тире, среднего тире и эмодзи. Данные попадают на кадр
      напрямую, и запреты стиля начинаются здесь, а не на верстке.
   5. Строка, которая начинается как дата, должна быть реальной датой и не из будущего.
+     Поле deadline исключено: это дата, до которой выпуск ещё можно поставить.
   6. Целые баллы лежат в шкале от 30 до 99, если поле называется ovr, potential,
      score или rating.
 
@@ -66,7 +67,7 @@ def walk(node, path: str, problems: list[str], today: dt.date) -> None:
             except ValueError:
                 problems.append(f"{path}: даты {head} не существует")
             else:
-                if value > today + dt.timedelta(days=1):
+                if value > today + dt.timedelta(days=1) and not path.endswith(".deadline"):
                     problems.append(f"{path}: дата {head} в будущем")
     elif isinstance(node, float):
         if node != node or node in (float("inf"), float("-inf")):

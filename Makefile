@@ -3,7 +3,7 @@
 PY ?= python3
 DECK ?= prime
 
-.PHONY: help setup check data test selfcheck refs render deck clean
+.PHONY: help setup check data test selfcheck refs decks render deck clean
 
 help:
 	@echo "make setup           зависимости python и node плюс chromium"
@@ -21,6 +21,9 @@ setup:
 
 check: data selfcheck test
 
+decks:
+	$(PY) build/deck_guard.py build/decks/*.json
+
 data:
 	$(PY) ops/validate_data.py
 
@@ -37,6 +40,7 @@ refs:
 	$(PY) refs/verify.py
 
 render:
+	$(PY) build/deck_guard.py build/decks/$(DECK).json
 	$(PY) build/gen.py build/decks/$(DECK).json
 	node build/render.js build/html/$(DECK).html build/out $(DECK)_
 	$(PY) build/lint.py build/html/$(DECK).html build/theme.css
