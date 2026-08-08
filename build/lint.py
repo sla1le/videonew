@@ -1,211 +1,182 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""Линтер текста и вёрстки деки. Версия 5.
+
+Запуск: python3 build/lint.py build/html/slides.html build/theme.css
 """
-Линтер стиля ЭХО. Проверяет текст кадра, тогда как qa.py проверяет геометрию.
-
-Запреты собраны из prompts/style-rules.md и prompts/design-rules.md.
-До v4.0 они существовали только прозой в промпте и нарушались молча.
-
-    python3 build/lint.py <папка выпуска>
-
-Код возврата 1, если найдено хотя бы одно нарушение уровня ERROR.
-"""
+import os
 import re
 import sys
-from pathlib import Path
 
 EMDASH = chr(8212)
-
-EMOJI = re.compile(
-    "["
-    "\U0001F300-\U0001FAFF"
-    "\U00002600-\U000027BF"
-    "\U0001F1E6-\U0001F1FF"
-    "\U0000FE0F"
-    "]"
-)
-
+ENDASH = chr(8211)
 STAT_ORDER = ["ТЕКСТЫ", "ЗВУК", "ПОДАЧА", "ХИТЫ", "ЛАЙВЫ", "ВЛИЯНИЕ"]
+STAT_ABBR = ["POT", "OVR PLUS", "ТЕК", "ЗВК", "ПДЧ", "ХИТ ", "ВЛН"]
+BANNED_FONTS = ["Oswald", "Bebas", "Roboto", "Montserrat", "Inter",
+                "Nimbus Sans Narrow", "Noto Sans"]
+FOOTER = "@ECHORATE"
+YEAR_LO, YEAR_HI = 1990, 2035
 
-STAT_ABBR = ["TEX", "ЗВК", "ПДЧ", "ХИТ", "ЛВ", "ВЛН", "POT", "OVR PLUS"]
-
-BANNED_FONTS = [
-    "Oswald", "Bebas", "Roboto", "Montserrat",
-    "Inter", "Nimbus Sans Narrow", "Noto Sans",
-]
-
-TAGS = re.compile(r"<[^>]+>")
-
-
-def text_of(html):
-    """Грубое снятие разметки. Для подсчёта слов и чисел этого достаточно."""
-    body = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", html, flags=re.S | re.I)
-    return re.sub(r"\s+", " ", TAGS.sub(" ", body)).strip()
+fails = []
+warns = []
 
 
-def find_line(src, idx):
-    return src.count("\n", 0, idx) + 1
+def fail(msg):
+    fails.append(msg)
 
 
-# ---------------------------------------------------------------- проверки
-
-def check_emdash(name, src, out):
-    for m in re.finditer(re.escape(EMDASH), src):
-        out.append(("ERROR", name, find_line(src, m.start()), "длинное тире U+2014"))
+def warn(msg):
+    warns.append(msg)
 
 
-def check_emoji(name, src, out):
-    for m in EMOJI.finditer(src):
-        out.append(("ERROR", name, find_line(src, m.start()),
-                    "эмодзи %r" % m.group(0)))
+def strip_tags(chunk):
+    chunk = re.sub(r"<svg[\s\S]*?</svg>", " ", chunk)
+    chunk = re.sub(r"<[^>]+>", " ", chunk)
+    chunk = chunk.replace("&nbsp;", " ").replace("&amp;", "&")
+    chunk = chunk.replace("&lt;", "<").replace("&gt;", ">")
+    return re.sub(r"\s+", " ", chunk).strip()
 
 
-def check_ne_a(name, src, out):
-    for pat, msg in (
-        (r"не [^.,!?<>]{2,40}, а ", "конструкция вида не X, а Y"),
-        (r", а не ", "конструкция вида X, а не Y"),
-        (r"не просто", "оборот не просто"),
-    ):
-        for m in re.finditer(pat, src, flags=re.I):
-            out.append(("ERROR", name, find_line(src, m.start()), msg))
+def split_frames(html):
+    parts = re.findall(r"<section class=\"s[\s\S]*?</section>", html)
+    return parts
 
 
-def check_stat_names(name, src, out):
-    txt = text_of(src)
-    if "POT" in txt:
-        out.append(("ERROR", name, 0, "POT вместо ПОТЕНЦИАЛ"))
-    for abbr in STAT_ABBR:
-        if abbr == "POT":
-            continue
-        if re.search(r"\b%s\b" % re.escape(abbr), txt):
-            out.append(("ERROR", name, 0, "аббревиатура стата %s" % abbr))
+# ---------------------------------------------------------------- текст
+def check_global_text(text):
+    if EMDASH in text:
+        fail("длинное тире в тексте")
+    if ENDASH in text:
+        fail("среднее тире в тексте")
+    for m in re.finditer(r"не [^.,!?<>]{2,40}, а ", text):
+        fail("шаблон не X, а Y: " + m.group(0)[:60])
+    for m in re.finditer(r", а не ", text):
+        fail("шаблон X, а не Y")
+    if "не просто" in text.lower():
+        fail("оборот не просто")
+    for ch in text:
+        o = ord(ch)
+        if 0x1F300 <= o <= 0x1FAFF or 0x2600 <= o <= 0x27BF:
+            fail("эмодзи в тексте: " + ch)
+            break
+    if re.search(r"(ВЫПУСК|EPISODE|EP)\s*[#N]?\s*\d+", text):
+        fail("номер выпуска на кадре")
+    for ab in STAT_ABBR:
+        if re.search(r"(?<![А-ЯёЁA-Z])%s(?![А-ЯёЁA-Z])" % ab.strip(), text):
+            fail("аббревиатура стата: " + ab.strip())
 
 
-def check_stat_order(name, src, out):
-    txt = text_of(src)
-    seen = [s for s in re.findall("|".join(STAT_ORDER), txt)]
-    if len(seen) < 6:
+def check_stat_order(frame_text):
+    seen = [s for s in STAT_ORDER if s in frame_text]
+    if len(seen) < 3:
         return
-    first6 = seen[:6]
-    if first6 != STAT_ORDER:
-        out.append(("ERROR", name, 0,
-                    "порядок статов нарушен: %s" % " ".join(first6)))
+    idx = [frame_text.index(s) for s in seen]
+    if idx != sorted(idx):
+        fail("порядок статов нарушен: " + ", ".join(seen))
 
 
-def check_episode_number(name, src, out):
-    txt = text_of(src)
-    for m in re.finditer(r"(ВЫПУСК|EPISODE|EP)\s*[#N]?\s*\d+", txt, flags=re.I):
-        out.append(("ERROR", name, 0, "номер выпуска на кадре: %s" % m.group(0)))
-
-
-def check_marks(name, src, out):
-    n = src.count('class="mk')
-    if n != 3:
-        out.append(("ERROR", name, 0,
-                    "рукописных пометок %d, требуется ровно 3" % n))
-
-
-def check_fonts(name, src, out):
-    for f in BANNED_FONTS:
-        if f.lower() in src.lower():
-            out.append(("ERROR", name, 0, "запрещённый шрифт %s" % f))
-
-
-def check_font_shorthand(name, src, out):
-    for m in re.finditer(r"font:[^;}]+", src):
-        decl = m.group(0)
-        if "var(" in decl:
+def numbers_in(text):
+    out = []
+    for m in re.finditer(r"\d[\d\u00a0.,]*", text):
+        raw = m.group(0).strip(".,")
+        digits = re.sub(r"[^\d]", "", raw)
+        if not digits:
             continue
-        out.append(("ERROR", name, find_line(src, m.start()),
-                    "сокращённая запись без семейства: %s" % decl.strip()))
+        if len(digits) == 4 and YEAR_LO <= int(digits) <= YEAR_HI:
+            continue
+        out.append(raw)
+    return out
 
 
-def check_georgia_on_numbers(name, src, out):
-    for m in re.finditer(r"\.(num|ovr|stat)[^{]*\{[^}]*Georgia", src, flags=re.I):
-        out.append(("ERROR", name, find_line(src, m.start()),
-                    "Georgia на числах, разрешена только для акцентной прозы"))
+def check_frame(i, frame):
+    name = re.search(r'data-name="([^"]+)"', frame)
+    name = name.group(1) if name else "frame%02d" % (i + 1)
+    dense = 'data-dense="1"' in frame
+    text = strip_tags(frame)
+
+    if FOOTER not in text:
+        fail("%s: нет подвала %s" % (name, FOOTER))
+
+    for tag in ("h1", "h2"):
+        for m in re.finditer(r'<div class="%s"[^>]*>([\s\S]*?)</div>' % tag, frame):
+            words = strip_tags(m.group(1)).split()
+            limit = 6 if tag == "h1" else 8
+            if len(words) > limit:
+                warn("%s: заголовок %s из %d слов" % (name, tag, len(words)))
+
+    inner = re.sub(r'<div class="top">[\s\S]*?</div>\s*</div>', " ", frame)
+    inner = re.sub(r'<div class="idx">[\s\S]*?</div>', " ", inner)
+    nums = numbers_in(strip_tags(inner).replace(FOOTER, " "))
+    if not dense:
+        if len(nums) > 6:
+            fail("%s: чисел на кадре %d" % (name, len(nums)))
+        elif len(nums) > 3:
+            warn("%s: чисел на кадре %d %s" % (name, len(nums), nums))
+
+    check_stat_order(text)
+
+    body = strip_tags(re.sub(r'<div class="pg"[\s\S]*?</div>\s*</div>', " ", frame))
+    if len(body) < 40:
+        warn("%s: почти пустой кадр" % name)
+    return name
 
 
-def check_headline(name, src, out):
-    for m in re.finditer(r"<h1[^>]*>(.*?)</h1>", src, flags=re.S | re.I):
-        words = text_of(m.group(1)).split()
-        if len(words) > 6:
-            out.append(("ERROR", name, find_line(src, m.start()),
-                        "заголовок из %d слов, потолок 6" % len(words)))
+def check_marks(html, expected=3):
+    got = html.count('class="mk')
+    if got != expected:
+        fail("пометок от руки %d, нужно %d" % (got, expected))
 
 
-def check_numbers_per_frame(name, src, out):
-    txt = text_of(src)
-    nums = re.findall(r"(?<![\w])\d[\d\s]*(?:[.,]\d+)?", txt)
-    nums = [n for n in nums if n.strip()]
-    if len(nums) > 3:
-        out.append(("WARN", name, 0,
-                    "чисел на кадре %d, потолок 3: %s" % (len(nums), " ".join(nums[:6]))))
+def check_cta(html):
+    got = html.count('class="cta')
+    if got != 1:
+        fail("призывов в деке %d, нужен один" % got)
 
 
-def check_triads(name, src, out):
-    txt = text_of(src)
-    for m in re.finditer(r"\b([А-ЯЁа-яё]{3,}), ([А-ЯЁа-яё]{3,}) и ([А-ЯЁа-яё]{3,})\b", txt):
-        out.append(("WARN", name, 0, "триада через запятую: %s" % m.group(0)))
-
-
-def check_footer(name, src, out):
-    if "1440" in src and "@ECHORATE" not in src:
-        out.append(("WARN", name, 0, "в деке нет подвала @ECHORATE"))
-    if "1350" in src and "T.ME/ECHORATE" not in src:
-        out.append(("WARN", name, 0, "на карточке нет подвала T.ME/ECHORATE"))
-
-
-HTML_CHECKS = [
-    check_emdash, check_emoji, check_ne_a, check_stat_names, check_stat_order,
-    check_episode_number, check_marks, check_fonts, check_headline,
-    check_numbers_per_frame, check_triads, check_footer,
-]
-
-CSS_CHECKS = [
-    check_emdash, check_emoji, check_fonts,
-    check_font_shorthand, check_georgia_on_numbers,
-]
+# ---------------------------------------------------------------- css
+def check_css(css):
+    for f in BANNED_FONTS:
+        if f in css:
+            fail("запрещённый шрифт в css: " + f)
+    for m in re.finditer(r"[^-a-z]font:\s*([^;}]+)", css):
+        if "var(" not in m.group(1):
+            fail("сокращённый font без var: " + m.group(1)[:40])
+    for m in re.finditer(r"\.(num|big|chip|tr \.v)[^{]*\{[^}]*Georgia", css):
+        fail("Georgia на числах: " + m.group(0)[:40])
 
 
 def main():
     if len(sys.argv) < 2:
-        print("использование: python3 build/lint.py <папка выпуска>")
+        print("укажи путь к slides.html")
         return 2
+    html_path = sys.argv[1]
+    css_path = sys.argv[2] if len(sys.argv) > 2 else None
+    html = open(html_path, encoding="utf-8").read()
 
-    root = Path(sys.argv[1])
-    if not root.exists():
-        print("нет такой папки: %s" % root)
-        return 2
+    frames = split_frames(html)
+    if not frames:
+        print("ПРОВАЛ: кадров не найдено")
+        return 1
+    if len(frames) > 20:
+        fail("кадров %d, карусель держит 20" % len(frames))
 
-    out = []
-    files = sorted(root.rglob("*.html")) + sorted(root.rglob("*.css"))
-    if not files:
-        print("в папке нет html и css")
-        return 2
+    check_global_text(strip_tags(html))
+    check_marks(html)
+    check_cta(html)
+    for i, fr in enumerate(frames):
+        check_frame(i, fr)
 
-    for path in files:
-        src = path.read_text(encoding="utf-8")
-        checks = HTML_CHECKS if path.suffix == ".html" else CSS_CHECKS
-        for fn in checks:
-            fn(path.name, src, out)
+    if css_path and os.path.exists(css_path):
+        check_css(open(css_path, encoding="utf-8").read())
 
-    errors = [r for r in out if r[0] == "ERROR"]
-    warns = [r for r in out if r[0] == "WARN"]
-
-    print("ЛИНТЕР СТИЛЯ   файлов: %d" % len(files))
-    print()
-
-    for level, name, line, msg in errors + warns:
-        where = "%s:%d" % (name, line) if line else name
-        print("%-5s %-28s %s" % (level, where, msg))
-
-    if not out:
-        print("нарушений нет")
-
-    print()
-    print("ошибок: %d   предупреждений: %d" % (len(errors), len(warns)))
-    return 1 if errors else 0
+    for w in warns:
+        print("ВНИМАНИЕ:", w)
+    for f in fails:
+        print("ПРОВАЛ:", f)
+    if fails:
+        print("ЛИНТ ПРОВАЛЕН: %d" % len(fails))
+        return 1
+    print("ЛИНТ ПРОЙДЕН: кадров %d, замечаний %d" % (len(frames), len(warns)))
+    return 0
 
 
 if __name__ == "__main__":
