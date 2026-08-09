@@ -33,5 +33,15 @@ jobs:
             python "$t"
           done
 
+      - name: Линтер описаний
+        run: python ops/desclint.py build/decks
+
+      - name: Сборка дек без фотографий
+        run: |
+          python build/gen.py build/decks/_template.json
+          python build/lint.py build/html/_template.html build/theme.css
+          python build/gen.py build/decks/tm2004.json
+          python build/lint.py build/html/tm2004.html build/theme.css
+
       - name: Эталонные кадры
         run: python refs/verify.py

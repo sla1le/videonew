@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Генератор дек ЭХО. Версия 5.
+"""Генератор дек ЭХО.
 
-Запуск: python3 build/gen.py build/decks/prime.json
-Пишет build/html/<prefix>.html и копирует активы рядом.
+Запуск: python3 build/gen.py build/decks/tm2004.json
+Пишет build/html/<prefix>.html и кладёт рядом theme.css и картинки деки.
+
+Картинки нужны только тем декам, которые на них ссылаются. Раньше отсутствие
+папки build/img валило сборку любой деки, включая деки без единого фото.
 """
 import json
 import os
@@ -290,7 +293,8 @@ BODIES = {
 def frame(f, idx, total, prefix):
     kind = f.get("t", "text")
     if kind not in BODIES:
-        raise SystemExit("НЕИЗВЕСТНЫЙ КАДР: " + kind)
+        raise SystemExit("НЕИЗВЕСТНЫЙ КАДР: %s. Есть: %s"
+                         % (kind, ", ".join(sorted(BODIES))))
     dark = bool(f.get("dark"))
     cls = "s dk" if dark else "s lt"
     dense = ' data-dense="1"' if f.get("dense") else ""
@@ -313,24 +317,72 @@ def build(deck):
     )
 
 
+def deck_images(node, found=None):
+    """Все картинки, на которые ссылается дека."""
+    if found is None:
+        found = []
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key in ("img", "mos") and isinstance(value, str):
+                found.append(value)
+            elif key == "imgs" and isinstance(value, list):
+                found.extend(v for v in value if isinstance(v, str))
+            else:
+                deck_images(value, found)
+    elif isinstance(node, list):
+        for value in node:
+            deck_images(value, found)
+    return found
+
+
+def copy_assets(deck):
+    """Кладёт рядом с html тему и картинки. Картинки только если они нужны."""
+    if not os.path.exists(THEME):
+        raise SystemExit("НЕТ theme.css в папке build")
+    shutil.copy(THEME, os.path.join(HTML, "theme.css"))
+
+    wanted = sorted(set(deck_images(deck)))
+    dst = os.path.join(HTML, "img")
+    if os.path.isdir(dst):
+        shutil.rmtree(dst)
+    if not wanted:
+        return 0
+    if not os.path.isdir(IMG):
+        raise SystemExit(
+            "НЕТ ПАПКИ build/img, а дека просит картинки:\n  "
+            + "\n  ".join(wanted))
+    missing = [p for p in wanted if not os.path.isfile(os.path.join(HERE, p))]
+    if missing:
+        raise SystemExit(
+            "НЕТ ФОТО, пути считаются от папки build:\n  " + "\n  ".join(missing))
+    shutil.copytree(IMG, dst)
+    return len(wanted)
+
+
 def main():
     if len(sys.argv) < 2:
-        raise SystemExit("укажи путь к деке, например build/decks/prime.json")
-    deck = json.load(open(sys.argv[1], encoding="utf-8"))
+        raise SystemExit("укажи путь к деке, например build/decks/tm2004.json")
+    src = sys.argv[1]
+    if not os.path.isfile(src):
+        raise SystemExit("НЕТ ДЕКИ: %s" % src)
+
+    deck = json.load(open(src, encoding="utf-8"))
+    prefix = deck.get("prefix")
+    if not prefix:
+        raise SystemExit("НЕТ ПОЛЯ prefix в %s" % src)
+    stem = os.path.splitext(os.path.basename(src))[0]
+    if prefix != stem:
+        raise SystemExit(
+            "ПРЕФИКС НЕ СОВПАДАЕТ: в файле %r, имя файла %r.\n"
+            "Сборка ищет build/html/%s.html и не найдёт его." % (prefix, stem, stem))
+
     os.makedirs(HTML, exist_ok=True)
-    if not os.path.exists(THEME):
-        raise SystemExit("НЕТ theme.css")
-    shutil.copy(THEME, os.path.join(HTML, "theme.css"))
-    if not os.path.isdir(IMG):
-        raise SystemExit("НЕТ папки img")
-    dst_img = os.path.join(HTML, "img")
-    if os.path.isdir(dst_img):
-        shutil.rmtree(dst_img)
-    shutil.copytree(IMG, dst_img)
-    html = build(deck)
-    out = os.path.join(HTML, deck["prefix"] + ".html")
-    open(out, "w", encoding="utf-8").write(html)
-    print("дека собрана: %s, кадров %d" % (out, len(deck["frames"])))
+    images = copy_assets(deck)
+
+    out = os.path.join(HTML, prefix + ".html")
+    open(out, "w", encoding="utf-8").write(build(deck))
+    print("дека собрана: %s, кадров %d, картинок %d"
+          % (out, len(deck["frames"]), images))
 
 
 if __name__ == "__main__":
