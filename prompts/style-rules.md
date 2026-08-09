@@ -156,4 +156,4 @@ make check
 
 Заготовка со всеми семью кадрами лежит в `build/decks/_template.json`.
 Драматургия разобрана в `prompts/deck-logic.md`, механика площадки в
-`
+`ops/tiktok.md`, психология зрителя в `ops/audience.md`.
