@@ -13,7 +13,7 @@ DECK ?= tm2004
 OUT := build/out/$(DECK)
 PROBE := build/probe_$(DECK).png
 
-.PHONY: help doctor setup check data selfcheck test desc verify refs render probe cards deck clean
+.PHONY: help doctor setup check data selfcheck test desc slop verify refs render probe cards deck clean
 
 help:
 	@echo "make doctor              что стоит в системе: python, node, chromium, magick"
@@ -22,6 +22,7 @@ help:
 	@echo "make render DECK=$(DECK)   собрать деку из build/decks и снять кадры"
 	@echo "make cards               рейтинговые карточки лиги 1080 на 1350"
 	@echo "make desc                линтер описаний build/decks/*.desc.txt"
+	@echo "make slop                стоп-лист машинных фраз по декам и описаниям"
 	@echo "make refs                перемерить и сверить эталонные кадры"
 	@echo "make clean               убрать временные файлы сборки"
 	@echo ""
@@ -43,7 +44,7 @@ setup:
 	@echo ""
 	@echo "готово. Проверь среду: make doctor"
 
-check: data selfcheck test desc verify
+check: data selfcheck test desc slop verify
 	@echo ""
 	@echo "ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ"
 
@@ -60,6 +61,9 @@ test:
 
 desc:
 	$(PY) ops/desclint.py build/decks
+
+slop:
+	$(PY) ops/slop.py build/decks
 
 verify:
 	$(PY) refs/verify.py

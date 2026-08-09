@@ -36,6 +36,9 @@ jobs:
       - name: Линтер описаний
         run: python ops/desclint.py build/decks
 
+      - name: Стоп-лист фраз
+        run: python ops/slop.py build/decks
+
       - name: Сборка дек без фотографий
         run: |
           python build/gen.py build/decks/_template.json
