@@ -22,6 +22,14 @@ jobs:
       - name: Гигиена json
         run: python ops/validate_data.py
 
+      - name: Тесты ops
+        working-directory: ops
+        run: |
+          for t in test_*.py; do
+            echo "== $t"
+            python "$t"
+          done
+
       - name: Самопроверка репозитория
         run: python ops/selfcheck.py
 
