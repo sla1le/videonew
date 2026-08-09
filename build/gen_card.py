@@ -13,6 +13,8 @@ DATA = Path(sys.argv[1]) if len(sys.argv) > 1 else REPO / "rating" / "data" / "l
 OUT = Path(sys.argv[2]) if len(sys.argv) > 2 else HERE / "html" / "cards.html"
 PHOTO_DIR = Path(sys.argv[3]) if len(sys.argv) > 3 else HERE / "photos"
 LABELS = (("T", "ТЕКСТЫ"), ("S", "ЗВУК"), ("D", "ПОДАЧА"), ("H", "ХИТЫ"), ("L", "ЛАЙВЫ"), ("I", "ВЛИЯНИЕ"))
+MODEL = json.loads((REPO / "rating" / "data" / "model.json").read_text(encoding="utf-8"))
+POS_LABELS = {code: str(text).upper() for code, text in MODEL.get("position_labels", {}).items()}
 
 
 def strike(value: int) -> str:
@@ -32,7 +34,8 @@ def card(row: dict) -> str:
     old = strike(row["was"]) if row.get("was") is not None else ""
     size = "90px" if len(name) > 10 else "132px"
     stats = "".join(stat(label, int(row["stats"][code])) for code, label in LABELS)
-    subtitle = f'{row["pos"]} · ТОЧНОСТЬ {row.get("accuracy", "B")}'
+    role = html.escape(str(row.get("label") or POS_LABELS.get(row["pos"], "")))
+    subtitle = f'{row["pos"]} · {role}' if role else row["pos"]
     return f'''<section class="wrap" data-name="{key}"><article class="card"><div class="top"><div class="lft"><div class="ovr">{row["ovr"]}</div><div class="pos">{row["pos"]}</div>{old}</div>{photo}</div><div class="rule"></div><div class="name" style="font-size:{size}">{name}</div><div class="sub">{subtitle}</div><div class="grid">{stats}</div><div class="pot"><span class="k">ПОТЕНЦИАЛ</span><span class="v">{row["potential"]}</span></div><div class="foot">T.ME/ECHORATE</div></article></section>'''
 
 
