@@ -1,6 +1,6 @@
 {
- "version": "1.0",
- "_note": "Прайм-карточки. Рейтинг считается на прайм-год, не на снимок лиги. Судейские баллы тоже за тот год.",
+ "version": "1.1",
+ "_note": "Прайм-карточки. Рейтинг считается на прайм-год, не на снимок лиги. Судейские баллы тоже за тот год. Годы без публичного чарта или без итогов года пишут absent_reason, и соответствующий стат идёт по строке вне списка, то есть 62.",
  "engine": "season",
  "weights": {
   "T": 0.15,
@@ -21,21 +21,9 @@
    "album_date": "2024-09-13",
    "tracks": 21,
    "minutes": 38,
-   "judge": {
-    "T": 77,
-    "S": 92,
-    "D": 90
-   },
-   "peak": {
-    "chart": "APPLE MUSIC RU",
-    "position": 1,
-    "date": "2024-09-16"
-   },
-   "yearend": {
-    "album_rank": 14,
-    "song_rank": 19,
-    "list": "PHOENIX"
-   },
+   "judge": {"T": 77, "S": 92, "D": 90},
+   "peak": {"chart": "APPLE MUSIC RU", "position": 1, "date": "2024-09-16"},
+   "yearend": {"album_rank": 14, "song_rank": 19, "list": "PHOENIX"},
    "face": "viperr_face.jpg",
    "now_ovr": 79
   },
@@ -50,23 +38,69 @@
    "album_date": "2019-11-08",
    "tracks": null,
    "minutes": null,
-   "judge": {
-    "T": 72,
-    "S": 80,
-    "D": 90
-   },
-   "peak": {
-    "chart": "GENIUS RU",
-    "position": 1,
-    "date": "2019-11-06"
-   },
-   "yearend": {
-    "album_rank": 21,
-    "song_rank": null,
-    "list": "THE FLOW"
-   },
+   "judge": {"T": 72, "S": 80, "D": 90},
+   "peak": {"chart": "GENIUS RU", "position": 1, "date": "2019-11-06"},
+   "yearend": {"album_rank": 21, "song_rank": null, "list": "THE FLOW"},
    "face": "thrill_otkr.jpg",
    "now_ovr": 68
+  },
+  {
+   "key": "smokymo_2004",
+   "name": "СМОКИ МО",
+   "sub": "МЯЧ ЭПОХИ 2000 2005",
+   "pos": "CAM",
+   "pos2": null,
+   "year": 2004,
+   "album": "КАРА-ТЭ",
+   "album_date": "2004-03-29",
+   "tracks": null,
+   "minutes": null,
+   "judge": {"T": 86, "S": 74, "D": 82},
+   "peak": {
+    "chart": null,
+    "position": null,
+    "date": null,
+    "absent_reason": "Публичного трекового чарта для русского рэпа в 2004 году не было."
+   },
+   "yearend": {"album_rank": 10, "song_rank": null, "list": "RAP-STYLE.RU 2004"},
+   "face": null,
+   "now_ovr": null,
+   "src": [
+    "https://web.archive.org/web/20050223123646/http://rap-style.ru/editorial/e3101200502.phtml",
+    "https://web.archive.org/web/20040422194439/http://rap-style.ru/news/29-03-2004.phtml",
+    "https://os.colta.ru/music_modern/projects/95/details/1040/"
+   ]
+  },
+  {
+   "key": "kasta_2002",
+   "name": "КАСТА",
+   "sub": "ВТОРОЙ НОМЕР ЭПОХИ",
+   "pos": "CM",
+   "pos2": null,
+   "year": 2002,
+   "album": "ГРОМЧЕ ВОДЫ ВЫШЕ ТРАВЫ",
+   "album_date": null,
+   "tracks": 22,
+   "minutes": null,
+   "judge": {"T": 92, "S": 80, "D": 84},
+   "peak": {
+    "chart": null,
+    "position": null,
+    "date": null,
+    "absent_reason": "Трекового чарта для рэпа в 2002 году не существовало."
+   },
+   "yearend": {
+    "album_rank": null,
+    "song_rank": null,
+    "list": null,
+    "absent_reason": "Годовых рэп-итогов за 2002 год нет."
+   },
+   "face": null,
+   "now_ovr": null,
+   "src": [
+    "https://os.colta.ru/music_modern/projects/95/details/1040/",
+    "https://daily.afisha.ru/specials/22055-100-luchshih-postsovetskih-albomov-za-30-let-50-21-mesta-ot-zemfiry-do-mumiy-trollya/"
+   ]
   }
  ]
 }
