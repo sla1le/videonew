@@ -1,34 +1,35 @@
 'use strict';
-
+// Съёмка произвольного селектора в PNG.
+//   node build/shot.js <html> <outDir> <prefix> <selector> <W> <H>
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
+const browser = require('./browser');
 
 async function main() {
-  const [htmlPath, outDir, prefix = 'frame_', selector = '.s', width = '1080', height = '1440'] = process.argv.slice(2);
+  const [htmlPath, outDir, prefix = 'frame_', selector = '.s', width = '1080', height = '1440'] =
+    process.argv.slice(2);
   if (!htmlPath || !outDir) {
-    console.error('usage: node shot.js <htmlPath> <outDir> <prefix> <selector> <W> <H>');
+    console.error('использование: node build/shot.js <html> <outDir> <prefix> <selector> <W> <H>');
+    process.exit(2);
+  }
+  if (!fs.existsSync(htmlPath)) {
+    console.error(`нет файла ${htmlPath}`);
     process.exit(2);
   }
 
   fs.mkdirSync(outDir, { recursive: true });
-  const executablePath = process.env.CHR || '/usr/local/bin/chromium';
-  const browser = await chromium.launch({
-    executablePath,
-    headless: true,
-    args: ['--no-sandbox', '--disable-gpu', '--hide-scrollbars', '--font-render-hinting=none']
-  });
-  const page = await browser.newPage({
+  const chrome = await browser.launch(chromium);
+  const page = await chrome.newPage({
     viewport: { width: Number(width), height: Number(height) },
     deviceScaleFactor: 1
   });
-  const url = 'file://' + path.resolve(htmlPath);
-  await page.goto(url, { waitUntil: 'load' });
+  await page.goto('file://' + path.resolve(htmlPath), { waitUntil: 'load' });
   await page.waitForTimeout(700);
 
   const nodes = page.locator(selector);
   const total = await nodes.count();
-  if (!total) throw new Error(`No nodes matched ${selector}`);
+  if (!total) throw new Error(`нет узлов по селектору ${selector}`);
 
   for (let i = 0; i < total; i += 1) {
     const node = nodes.nth(i);
@@ -36,10 +37,10 @@ async function main() {
     const suffix = dataName || String(i + 1).padStart(2, '0');
     const out = path.join(outDir, `${prefix}${suffix}.png`);
     await node.screenshot({ path: out, type: 'png' });
-    console.log('OK', path.basename(out));
+    console.log('снят', path.basename(out));
   }
-  console.log('TOTAL', total);
-  await browser.close();
+  console.log('всего', total);
+  await chrome.close();
 }
 
 main().catch(err => {
