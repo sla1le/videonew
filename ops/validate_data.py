@@ -4,12 +4,11 @@
 
 Проверяет то, что ломалось на практике:
   1. Файл разбирается и читается в utf-8.
-  2. Нет повторяющихся ключей в одном объекте. json.load тихо берёт последний,
-     и именно так разошлись баллы, когда одна цифра лежала в двух местах.
-  3. Нет NaN и Infinity: такое json пройдёт в python и упадёт в любом другом месте.
-  4. В строках нет длинного тире, среднего тире и эмодзи. Данные попадают на кадр
-     напрямую, и запреты стиля начинаются здесь, а не на верстке.
-  5. Строка, которая начинается как дата, должна быть реальной датой и не из будущего.
+  2. Нет повторяющихся ключей в одном объекте.
+  3. Нет NaN и Infinity.
+  4. В строках нет длинного тире, среднего тире и эмодзи.
+  5. Строка, которая начинается как дата, должна быть реальной датой.
+     Будущая дата запрещена для фактов и снимков, но разрешена в плановых полях.
   6. Целые баллы лежат в шкале от 30 до 99, если поле называется ovr, potential,
      score или rating.
 
@@ -29,6 +28,14 @@ DEFAULT_DIRS = ["rating/data", "ops/data", "formats/data", "iceberg/data", "refs
 DASHES = {chr(8212): "длинное тире", chr(8211): "среднее тире"}
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
 SCORE_KEYS = {"ovr", "potential", "score", "rating"}
+FUTURE_DATE_KEYS = {
+    "deadline", "due", "due_date", "cutoff", "expires", "expires_at",
+    "expiry", "expiry_date", "scheduled_at", "scheduled_for",
+    "publish_at", "publish_date", "target_date", "next_date",
+}
+FUTURE_DATE_SUFFIXES = (
+    "_deadline", "_due", "_expires", "_expiry", "_scheduled", "_target",
+)
 
 
 def is_emoji(ch: str) -> bool:
@@ -43,6 +50,17 @@ def no_duplicates(pairs):
             raise ValueError(f"повтор ключа {key!r}")
         seen[key] = value
     return seen
+
+
+def leaf_key(path: str) -> str:
+    leaf = path.rsplit(".", 1)[-1]
+    leaf = re.sub(r"\[\d+\]$", "", leaf)
+    return leaf.lower()
+
+
+def future_date_allowed(path: str) -> bool:
+    leaf = leaf_key(path)
+    return leaf in FUTURE_DATE_KEYS or leaf.endswith(FUTURE_DATE_SUFFIXES)
 
 
 def walk(node, path: str, problems: list[str], today: dt.date) -> None:
@@ -66,7 +84,7 @@ def walk(node, path: str, problems: list[str], today: dt.date) -> None:
             except ValueError:
                 problems.append(f"{path}: даты {head} не существует")
             else:
-                if value > today + dt.timedelta(days=1):
+                if value > today + dt.timedelta(days=1) and not future_date_allowed(path):
                     problems.append(f"{path}: дата {head} в будущем")
     elif isinstance(node, float):
         if node != node or node in (float("inf"), float("-inf")):
@@ -74,7 +92,7 @@ def walk(node, path: str, problems: list[str], today: dt.date) -> None:
     elif isinstance(node, bool):
         return
     elif isinstance(node, int):
-        leaf = path.rsplit(".", 1)[-1].lower()
+        leaf = leaf_key(path)
         if leaf in SCORE_KEYS and not 30 <= node <= 99:
             problems.append(f"{path}: балл {node} вне шкалы 30 до 99")
 

@@ -4,8 +4,8 @@
 
     python3 ops/selfcheck.py
 
-Гоняется перед каждым выпуском. Проверяет веса модели, полноту данных,
-форму прайм-записей, айсберги и текст документации на запрещённые обороты.
+Гоняется перед каждым выпуском. Проверяет мастер-контекст, версию, веса модели,
+полноту данных, форму прайм-записей, айсберги и текст документации.
 
 Файла нет равно проверка пропущена. Код возврата 1 только на реальной поломке.
 """
@@ -38,6 +38,37 @@ def read_json(path):
     except ValueError as err:
         bad.append(u'%s не читается как JSON: %s' % (path, err))
         return None
+
+
+def read_text(path):
+    full = rel(path)
+    if not os.path.exists(full):
+        return None
+    return io.open(full, encoding='utf-8').read()
+
+
+# 0. Вход в репозиторий и версия
+context = read_text('AGENT_CONTEXT.md')
+if context is None:
+    bad.append(u'нет AGENT_CONTEXT.md, новый агент не получает карту репозитория')
+else:
+    required = ('rating/data/model.json', 'rating/core.py', 'formats/card-spec.md', 'ops/publishing.md')
+    missing = [item for item in required if item not in context]
+    if missing:
+        bad.append(u'AGENT_CONTEXT.md не содержит обязательные маршруты: %s' % ', '.join(missing))
+    else:
+        ok.append(u'мастер-контекст: основные маршруты на месте')
+
+package = read_json('package.json')
+changelog = read_text('CHANGELOG.md')
+if package and changelog:
+    match = re.search(r'^## v(\d+\.\d+\.\d+),', changelog, re.M)
+    if not match:
+        bad.append(u'CHANGELOG.md: не найден первый заголовок версии')
+    elif str(package.get('version')) != match.group(1):
+        bad.append(u'версия package.json %s расходится с CHANGELOG %s' % (package.get('version'), match.group(1)))
+    else:
+        ok.append(u'версия: %s' % match.group(1))
 
 
 # 1. Веса модели
@@ -120,15 +151,12 @@ if primes:
             bad.append(u'прайм %s: год %s совпадает со снимком лиги или позже него' % (name, entry['year']))
         if 'L' in judge:
             bad.append(u'прайм %s: ЛАЙВЫ в прайм-карте не считаются' % name)
-        # Дочартовая эпоха: пика в чарте может не существовать. Тогда в записи
-        # обязательно стоит причина, и движок считает ХИТЫ как вне списка.
         peak = entry.get('peak') or {}
         if peak.get('position') is None:
             if peak.get('absent_reason'):
                 skipped.append(u'прайм %s: чарта за тот год нет, ХИТЫ идут как вне списка' % name)
             else:
                 bad.append(u'прайм %s: нет пикового места в чарте и нет причины его отсутствия' % name)
-        # Сегодняшний балл нужен только тем, кто есть в снимке лиги.
         if entry.get('now_ovr') is None:
             skipped.append(u'прайм %s: в лиге его нет, на карте дельты не будет' % name)
     if entries:
@@ -154,27 +182,37 @@ if os.path.isdir(ice_dir):
             if not isinstance(level, int) or not 1 <= level <= 5:
                 bad.append(u'айсберг %s: уровень «%s» вне диапазона 1..5' % (artist, level))
         if blob.get('status') == 'ready' and len(items) < 10:
-            bad.append(u'айсберг %s помечен ready, а позиций только %d' % (artist, len(items)))
+            bad.append(u'айсберг %s помечен ready, позиций только %d' % (artist, len(items)))
         if items:
             depth = sum(i.get('level', 0) for i in items) / float(len(items))
             ok.append(u'айсберг %s: %d позиций, глубина %.1f' % (artist, len(items), depth))
 
 
 # 5. Текст
-# Файлы ниже сами описывают запрещённые обороты, поэтому линтер их не читает.
-SKIP_TEXT = {
+# Исторические, аналитические и инструктивные документы могут содержать примеры запрещённых оборотов.
+SKIP_ALL_TEXT = {
+    'CHANGELOG.md',
+    'ops/mistakes.md',
+}
+SKIP_PATTERN_TEXT = {
+    'README.md',
+    'AGENTS.md',
+    'SKILL.md',
+    'prompts/master-prompt.md',
     'prompts/style-rules.md',
     'formats/card-spec.md',
     'formats/iceberg.md',
-    'ops/mistakes.md',
-    'CHANGELOG.md',
+    'formats/new-formats-2026.md',
+    'ops/prompt-fixes-v4.md',
+    'ops/top10-videos.md',
+    'ops/analytics.md',
 }
 DASH = chr(8212)
 EMOJI = re.compile(u'[\U0001F000-\U0001FAFF\u2600-\u26FF\u2700-\u27BF]')
 PATTERNS = [
-    (re.compile(u', а не '), u'оборот «X, а не Y»'),
-    (re.compile(u'не [^.,!?\n]{2,40}, а '), u'оборот «не X, а Y»'),
-    (re.compile(u'не просто'), u'оборот «не просто»'),
+    (re.compile(u', а не '), u'запрещённый зеркальный оборот'),
+    (re.compile(u'не [^.,!?\n]{2,40}, а '), u'запрещённый противопоставляющий оборот'),
+    (re.compile(u'не просто'), u'запрещённый оборот из style-rules'),
     (re.compile(u'ИСТОЧНИК'), u'служебная строка ИСТОЧНИК'),
     (re.compile(u'ПОДТВЕРЖДЕНО'), u'штамп ПОДТВЕРЖДЕНО'),
 ]
@@ -185,7 +223,7 @@ for folder, dirs, files in os.walk(ROOT):
         if not fname.endswith('.md'):
             continue
         path = os.path.relpath(os.path.join(folder, fname), ROOT).replace(os.sep, '/')
-        if path in SKIP_TEXT:
+        if path in SKIP_ALL_TEXT:
             continue
         text = io.open(os.path.join(folder, fname), encoding='utf-8').read()
         checked += 1
@@ -194,6 +232,8 @@ for folder, dirs, files in os.walk(ROOT):
         found = EMOJI.findall(text)
         if found:
             bad.append(u'%s: эмодзи %s' % (path, u' '.join(sorted(set(found)))))
+        if path in SKIP_PATTERN_TEXT:
+            continue
         for rx, label in PATTERNS:
             hits = rx.findall(text)
             if hits:
