@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 """Готовит изображения из пакета владельца канала в единый вид.
-Портреты переводятся в высококонтрастный серый, обложки остаются цветными.
+Портреты и обложки остаются цветными. Серый больше не применяется.
+
+Решение автора от 09.08.2026, запись в ops/corrections.md.
+Если исходник сам снят чернобелым, он таким и останется: подкрасить нельзя,
+нужен цветной файл. Проверить исходник можно так:
+  magick <файл> -colorspace HSL -channel g -separate +channel -format '%[fx:mean]' info:
+Значение около нуля означает чернобелый снимок.
 
 Запуск: python3 build/prep_img.py
 Пакет с исходными картинками в git не хранится, путь в PACK.
@@ -32,20 +38,21 @@ def run(args):
     return True
 
 
-def gray(src, dst, w, h, grav="north", bright="100,100"):
+def portrait(src, dst, w, h, grav="north", sat="108"):
+    """Цветной портрет. Мягкий контраст, чуть добавленная насыщенность, резкость."""
     if not os.path.exists(src):
         fails.append("нет файла: " + src)
         return
     run([
         "magick", src,
-        "-colorspace", "Gray",
-        "-modulate", bright,
-        "-contrast-stretch", "1.5%x1.5%",
+        "-auto-orient",
+        "-contrast-stretch", "0.4%x0.4%",
+        "-modulate", "100," + sat,
         "-resize", "%dx%d^" % (w, h),
         "-gravity", grav,
         "-extent", "%dx%d" % (w, h),
         "+repage",
-        "-unsharp", "0x1+0.75+0",
+        "-unsharp", "0x1+0.6+0",
         dst,
     ])
 
@@ -75,14 +82,14 @@ thrill_st = os.path.join(V1, "THRILL_PILL", "THRILL_PILL_Grustnaya_Pesnya_video_
 thrill_pt = os.path.join(PREV, "01_VIPERR_vs_THRILL_PILL", "portraits", "THRILL_PILL_portrait.jpg")
 hm2 = os.path.join(V1, "covers", "VIPERR_Heavy_Metal_2_cover_2000.webp")
 
-gray(viperr_sq, os.path.join(OUT_P, "viperr_head.png"), 456, 604, "center")
-gray(thrill_pt, os.path.join(OUT_P, "thrill_head.png"), 456, 604, "north")
-gray(viperr_wd, os.path.join(OUT_P, "viperr_wide.png"), 936, 470, "center")
-gray(thrill_st, os.path.join(OUT_P, "thrill_wide.png"), 936, 470, "center")
-gray(viperr_lv, os.path.join(OUT_P, "viperr_live.png"), 456, 604, "center")
-gray(viperr_l1, os.path.join(OUT_P, "viperr_live_wide.png"), 936, 470, "center")
-gray(viperr_sq, os.path.join(OUT_P, "viperr_sq.png"), 380, 380, "center")
-gray(thrill_pt, os.path.join(OUT_P, "thrill_sq.png"), 380, 380, "north")
+portrait(viperr_sq, os.path.join(OUT_P, "viperr_head.png"), 456, 604, "center")
+portrait(thrill_pt, os.path.join(OUT_P, "thrill_head.png"), 456, 604, "north")
+portrait(viperr_wd, os.path.join(OUT_P, "viperr_wide.png"), 936, 470, "center")
+portrait(thrill_st, os.path.join(OUT_P, "thrill_wide.png"), 936, 470, "center")
+portrait(viperr_lv, os.path.join(OUT_P, "viperr_live.png"), 456, 604, "center")
+portrait(viperr_l1, os.path.join(OUT_P, "viperr_live_wide.png"), 936, 470, "center")
+portrait(viperr_sq, os.path.join(OUT_P, "viperr_sq.png"), 380, 380, "center")
+portrait(thrill_pt, os.path.join(OUT_P, "thrill_sq.png"), 380, 380, "north")
 color(hm2, os.path.join(OUT_C, "viperr_hm2.png"), 560, 560)
 color(thrill_rl, os.path.join(OUT_C, "thrill_otkroveniya.png"), 560, 560)
 
@@ -113,12 +120,11 @@ for folder, name, key in COVERS:
     if os.path.exists(dst):
         made.append(key)
 
-# мозаика для обложки кубка
+# мозаика для обложки кубка, тоже в цвете
 tiles = [os.path.join(OUT_C, k + ".png") for k in made]
 if len(tiles) >= 15:
     run(["magick", "montage"] + tiles[:15] + [
         "-tile", "5x3", "-geometry", "216x216+0+0", "-background", "#0E0E0E",
-        "-colorspace", "Gray", "-modulate", "78,100",
         os.path.join(OUT_C, "mosaic.png"),
     ])
 
