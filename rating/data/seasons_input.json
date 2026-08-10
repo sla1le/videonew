@@ -59,6 +59,31 @@
         {"n": "FACE", "pos": "ST", "T": 62, "S": 74, "D": 88, "tr": 9, "alb": 48, "vote": null, "spots": [9]},
         {"n": "NOIZE MC", "pos": "CAM", "T": 84, "S": 74, "D": 80, "tr": null, "alb": null, "vote": 5, "spots": [5]}
       ]
+    },
+    "2018": {
+      "status": "published",
+      "source": "the-flow.ru, итоги 2018: 50 лучших треков и 50 отечественных альбомов",
+      "scope": "в зачёте рэп-сцена",
+      "published_top3": [["GONE.FLUDD", 86], ["MNOGOZNAAL", 81], ["BOULEVARD DEPO", 80]],
+      "excluded": [
+        {"n": "МОНЕТОЧКА", "tr": 1, "alb": 1, "why": "первые места в обоих топах, вне рэп-зачёта"},
+        {"n": "EIGHTEEN", "tr": 5, "alb": null, "why": "поп-вокал"},
+        {"n": "ГРЕЧКА", "tr": 9, "alb": null, "why": "поп-вокал"}
+      ],
+      "pool": [
+        {"n": "GONE.FLUDD", "pos": "LW", "T": 72, "S": 89, "D": 87, "tr": 2, "alb": 2, "vote": null, "spots": [2, 2, 7]},
+        {"n": "MNOGOZNAAL", "pos": "CDM", "T": 86, "S": 86, "D": 80, "tr": 10, "alb": 3, "vote": null, "spots": [10, 3]},
+        {"n": "BOULEVARD DEPO", "pos": "RW", "T": 80, "S": 86, "D": 85, "tr": 6, "alb": 5, "vote": null, "spots": [6, 5]},
+        {"n": "ХАСКИ", "pos": "CAM", "T": 92, "S": 84, "D": 88, "tr": 3, "alb": null, "vote": null, "spots": [3]},
+        {"n": "HORUS", "pos": "CAM", "T": 88, "S": 82, "D": 76, "tr": null, "alb": 4, "vote": null, "spots": [4]},
+        {"n": "NOIZE MC", "pos": "CAM", "T": 84, "S": 74, "D": 80, "tr": null, "alb": 6, "vote": null, "spots": [6]},
+        {"n": "MARKUL", "pos": "CM", "T": 78, "S": 84, "D": 80, "tr": null, "alb": 8, "vote": null, "spots": [8]},
+        {"n": "ЛАУД", "pos": "CDM", "T": 66, "S": 88, "D": 74, "tr": 6, "alb": 9, "vote": null, "role": "colead", "spots": [6, 9]},
+        {"n": "BIG BABY TAPE", "pos": "ST", "T": 62, "S": 84, "D": 86, "tr": 4, "alb": null, "vote": null, "spots": [4]},
+        {"n": "ANACONDAZ", "pos": "CB", "T": 84, "S": 74, "D": 78, "tr": null, "alb": 10, "vote": null, "spots": [10]},
+        {"n": "ТИМА БЕЛОРУССКИХ", "pos": "ST", "T": 62, "S": 74, "D": 78, "tr": 7, "alb": null, "vote": null, "spots": [7]},
+        {"n": "MATRANG", "pos": "ST", "T": 64, "S": 80, "D": 78, "tr": 8, "alb": null, "vote": null, "spots": [8]}
+      ]
     }
   }
 }
