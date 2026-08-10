@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Золотой мяч сезона v4.0.
+"""Золотой микрофон сезона v4.1.
 
-    python3 season.py 2017            таблица сезона
+    python3 season.py 2018            таблица сезона
     python3 season.py --all           все доступные сезоны
-    python3 season.py 2017 --toty     сборная года
-    python3 season.py 2017 --json     машинный вывод
+    python3 season.py 2018 --toty     сборная года
+    python3 season.py 2018 --json     машинный вывод
 
 Сезон без опубликованных итогов не считается. Он печатает список того, чего не хватает.
+Пулы годов лежат в data/seasons_input.json, в коде их нет.
 """
 from __future__ import annotations
 
@@ -35,6 +36,7 @@ def solve_year(year: str | int) -> dict:
                 "legacy_model": season.get("legacy_model")}
     rows = core.season_solve(season["pool"])
     return {"year": year, "status": "ok", "source": season.get("source"),
+            "scope": season.get("scope"), "excluded": season.get("excluded", []),
             "published_top3": season.get("published_top3"), "rows": rows}
 
 
@@ -64,22 +66,28 @@ def toty(year: str | int) -> dict:
 def print_year(result: dict) -> None:
     year = result["year"]
     if result["status"] != "ok":
-        print(f"ЗОЛОТОЙ МЯЧ {year}: не считается, статус {result['status']}")
+        print(f"ЗОЛОТОЙ МИКРОФОН {year}: не считается, статус {result['status']}")
         for item in result.get("blocked_by", []):
             print(f"  требуется: {item}")
         if result.get("legacy_result"):
             print(f"  старый результат по дореформенной модели: {result['legacy_result']}")
-            print("  эти баллы несравнимы с 2015 и 2017, в выпуск их брать нельзя")
+            print("  эти баллы несравнимы с остальными сезонами, в выпуск их брать нельзя")
         return
-    print(f"ЗОЛОТОЙ МЯЧ {year}   источник: {result.get('source')}")
-    print("-" * 78)
-    print(f"{'#':>2} {'АРТИСТ':<20} {'ПОЗ':<4} {'Т':>3} {'З':>3} {'П':>3} {'ХИТЫ':>6} {'ВЛИЯ':>6} {'RAW':>7} {'OVR':>4}")
-    print("-" * 78)
+    print(f"ЗОЛОТОЙ МИКРОФОН {year}   источник: {result.get('source')}")
+    if result.get("scope"):
+        print(f"объём оценки: {result['scope']}")
+    print("-" * 86)
+    print(f"{'#':>2} {'АРТИСТ':<20} {'ПОЗ':<4} {'Т':>3} {'З':>3} {'П':>3} {'ТР':>3} {'АЛБ':>4} {'ХИТЫ':>6} {'ВЛИЯ':>6} {'RAW':>7} {'OVR':>4}")
+    print("-" * 86)
     for row in result["rows"]:
         mark = " TB" if row.get("tiebreak") else ""
+        tr = row.get("tr") if row.get("tr") is not None else "−"
+        alb = row.get("alb") if row.get("alb") is not None else "−"
         print(f"{row['place']:>2} {row['n']:<20} {row['pos']:<4} {row['T']:>3} {row['S']:>3} {row['D']:>3} "
-              f"{row['H']:>6.2f} {row['I']:>6.2f} {row['raw']:>7.2f} {row['ovr']:>4}{mark}")
-    print("-" * 78)
+              f"{str(tr):>3} {str(alb):>4} {row['H']:>6.2f} {row['I']:>6.2f} {row['raw']:>7.2f} {row['ovr']:>4}{mark}")
+    print("-" * 86)
+    for item in result.get("excluded", []):
+        print(f"  вне зачёта: {item['n']}, {item.get('why', '')}")
     if result.get("published_top3"):
         got = [(r["n"], r["ovr"]) for r in result["rows"][:3]]
         want = [tuple(x) for x in result["published_top3"]]
@@ -109,8 +117,8 @@ def print_toty(team: dict) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Золотой мяч сезона")
-    parser.add_argument("year", nargs="?", help="год, например 2017")
+    parser = argparse.ArgumentParser(description="Золотой микрофон сезона")
+    parser.add_argument("year", nargs="?", help="год, например 2018")
     parser.add_argument("--all", action="store_true", help="все сезоны")
     parser.add_argument("--toty", action="store_true", help="сборная года")
     parser.add_argument("--json", action="store_true", help="машинный вывод")
