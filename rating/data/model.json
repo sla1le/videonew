@@ -1,6 +1,6 @@
 {
   "_note": "Единая конфигурация всех движков ECHORATE. Формулы и веса публикуются в выпусках.",
-  "version": "4.0",
+  "version": "4.1",
   "rounding": "floor(x + 0.5)",
   "clamp": [30, 99],
   "stat_order": ["T", "S", "D", "H", "L", "I"],
@@ -29,6 +29,35 @@
   "season_vote_bonus_max_rank": 5,
   "season_tiebreak_threshold": 1.0,
   "season_cutoff": "Все официальные итоги сезона, опубликованные до 31 января следующего года",
+  "live_blocked": {
+    "_note": "Концертов нет по внешней причине. Ось ЛАЙВЫ выбрасывается, её вес раздаётся остальным пропорционально. Причина хранится в данных, строка на кадре обязательна.",
+    "mode": "redistribute",
+    "drop": "L",
+    "card_note": "Лайвов здесь нет",
+    "reason_required": true,
+    "engine": "rating/live.py"
+  },
+  "matchup": {
+    "_note": "Классы дуэльных пар. Границы калиброваны на двух опросах канала, процент не предсказывается.",
+    "craft": ["T", "S", "D"],
+    "recog": ["H", "I"],
+    "debate_ovr_max": 3,
+    "debate_recog_max": 4,
+    "reach_recog_min": 8,
+    "observed": [
+      {"pair": "kizaru против ICEGERGERT", "poll": [95, 5], "votes": 6275, "kind": "разгром"},
+      {"pair": "OG Buda против LILDRUGHILL", "poll": [52, 48], "votes": 3748, "kind": "спор"}
+    ],
+    "engine": "rating/matchup.py"
+  },
+  "deck": {
+    "_note": "Глубина просмотра карусели падает до половины на восьми слайдах. Числа из analytics/posts.json.",
+    "slides_min": 6,
+    "slides_max": 7,
+    "slides_hard_max": 8,
+    "scope_line_required": true,
+    "reason_per_stat_required": true
+  },
   "age_bonus": [[21, 8], [24, 6], [27, 4], [30, 2], [33, 1]],
   "age_bonus_default": 0,
   "age_bonus_unknown": 2,
