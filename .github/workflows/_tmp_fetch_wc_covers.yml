@@ -1,0 +1,153 @@
+name: Temporary fetch WC covers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow
+      - name: Download album covers
+        shell: bash
+        run: |
+          cat > /tmp/fetch_covers.py <<'PY'
+          import json, re, time
+          from pathlib import Path
+          from difflib import SequenceMatcher
+          from urllib.parse import quote_plus
+          from urllib.request import Request, urlopen
+          from PIL import Image
+          from io import BytesIO
+
+          albums = [
+            ('01_skryptonite_dsny','Скриптонит','Дом с нормальными явлениями',2015),
+            ('02_oxxxymiron_gorgorod','Oxxxymiron','Горгород',2015),
+            ('03_bbtape_aarne_peekaboo','Big Baby Tape & Aarne','PEEKABOO',2024),
+            ('04_kizaru_borntotrap','kizaru','BORN TO TRAP',2020),
+            ('05_husky_lubimye','Хаски','Любимые песни (воображаемых) людей',2017),
+            ('06_lsp_tragiccity','ЛСП','Tragic City',2017),
+            ('07_pharaoh_pinkphloyd','PHARAOH','Pink Phloyd',2017),
+            ('08_morgenshtern_pyl','MORGENSHTERN','Легендарная пыль',2020),
+            ('17_krovostok_lombard','Кровосток','Ломбард',2015),
+            ('18_kasta_4glavy','Каста','Четырёхглавый орёт',2017),
+            ('19_depo_oldblood','Boulevard Depo','OLD BLOOD',2020),
+            ('20_slavakpss_solntse','Слава КПСС','Солнце мёртвых',2017),
+            ('21_gonefludd_superchuits','GONE.Fludd','СУПЕРЧУИТС',2018),
+            ('22_face_hatelove','FACE','HATE LOVE',2017),
+            ('23_tfest_inostranets','T-Fest','Иностранец',2018),
+            ('24_markul_tranzit','MARKUL','Tranzit',2017),
+          ]
+          out = Path('wc_covers_png')
+          out.mkdir(exist_ok=True)
+
+          def norm(s):
+              s=(s or '').lower().replace('ё','е').replace('&',' ')
+              return re.sub(r'[^a-zа-я0-9]+','',s)
+
+          def get_json(url):
+              req=Request(url,headers={'User-Agent':'Mozilla/5.0'})
+              with urlopen(req,timeout=25) as r:
+                  return json.loads(r.read().decode('utf-8','replace'))
+
+          def get_bytes(url):
+              req=Request(url,headers={'User-Agent':'Mozilla/5.0'})
+              with urlopen(req,timeout=35) as r:
+                  return r.read()
+
+          def score_result(artist,title,year,r):
+              ra=r.get('artistName') or (r.get('artist') or {}).get('name') or ''
+              rt=r.get('collectionName') or r.get('title') or ''
+              sy=0
+              ry=str(r.get('releaseDate') or '')[:4]
+              if ry.isdigit():
+                  sy=max(0,1-abs(int(ry)-year)/5)
+              a=SequenceMatcher(None,norm(artist),norm(ra)).ratio()
+              t=SequenceMatcher(None,norm(title),norm(rt)).ratio()
+              return .43*a+.49*t+.08*sy
+
+          def apple(artist,title,year):
+              candidates=[]
+              terms=[f'{artist} {title}', title]
+              for term in terms:
+                  for country in ('RU','US','KZ','UA','NL'):
+                      try:
+                          u=f'https://itunes.apple.com/search?term={quote_plus(term)}&entity=album&limit=50&country={country}'
+                          for r in get_json(u).get('results',[]):
+                              art=r.get('artworkUrl100')
+                              if art:
+                                  candidates.append((score_result(artist,title,year,r),r))
+                      except Exception:
+                          pass
+              if not candidates: return None
+              candidates.sort(key=lambda x:x[0],reverse=True)
+              sc,r=candidates[0]
+              if sc < .50: return None
+              art=r['artworkUrl100']
+              art=re.sub(r'/\d+x\d+bb\.(jpg|png|webp)$',r'/3000x3000bb.\1',art)
+              return sc, art, r.get('collectionName'), r.get('artistName'), 'Apple/iTunes'
+
+          def deezer(artist,title,year):
+              candidates=[]
+              for term in (f'artist:"{artist}" album:"{title}"', f'{artist} {title}'):
+                  try:
+                      u=f'https://api.deezer.com/search/album?q={quote_plus(term)}&limit=50'
+                      for r in get_json(u).get('data',[]):
+                          art=r.get('cover_xl') or r.get('cover_big')
+                          if art:
+                              fake={'artistName':(r.get('artist') or {}).get('name'),'collectionName':r.get('title'),'releaseDate':''}
+                              candidates.append((score_result(artist,title,year,fake),r))
+                  except Exception:
+                      pass
+              if not candidates: return None
+              candidates.sort(key=lambda x:x[0],reverse=True)
+              sc,r=candidates[0]
+              if sc < .50: return None
+              return sc, r.get('cover_xl') or r.get('cover_big'), r.get('title'), (r.get('artist') or {}).get('name'), 'Deezer'
+
+          log=[]
+          failed=[]
+          for key,artist,title,year in albums:
+              print('\n',key,artist,title)
+              found=apple(artist,title,year) or deezer(artist,title,year)
+              if not found:
+                  print('NOT FOUND')
+                  failed.append(key); continue
+              sc,url,rt,ra,source=found
+              try:
+                  blob=get_bytes(url)
+                  im=Image.open(BytesIO(blob)).convert('RGB')
+                  w,h=im.size
+                  s=min(w,h)
+                  im=im.crop(((w-s)//2,(h-s)//2,(w-s)//2+s,(h-s)//2+s))
+                  if im.width < 1200:
+                      im=im.resize((1200,1200),Image.Resampling.LANCZOS)
+                  im.save(out/f'{key}.png',format='PNG',optimize=True)
+                  print(source,round(sc,3),ra,'—',rt,im.size)
+                  log.append({'key':key,'wanted_artist':artist,'wanted_title':title,'year':year,'source':source,'match_score':round(sc,3),'matched_artist':ra,'matched_title':rt,'source_image_url':url,'size':list(im.size)})
+              except Exception as e:
+                  print('DOWNLOAD ERROR',e); failed.append(key)
+              time.sleep(.15)
+
+          (out/'SOURCES.json').write_text(json.dumps(log,ensure_ascii=False,indent=2),encoding='utf-8')
+          (out/'FAILED.txt').write_text('\n'.join(failed),encoding='utf-8')
+          print('\nFAILED',failed)
+          if failed:
+              raise SystemExit(2)
+          PY
+          python /tmp/fetch_covers.py
+      - name: Upload covers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ECHORATE_WC_V1_COVERS_PNG
+          path: wc_covers_png/
+          if-no-files-found: error
