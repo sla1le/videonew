@@ -208,6 +208,16 @@
 5. Расхождение THRILL PILL: движок `68.20`, `league.json` `68.33`.
 6. География аудитории в свежей выгрузке.
 
+## Счёт перед сборкой
+
+```bash
+python3 rating/test_rating.py
+python3 rating/echorate.py
+python3 rating/matchup.py --input /tmp/pool.json --goal спор
+python3 rating/live.py
+cd rating && python3 season.py 2019 --json
+```
+
 ## Прогон перед публикацией
 
 ```bash
