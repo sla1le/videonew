@@ -1,0 +1,35 @@
+{
+  "snapshot": "2026-08-06",
+  "artist": {
+    "key": "darkprince",
+    "name": "ТЁМНЫЙ ПРИНЦ",
+    "real_name": "Артём Алексеевич Бондарев",
+    "pos": "CDM",
+    "born": "2005-11-26",
+    "in_league": true,
+
+    "T": 68,
+    "S": 86,
+    "D": 78,
+
+    "top5": 93436601,
+    "cap": 2500,
+    "cities": 2,
+    "fest": false,
+    "catalog": 163346892,
+    "scene": 5,
+    "form": null,
+
+    "src_top5": "kworb.net Spotify top songs, снимок 06.08.2026: 28626854 + 18484492 + 17750350 + 14759954 + 13814951",
+    "src_live": "tau.place 22.03.2026 Москва TAU Place танцпол 2500; soundspb.com 21.06.2026 Петербург Sound; live.mts.ru 19.07.2026 Москва Pipl bar. Состоявшихся городов два",
+    "src_scene": "Forbes 30 до 30 за 2026 в категории Музыка; Яндекс Музыка Искра года 2025; The Flow итоги 2025 песня 8 альбом 7",
+
+    "notes": {
+      "catalog_src": "kworb.net Spotify artist total 163346892, снимок 06.08.2026",
+      "top5_rule": "сумма пяти лучших треков артиста включая фиты, как они идут в списке kworb",
+      "top5_alt": "без фитов сумма 74443239, дала бы ХИТЫ 72",
+      "cap_conflict": "Sound Петербург: официальный сайт 3000, peterburg2 1700. Взят более консервативный TAU 2500",
+      "debut_conflict": "биты с 2019 по Wikipedia, Forbes пишет 2018"
+    }
+  }
+}
