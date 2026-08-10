@@ -167,3 +167,154 @@ body{width:1080px}
 .av{display:block;width:112px;height:112px;object-fit:cover}
 
 .cta.mid{margin-top:40px}
+
+/* ------------------------------------------------------------ карта игрока */
+.fc{width:856px;margin:0 auto;background:#141414;border:3px solid var(--gold);padding:30px 34px 26px;display:flex;flex-direction:column}
+.fc .top2{display:flex;justify-content:space-between;align-items:flex-start;gap:26px}
+.fc .lft{display:flex;flex-direction:column}
+.fc .ovr{font-family:var(--num);font-size:200px;line-height:.78;letter-spacing:-4px;color:var(--gold)}
+.fc .pos{font-family:var(--num);font-size:62px;letter-spacing:8px;color:#FFFFFF;margin-top:14px}
+.fc .ph2{width:300px;height:300px;object-fit:cover;background:#222222;display:block;flex:none}
+.fc .rl{height:4px;background:var(--gold);margin:22px 0 18px}
+.fc .nm{font-family:var(--num);font-size:88px;letter-spacing:4px;line-height:.96;white-space:nowrap;color:#FFFFFF}
+.fc .sb{font-family:var(--txt);font-weight:700;font-size:23px;letter-spacing:4px;color:#9A8330;margin-top:12px}
+.fc .gr{display:grid;grid-template-columns:1fr 1fr;column-gap:44px;row-gap:16px;margin-top:22px}
+.fc .lab{font-family:var(--txt);font-weight:700;font-size:20px;letter-spacing:3px;color:#9A8330}
+.fc .ln2{font-family:var(--num);font-size:44px;line-height:1.04;color:#FFFFFF}
+.fc .br2{height:8px;background:rgba(255,255,255,.18);margin-top:7px}
+.fc .br2 i{display:block;height:100%;background:var(--gold)}
+.fc .pt{margin-top:20px;display:flex;justify-content:space-between;align-items:baseline;border-top:3px solid rgba(255,255,255,.22);padding-top:16px}
+.fc .pt .k{font-family:var(--txt);font-weight:700;font-size:22px;letter-spacing:4px;color:#9A8330}
+.fc .pt .v{font-family:var(--num);font-size:52px;color:var(--gold)}
+.fc .ft{margin-top:14px;display:flex;justify-content:flex-end;font-family:var(--txt);font-weight:700;font-size:20px;letter-spacing:6px;color:#9A8330}
+
+/* ------------------------------------------------------------ тёмные кадры: хайрлайны */
+.s.dk .tr{border-bottom-color:#333333}
+.s.dk .tr.hi{background:rgba(255,255,255,.07)}
+.s.dk .fl .r{border-bottom-color:#333333}
+.s.dk .st .row{border-bottom-color:#333333}
+.s.dk .m{border-top-color:#333333}
+.s.dk .bar{background:#333333}
+.s.dk .bar i{background:#FFFFFF}
+.s.dk .duo .tx{color:#FFFFFF}
+
+/* крупная таблица статов */
+.tb.tall .tr{grid-template-columns:74px 1fr 170px;padding:52px 0}
+.tb.tall .tr .n{font-size:34px}
+.tb.tall .tr .t{font-size:58px}
+.tb.tall .tr .t small{font-size:31px;margin-top:10px}
+.tb.tall .tr .v{font-size:104px}
+
+/* веса осей одной лентой */
+.wg{display:grid;grid-template-columns:repeat(6,1fr);margin-top:32px;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.s.dk .wg{border-top-color:#FFFFFF;border-bottom-color:#FFFFFF}
+.wg>div{padding:24px 14px 26px}
+.wg>div+div{border-left:1px solid var(--ln)}
+.s.dk .wg>div+div{border-left-color:#3A3A3A}
+.wg .k{font-family:var(--txt);font-weight:700;font-size:19px;letter-spacing:2px;color:var(--g)}
+.s.dk .wg .k{color:#9C9C9C}
+.wg .v{font-family:var(--num);font-size:62px;line-height:1;margin-top:12px}
+
+/* ------------------------------------------------- золотой микрофон, светлая серия */
+.s.gm{background:#F4F3F1}
+.s.gm .rule{height:7px}
+.s.gm .h1,.s.gm .h2{font-family:var(--num);letter-spacing:0}
+.s.gm .h2{font-size:76px;line-height:1.02}
+.s.gm .big{font-size:210px}
+.gmh{font-family:var(--num);font-size:104px;line-height:.95;letter-spacing:-2px}
+.gmh:first-child{margin-top:24px}
+.hr{height:2px;background:#DCDAD6;margin-top:28px}
+.nt{font-family:var(--txt);font-size:32px;line-height:1.34;color:#3A3A3A;margin-top:24px}
+.tri{display:grid;grid-template-columns:repeat(3,296px);column-gap:24px;margin-top:34px}
+.tri .ph{background:#C9C7C3}
+.tri .ph img{width:296px;height:435px;object-fit:cover;display:block}
+.tri .cp{font-family:var(--txt);font-weight:700;font-size:23px;letter-spacing:3px;margin-top:18px}
+
+.rks{margin-top:26px}
+.rk{display:grid;grid-template-columns:104px 1fr;align-items:center;column-gap:20px;padding:42px 0;border-bottom:2px solid #DCDAD6}
+.rk .n{font-family:var(--num);font-size:62px;line-height:1;color:#B4B1AC}
+.rk .t{font-family:var(--num);font-size:52px;line-height:1.02}
+.rk .t small{display:block;font-family:var(--txt);font-weight:700;font-size:22px;letter-spacing:3px;color:var(--g);margin-top:9px}
+.rk.sm{grid-template-columns:70px 1fr;padding:35px 0}
+.rk.sm .n{font-size:48px}
+.rk.sm .t{font-size:44px}
+.rk.sm .t small{font-size:20px;letter-spacing:2px;margin-top:8px}
+.alb{display:grid;grid-template-columns:1fr 460px;column-gap:36px;align-items:start}
+.alb .cv{margin-top:26px}
+.alb .cv .ph{background:#C9C7C3}
+.alb .cv .ph img{width:460px;height:460px;object-fit:cover;display:block}
+.cp2{font-family:var(--txt);font-weight:700;font-size:20px;letter-spacing:3px;color:var(--g);margin-top:14px}
+
+.mx{margin-top:30px}
+.mx .rw{display:grid;grid-template-columns:1fr 150px 150px 150px;align-items:end;column-gap:18px;padding-top:60px}
+.mx .rw.hh{padding-top:0;padding-bottom:14px;border-bottom:3px solid var(--ink)}
+.mx .hd{font-family:var(--txt);font-weight:700;font-size:20px;letter-spacing:3px;color:var(--g);text-align:right}
+.mx .nm{font-family:var(--num);font-size:42px}
+.mx .vl{text-align:right}
+.mx .vl span{font-family:var(--num);font-size:84px;line-height:.9}
+.mx .vl i{display:block;height:3px;background:#DCDAD6;margin-top:14px}
+.mx .vl.g span{color:var(--grn)}
+.mx .vl.r span{color:var(--red)}
+.mx .vl.r i{background:var(--red);height:6px}
+.vd{display:grid;grid-template-columns:170px 1fr;column-gap:26px;margin-top:44px;border-left:7px solid var(--ink);padding:8px 0 8px 26px}
+.vd .k{font-family:var(--txt);font-weight:700;font-size:22px;letter-spacing:4px;color:var(--g);padding-top:8px}
+.vd .t{font-family:var(--txt);font-size:31px;line-height:1.34}
+
+.wl{margin-top:30px}
+.wr{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:2px solid #DCDAD6}
+.wr .k{font-family:var(--txt);font-weight:700;font-size:30px;letter-spacing:4px}
+.wr .v{font-family:var(--num);font-size:60px;line-height:1}
+.bigrow{display:flex;align-items:flex-end;gap:28px;margin-top:30px}
+.un{font-family:var(--txt);font-weight:700;font-size:30px;letter-spacing:5px;color:var(--g);padding-bottom:30px}
+.fin{font-family:var(--txt);font-size:30px;line-height:1.32;color:#3A3A3A;margin-top:22px}
+
+.pds{margin-top:24px}
+.pd{position:relative;display:grid;grid-template-columns:82px 1fr 180px;align-items:center;column-gap:22px;padding:48px 0;border-bottom:2px solid #DCDAD6}
+.pd .n{font-family:var(--num);font-size:56px;line-height:1;color:#B4B1AC}
+.pd .t{font-family:var(--num);font-size:66px;line-height:1}
+.pd .v{font-family:var(--num);font-size:100px;line-height:.92;text-align:right}
+.pd.win{padding-top:88px;border-bottom:6px solid var(--gold)}
+.pd.win .n,.pd.win .t,.pd.win .v{color:#B08D1E}
+.cr2{position:absolute;left:2px;top:8px;width:86px;height:52px}
+
+.yc{background:#0E0E0E;color:#FFFFFF;border-radius:40px;padding:40px 44px 30px;margin-top:6px}
+.yc .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:26px}
+.yc .ov{font-family:var(--num);font-size:176px;line-height:.82;letter-spacing:-2px}
+.yc .ps{font-family:var(--num);font-size:74px;line-height:1;margin-top:8px}
+.yc .se{font-family:var(--txt);font-weight:700;font-size:22px;letter-spacing:6px;color:#9C9C9C;margin-top:20px}
+.yc .pc{width:380px;height:380px;object-fit:cover;border-radius:22px;background:#6E6E6E;display:block;flex:none}
+.yc .ln{height:3px;background:#FFFFFF;margin:24px 0 20px}
+.yc .nm{font-family:var(--num);font-size:96px;letter-spacing:1px;line-height:1;white-space:nowrap}
+.yc .sb{font-family:var(--txt);font-weight:700;font-size:24px;letter-spacing:5px;color:#9C9C9C;margin-top:14px}
+.yc .sr{display:grid;grid-template-columns:1fr 130px;column-gap:20px;padding-top:14px}
+.yc .lb{font-family:var(--txt);font-weight:700;font-size:32px;letter-spacing:2px}
+.yc .vv{font-family:var(--num);font-size:52px;line-height:.94;text-align:right;color:var(--grn)}
+.yc .vv.r{color:var(--red)}
+.yc .bx{grid-column:1 / span 2;height:6px;background:#333333;margin-top:10px}
+.yc .bx i{display:block;height:100%;background:var(--grn)}
+.yc .bx i.r{background:#FFFFFF}
+.yc .ft{text-align:center;font-family:var(--txt);font-weight:700;font-size:22px;letter-spacing:5px;color:#8A8A8A;margin-top:26px}
+.cta.plain{margin-top:34px;background:transparent;color:var(--ink);padding:0;text-align:center}
+.cta.plain .a{font-family:var(--num);font-size:52px;letter-spacing:0}
+
+.pg.gd{justify-content:flex-start}
+.pg.gd .sq{display:none}
+.pg.gd .tx{color:var(--gold)}
+.pg.bx{justify-content:flex-end}
+.pg.bx .sq{display:none}
+.pg.bx .tx{background:var(--ink);color:#FFFFFF;padding:11px 20px 13px}
+.pg.md{justify-content:center}
+.pg.md .sq{display:none}
+.pg.md .tx{color:var(--g)}
+
+/* Модель 4.1. Строка объёма оценки и причина под баллом. */
+.sco{font-family:var(--txt);font-weight:700;font-size:26px;letter-spacing:3px;
+     text-transform:uppercase;color:#8A8A8A;padding:16px 0 2px}
+.s.lt .sco{color:#5A5A5A}
+.s.gm .sco{color:#3A3A3A;font-size:24px;letter-spacing:2px}
+.rsn{font-family:var(--txt);font-weight:400;font-size:27px;line-height:1.3;
+     color:#6E6E6E;padding-top:12px}
+.s.lt .rsn{color:#4A4A4A}
+.s.gm .rsn{color:#3A3A3A;font-size:26px}
+.rsn.in{font-size:21px;line-height:1.25;color:#9C9C9C;padding:4px 0 10px}
+.yc .rsn.in{color:#8A8A8A;padding:2px 0 8px}
