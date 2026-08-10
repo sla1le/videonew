@@ -1,0 +1,34 @@
+{
+  "_note": "Наблюдаемые числа канала. Только то, что видно на экране записи. Пустое поле значит нет данных, а не ноль.",
+  "source": {
+    "file": "video_2026-08-10_13-26-54.mp4",
+    "sha256": "e37e59b9fb96e70baddfb6be2a941de60b92626c1d95c62f93d34f10cb2cd463",
+    "recorded": "2026-08-10",
+    "duration_s": 531.9,
+    "note": "Экранная запись профиля и аналитики. Счётчики живые, это снимок, а не итог за всё время."
+  },
+  "account": {"followers": 799, "profile_likes": 23300, "following": 6, "posts_seen": 12},
+  "audience": {"male": 82, "female": 18, "age_18_24": 42, "age_25_34": 46, "age_35_44": 6, "age_45_54": 3, "age_55_plus": 3, "conf": "medium", "note": "Привязка экрана к конкретному посту не стопроцентная, брать как срез аудитории целиком."},
+  "posts": [
+    {"id": "kai9_thrill", "title": "Kai Angel и 9mice против THRILL PILL", "fmt": "история", "pub": "2026-08-07 17:32", "views": 132800, "likes": 2655, "comments": 162, "shares": 129, "saves": 366, "follows": 141, "slides": 7, "seen": 4.5, "play_h": 1148.65, "conf": "high"},
+    {"id": "kizaru_ice", "title": "kizaru против ICEGERGERT", "fmt": "дуэль", "pub": "2026-08-09 14:49", "views": 117600, "likes": 2325, "comments": 115, "shares": 108, "saves": 240, "follows": 115, "slides": 8, "seen": 4.3, "play_h": 985.9, "fyp": 98.7, "poll": {"kizaru": 95, "ICEGERGERT": 5}, "votes": 6275, "conf": "high"},
+    {"id": "buda_lild", "title": "OG Buda против LILDRUGHILL", "fmt": "дуэль", "pub": "2026-08-06 15:49", "views": 72100, "likes": 1455, "comments": 119, "shares": 160, "saves": 237, "follows": 90, "slides": 7, "seen": 3.9, "play_h": 656.7, "poll": {"OG Buda": 52, "LILDRUGHILL": 48}, "votes": 3748, "conf": "high"},
+    {"id": "gonefludd", "title": "Айсберг Gone.Fludd", "fmt": "айсберг", "pub": "2026-08-08 18:52", "views": 60100, "likes": 4570, "comments": 126, "shares": 88, "saves": 592, "follows": 18, "slides": 2, "seen": 1.8, "play_h": 258.0, "conf": "high", "note": "Более поздний экран показывает около 23,2 тысячи просмотров при тех же лайках. Расхождение не закрыто."},
+    {"id": "golden2017", "title": "Золотой микрофон 2017", "fmt": "сезон", "pub": "2026-08-07 13:18", "views": 58200, "likes": 1070, "comments": 87, "shares": 39, "saves": 131, "follows": 55, "slides": 7, "seen": 3.9, "play_h": 310.4, "conf": "high"},
+    {"id": "cards", "title": "Музыканты как карточки", "fmt": "объяснение формата", "pub": "2026-08-04 10:30", "views": 50900, "likes": 2255, "comments": 95, "shares": 342, "saves": 267, "follows": 81, "slides": 7, "seen": 4.0, "play_h": 353.73, "fyp": 53.6, "profile": 45.2, "conf": "high"},
+    {"id": "golden2016", "title": "Золотой микрофон 2016", "fmt": "сезон", "pub": "2026-08-06 09:41", "views": 49100, "likes": 1308, "comments": 99, "shares": 79, "saves": 128, "follows": 40, "slides": 8, "seen": 4.0, "play_h": 295.02, "conf": "high"},
+    {"id": "egor", "title": "ЕГОР КРИД, разбор", "fmt": "разбор", "pub": "2026-08-05 08:58", "views": 32000, "likes": 480, "comments": 39, "shares": 20, "saves": 39, "follows": 68, "slides": 6, "seen": 3.3, "play_h": 191.93, "conf": "high"},
+    {"id": "zavet", "title": "ZAVET, карточка", "fmt": "видео", "pub": "2026-08-05 17:05", "views": 30800, "likes": 1035, "comments": 45, "shares": 63, "saves": 111, "follows": 37, "play_h": 156.0, "fyp": 85.1, "profile": 13.4, "retention": {"s3": 60.0, "finish": 13.9}, "conf": "high"},
+    {"id": "unknown_0808", "title": "Пост 8 августа 23:07, название не опознано", "fmt": "неизвестно", "pub": "2026-08-08 23:07", "views": 23000, "likes": 2224, "comments": 26, "shares": 57, "saves": 477, "conf": "medium", "note": "В выводы по форматам не входит, пока пост не опознан."},
+    {"id": "depo_pharaoh", "title": "Boulevard Depo против PHARAOH, прайм", "fmt": "дуэль праймов", "pub": "2026-08-09 16:30", "views": 22000, "likes": 837, "comments": 30, "shares": 12, "saves": 89, "follows": 20, "slides": 8, "seen": 4.0, "play_h": 142.43, "conf": "high"},
+    {"id": "dark_prince", "title": "ТЁМНЫЙ ПРИНЦ, разбор", "fmt": "разбор", "pub": "2026-08-09 20:52", "views": 2829, "likes": 32, "comments": 8, "shares": 1, "saves": 3, "slides": 7, "age_h": 15, "conf": "medium", "note": "Возраст поста около 15 часов на момент записи. Сравнение со зрелыми постами преждевременно."}
+  ],
+  "polls_note": "Опрос в карусели собирает от 3,7 до 6,3 тысячи голосов. Это самый дешёвый источник вовлечения на канале.",
+  "warnings": [
+    "Счётчики живые и менялись во время записи.",
+    "Часть экранов ещё в обработке. Пустое значение не ноль.",
+    "Видимые комментарии отобраны площадкой и путём прокрутки, это не выборка.",
+    "Локаль и часовой пояс на экранах менялись, слот публикации требует отдельной проверки.",
+    "Пост 8 августа 23:07 не опознан по названию и держится отдельно."
+  ]
+}
