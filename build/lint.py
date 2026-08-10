@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Линтер текста и вёрстки деки. Версия 5.
-
-Запуск: python3 build/lint.py build/html/slides.html build/theme.css
-"""
+"""Линтер текста и вёрстки деки. Версия 6."""
 import os
 import re
 import sys
@@ -15,6 +12,8 @@ BANNED_FONTS = ["Oswald", "Bebas", "Roboto", "Montserrat", "Inter",
                 "Nimbus Sans Narrow", "Noto Sans"]
 FOOTER = "@ECHORATE"
 YEAR_LO, YEAR_HI = 1990, 2035
+SLIDES_MIN, SLIDES_MAX, SLIDES_HARD = 6, 7, 8
+STAT_ROW_RE = re.compile(r'class="(sr|sts|mx|tr)[" ]')
 
 fails = []
 warns = []
@@ -41,7 +40,6 @@ def split_frames(html):
     return parts
 
 
-# ---------------------------------------------------------------- текст
 def check_global_text(text):
     if EMDASH in text:
         fail("длинное тире в тексте")
@@ -132,7 +130,6 @@ def check_cta(html):
         fail("призывов в деке %d, нужен один" % got)
 
 
-# ---------------------------------------------------------------- css
 def check_css(css):
     for f in BANNED_FONTS:
         if f in css:
@@ -142,6 +139,49 @@ def check_css(css):
             fail("сокращённый font без var: " + m.group(1)[:40])
     for m in re.finditer(r"\.(num|big|chip|tr \.v)[^{]*\{[^}]*Georgia", css):
         fail("Georgia на числах: " + m.group(0)[:40])
+
+
+def frame_name(i, frame):
+    m = re.search(r'data-name="([^"]+)"', frame)
+    return m.group(1) if m else "frame%02d" % (i + 1)
+
+
+def has_stats(chunk):
+    if STAT_ROW_RE.search(chunk):
+        return True
+    return len([s for s in STAT_ORDER if s in chunk]) >= 3
+
+
+def check_scope(html, frames):
+    """Зритель должен понимать, что именно оценивается. Спрашивают про артиста и релиз."""
+    if not has_stats(html):
+        return
+    if 'class="sco' not in "".join(frames[:2]):
+        warn("в первых двух кадрах нет строки объёма оценки")
+
+
+def check_reason(frames):
+    """Балл без своей причины на кадре читается как выдумка."""
+    for i, fr in enumerate(frames):
+        if any(t in fr for t in ('class="rsn', 'class="vd', 'class="wl')):
+            continue
+        if has_stats(fr):
+            warn("%s: баллы без причины на кадре" % frame_name(i, fr))
+
+
+def check_loop(frames):
+    """Последний кадр возвращает к вопросу обложки, иначе луп разорван."""
+    if len(frames) < 3:
+        return
+    m = re.search(r'<div class="h1"[^>]*>([\s\S]*?)</div>', frames[0])
+    if not m:
+        return
+    words = set(re.findall(r"[А-ЯЁA-Z]{4,}", strip_tags(m.group(1)).upper()))
+    if not words:
+        return
+    tail = strip_tags(frames[-1]).upper()
+    if not any(w in tail for w in words):
+        warn("последний кадр не возвращает к вопросу обложки")
 
 
 def main():
@@ -156,12 +196,19 @@ def main():
     if not frames:
         print("ПРОВАЛ: кадров не найдено")
         return 1
-    if len(frames) > 20:
-        fail("кадров %d, карусель держит 20" % len(frames))
+    if len(frames) > SLIDES_HARD:
+        fail("кадров %d, рабочий предел %d" % (len(frames), SLIDES_HARD))
+    elif len(frames) == SLIDES_HARD:
+        warn("кадров %d, на восьмом слайде глубина падает до половины" % len(frames))
+    elif len(frames) < SLIDES_MIN:
+        warn("кадров %d, рабочий диапазон от %d до %d" % (len(frames), SLIDES_MIN, SLIDES_MAX))
 
     check_global_text(strip_tags(html))
     check_marks(html)
     check_cta(html)
+    check_scope(html, frames)
+    check_reason(frames)
+    check_loop(frames)
     for i, fr in enumerate(frames):
         check_frame(i, fr)
 
