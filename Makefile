@@ -13,7 +13,7 @@ DECK ?= tm2004
 OUT := build/out/$(DECK)
 PROBE := build/probe_$(DECK).png
 
-.PHONY: help doctor setup check data selfcheck test desc slop verify refs render probe cards deck clean
+.PHONY: help doctor setup check data selfcheck test desc slop mobile verify refs render probe cards deck clean
 
 help:
 	@echo "make doctor              что стоит в системе: python, node, chromium, magick"
@@ -22,6 +22,7 @@ help:
 	@echo "make render DECK=$(DECK)   собрать деку из build/decks и снять кадры"
 	@echo "make cards               рейтинговые карточки лиги 1080 на 1350"
 	@echo "make desc                линтер описаний build/decks/*.desc.txt"
+	@echo "make mobile              читаемость темы и безопасные поля"
 	@echo "make slop                стоп-лист машинных фраз по декам и описаниям"
 	@echo "make refs                перемерить и сверить эталонные кадры"
 	@echo "make clean               убрать временные файлы сборки"
@@ -44,7 +45,7 @@ setup:
 	@echo ""
 	@echo "готово. Проверь среду: make doctor"
 
-check: data selfcheck test desc slop verify
+check: data selfcheck test desc slop mobile verify
 	@echo ""
 	@echo "ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ"
 
@@ -65,6 +66,9 @@ desc:
 slop:
 	$(PY) ops/slop.py build/decks
 
+mobile:
+	$(PY) build/mobile.py build/theme.css
+
 verify:
 	$(PY) refs/verify.py
 
@@ -78,6 +82,7 @@ render:
 	node build/render.js build/html/$(DECK).html $(OUT)
 	$(PY) build/lint.py build/html/$(DECK).html build/theme.css
 	$(PY) build/qa.py $(OUT) build/html/$(DECK).html build/theme.css
+	$(PY) build/mobile.py build/theme.css $(OUT)
 	@$(MAKE) --no-print-directory probe DECK=$(DECK)
 
 probe:
