@@ -33,11 +33,17 @@ jobs:
             python "$t"
           done
 
+      - name: Тест структурного антислопа
+        run: python ops/neuroslop.py --self-test
+
       - name: Линтер описаний
         run: python ops/desclint.py build/decks
 
       - name: Стоп-лист фраз
         run: python ops/slop.py build/decks
+
+      - name: Структурный антислоп
+        run: python ops/neuroslop.py build/decks --max-score 65 --warn-score 25
 
       - name: Сборка дек без фотографий
         run: |
