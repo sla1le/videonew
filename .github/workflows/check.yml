@@ -36,6 +36,9 @@ jobs:
       - name: Тест структурного антислопа
         run: python ops/neuroslop.py --self-test
 
+      - name: Тест SVG-визуализаций
+        run: python build/visuals.py --self-test
+
       - name: Линтер описаний
         run: python ops/desclint.py build/decks
 
