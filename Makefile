@@ -25,7 +25,7 @@ help:
 	@echo "make slop                точный стоп-лист машинных фраз"
 	@echo "make neuroslop           структурный neuroslop_score по декам"
 	@echo "make prose               slop + neuroslop + опциональный LanguageTool"
-	@echo "make vale                правила ECHO через Vale, если он установлен"
+	@echo "make vale                правила ECHO через Vale для описаний"
 	@echo "make visual-test         самотест radar, line, bar, timeline, quadrant"
 	@echo "make refs                перемерить и сверить эталонные кадры"
 	@echo "make clean               убрать временные файлы сборки"
@@ -86,7 +86,7 @@ prose: slop neuroslop grammar
 
 vale:
 	@if command -v vale > /dev/null 2>&1; then \
-		vale prompts build/decks/*.desc.txt; \
+		vale build/decks/*.desc.txt; \
 	else \
 		echo "vale не установлен. Основной check продолжает работать без него"; \
 	fi
