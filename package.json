@@ -1,6 +1,6 @@
 {
   "name": "echorate-videonew",
-  "version": "4.2.2",
+  "version": "4.3.0",
   "private": true,
   "description": "Конвейер рейтинговых видео ЭХО: генератор кадров, рендер и проверки",
   "engines": {
