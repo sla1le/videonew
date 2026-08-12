@@ -28,6 +28,12 @@ def per_1k(value, views):
     return value * 1000.0 / views
 
 
+def pct(value, total):
+    if value is None or not total:
+        return None
+    return value * 100.0 / total
+
+
 def metrics(p: dict) -> dict:
     v = p.get("views") or 0
     seen, slides, play = p.get("seen"), p.get("slides"), p.get("play_h")
@@ -35,6 +41,7 @@ def metrics(p: dict) -> dict:
         "id": p["id"],
         "fmt": p.get("fmt", "неизвестно"),
         "views": v,
+        "latest": p.get("grid_views_latest") or v,
         "lk": per_1k(p.get("likes"), v),
         "fol": per_1k(p.get("follows"), v),
         "sav": per_1k(p.get("saves"), v),
@@ -68,15 +75,47 @@ def table(head, lines):
     print()
 
 
+def report_account(d: dict) -> None:
+    account = d.get("account") or {}
+    period = d.get("period_7d") or {}
+
+    print("## Аккаунт\n")
+    table(
+        ["Метрика", "Значение"],
+        [
+            ["Подписчики", str(account.get("followers", "нет"))],
+            ["Лайки профиля", str(account.get("profile_likes", "нет"))],
+            ["Просмотры за 7 дней", str(period.get("post_views", "нет"))],
+            ["Просмотры профиля за 7 дней", str(period.get("profile_views", "нет"))],
+            ["Чистые подписки за 7 дней", str(period.get("net_followers", "нет"))],
+            ["Уникальные зрители за 7 дней", str(period.get("total_viewers", "нет"))],
+            ["Новые зрители за 7 дней", str(period.get("new_viewers", "нет"))],
+        ],
+    )
+
+    if period:
+        print("## Воронка 7 дней\n")
+        table(
+            ["Показатель", "Значение"],
+            [
+                ["Переходы в профиль от просмотров", n(pct(period.get("profile_views"), period.get("post_views")), 2) + "%"],
+                ["Чистые подписки на 1000 просмотров", n(per_1k(period.get("net_followers"), period.get("post_views")), 2)],
+                ["Новые зрители среди уникальных", n(pct(period.get("new_viewers"), period.get("total_viewers")), 1) + "%"],
+            ],
+        )
+
+
 def report(d: dict) -> None:
+    report_account(d)
+
     rows = [metrics(p) for p in d["posts"]]
-    rows.sort(key=lambda r: -r["views"])
+    rows.sort(key=lambda r: -r["latest"])
     solid = [r for r in rows if r["solid"]]
 
     print("## Посты\n")
     table(
-        ["ID", "Формат", "Просмотры", "Лайки/1к", "Подписки/1к", "Сохран/1к", "Репост/1к", "Комм/1к", "Глубина %", "Сек/просмотр"],
-        [[r["id"], r["fmt"], "%d" % r["views"], n(r["lk"], 1), n(r["fol"]), n(r["sav"]), n(r["shr"]), n(r["com"]), n(r["depth"], 1), n(r["spv"], 1)] for r in rows],
+        ["ID", "Формат", "Просмотры", "Счётчик сейчас", "Лайки/1к", "Подписки/1к", "Сохран/1к", "Репост/1к", "Комм/1к", "Глубина %", "Сек/просмотр"],
+        [[r["id"], r["fmt"], "%d" % r["views"], "%d" % r["latest"], n(r["lk"], 1), n(r["fol"]), n(r["sav"]), n(r["shr"]), n(r["com"]), n(r["depth"], 1), n(r["spv"], 1)] for r in rows],
     )
 
     print("## Форматы, только надёжные посты\n")
@@ -91,7 +130,10 @@ def report(d: dict) -> None:
     print("## Три цели, у каждой свой лидер\n")
     lines = []
     for goal, key in GOALS.items():
-        best = max([r for r in solid if r[key] is not None], key=lambda r: r[key])
+        available = [r for r in solid if r[key] is not None]
+        if not available:
+            continue
+        best = max(available, key=lambda r: r[key])
         lines.append([goal, best["id"], best["fmt"], n(best[key], 2 if key != "views" else 0)])
     table(["Цель", "Лидер", "Формат", "Значение"], lines)
 
@@ -130,6 +172,8 @@ def check(d: dict) -> int:
         seen_ids.add(who)
         if not p.get("views"):
             bad.append("%s: нет просмотров" % who)
+        if p.get("grid_views_latest") is not None and p["grid_views_latest"] < p.get("views", 0):
+            bad.append("%s: свежий счётчик меньше полного снимка" % who)
         if p.get("seen") and p.get("slides") and p["seen"] > p["slides"]:
             bad.append("%s: просмотрено слайдов больше, чем есть" % who)
         for key in ("likes", "comments", "shares", "saves", "follows"):
@@ -137,6 +181,9 @@ def check(d: dict) -> int:
                 bad.append("%s: %s больше просмотров" % (who, key))
         if p.get("conf") not in ("high", "medium", "low"):
             bad.append("%s: нет отметки надёжности" % who)
+    period = d.get("period_7d") or {}
+    if period.get("new_viewers", 0) > period.get("total_viewers", 0):
+        bad.append("period_7d: новых зрителей больше общего числа")
     for b in bad:
         print("ПРОВАЛ:", b)
     if bad:

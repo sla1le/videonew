@@ -1,0 +1,137 @@
+{
+  "_note": "Только числа, которые видны в экранной записи 12 августа 2026. Пустое поле значит данных на экране не было.",
+  "source": {
+    "file": "video_2026-08-12_15-12-25.mp4",
+    "sha256": "00e2725af94e6529eb83d1326ac01fc632d60a29c0288193be44f96e902cd55e",
+    "recorded": "2026-08-12",
+    "duration_s": 240.875,
+    "local_time": "15:02-15:06 UTC+5"
+  },
+  "account": {
+    "following": 9,
+    "followers": 966,
+    "profile_likes": 33400
+  },
+  "period_7d": {
+    "range": "2026-08-04/2026-08-10",
+    "post_views": 857400,
+    "profile_views": 12700,
+    "likes": 29600,
+    "comments": 1600,
+    "shares": 1500,
+    "total_viewers": 219500,
+    "new_viewers": 205100,
+    "followers_total": 966,
+    "net_followers": 685
+  },
+  "viewers": {
+    "gender_pct": {
+      "male": 75,
+      "female": 24,
+      "other": 1
+    },
+    "peak": {
+      "date": "2026-08-10",
+      "hour": 17,
+      "active_viewers": 27300
+    }
+  },
+  "followers": {
+    "countries_pct": {
+      "Russia": 43.1,
+      "Ukraine": 4.0,
+      "United States": 2.8,
+      "Belarus": 2.4,
+      "Kazakhstan": 2.4
+    },
+    "peak_note": "Экран сообщает: за последние 7 дней большинство подписчиков были активны 6 августа в 16:00."
+  },
+  "posts": [
+    {
+      "id": "kizaru_ice",
+      "title": "kizaru против ICEGERGERT",
+      "pub": "2026-08-09 14:49",
+      "views": 191900,
+      "likes": 4235,
+      "comments": 156,
+      "shares": 193,
+      "saves": 405,
+      "follows": 193,
+      "slides": 8,
+      "seen": 4.3,
+      "play_h": 1693.633333,
+      "total_viewers": 76800,
+      "new_viewers_pct": 57,
+      "returning_viewers_pct": 43,
+      "non_followers_pct": 100,
+      "followers_pct": 0
+    },
+    {
+      "id": "buster_diss",
+      "title": "Дисс дал Buster 412 795 прослушиваний и ноль к карте",
+      "pub": "2026-08-11 11:48",
+      "views": 100600,
+      "likes": 938,
+      "comments": 103,
+      "shares": 51,
+      "saves": 97,
+      "follows": 35,
+      "slides": 7,
+      "seen": 3.8,
+      "play_h": 946.616667,
+      "fyp": 94.8,
+      "profile": 4.2,
+      "other_traffic": 0.7
+    },
+    {
+      "id": "worldcup_peekaboo",
+      "title": "Я выбил PEEKABOO из кубка",
+      "pub": "2026-08-11 00:37",
+      "views": 7100,
+      "likes": 135,
+      "comments": 20,
+      "shares": 2,
+      "saves": 15,
+      "follows": 15,
+      "slides": 7,
+      "seen": 3.4,
+      "play_h": 40.583056
+    },
+    {
+      "id": "golden2018",
+      "title": "Золотой микрофон 2018",
+      "pub": "2026-08-10 13:17",
+      "views": 22900,
+      "likes": 1135,
+      "comments": 50,
+      "shares": 31,
+      "saves": 78,
+      "follows": 17,
+      "slides": 7,
+      "seen": 3.9,
+      "play_h": 141.466667
+    },
+    {
+      "id": "unknown_0811_1338",
+      "title": "Его зовут русский Карти, 12 часов",
+      "pub": "2026-08-11 13:38",
+      "views": 12000,
+      "likes": 337,
+      "comments": 11,
+      "shares": 118,
+      "saves": 21,
+      "conf": "medium",
+      "note": "Название записано по тексту обложки. Формат и герой пока не размечены."
+    }
+  ],
+  "grid_only": {
+    "kai9_thrill_views": 141300,
+    "note": "На сетке профиля виден новый счётчик старого поста. Остальные метрики этого поста в записи не открывались."
+  },
+  "warnings": [
+    "Период 7 дней в аналитике заканчивается 10 августа, хотя запись сделана 12 августа.",
+    "Счётчики публикаций живые и продолжают расти.",
+    "Поля, которые TikTok показывал как обрабатываемые, не восстановлены по косвенным признакам.",
+    "Страны относятся к подписчикам, пол 75/24/1 снят со вкладки зрителей."
+  ]
+}
