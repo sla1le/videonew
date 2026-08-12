@@ -172,27 +172,27 @@ def test_price_monotonic():
 
 def test_squad_budget():
     data = formats.squad()
-    assert data["budget_mln"] == 200
-    for option in data["options"]:
-        assert option["total_mln"] <= 200
-        assert len({m["pos"] for m in option["members"]}) == 3, "трио из трёх разных позиций"
-    assert len(data["options"]) == 4, f"вариантов {len(data['options'])}, ждали 4"
+    assert data["budget"] == 200
+    positions = {row["name"]: row["pos"] for row in data["prices"]}
+    for combo in data["combos"]:
+        assert combo["cost"] <= 200
+        assert len({positions[name] for name in combo["names"]}) == 3, "трио из трёх разных позиций"
+    assert len(data["combos"]) == 4, f"вариантов {len(data['combos'])}, ждали 4"
     assert data["ready"] is True
 
 
 def test_squad_excludes_top_artist():
-    """Крид стоит 130 из 200. С ним остаётся 70 на двоих, а это уже выбор."""
     data = formats.squad()
-    with_kreed = [o for o in data["options"] if any(m["name"] == "ЕГОР КРИД" for m in o["members"])]
+    with_kreed = [combo for combo in data["combos"] if "ЕГОР КРИД" in combo["names"]]
     assert not with_kreed, "в текущей лиге Крид не влезает ни в одно трио с тремя позициями"
 
 
 def test_hidden_leader():
     data = formats.hidden()
-    assert data["all"][0]["name"] == "LILDRUGHILL"
-    assert abs(data["all"][0]["hidden_gap"] - 20.17) < 0.01
-    assert data["all"][-1]["name"] == "ЕГОР КРИД"
-    assert data["all"][-1]["hidden_gap"] < 0, "у Крида охват выше ремесла"
+    assert data["rows"][0]["name"] == "LILDRUGHILL"
+    assert abs(data["rows"][0]["hidden_gap"] - 20.17) < 0.01
+    assert data["rows"][-1]["name"] == "ЕГОР КРИД"
+    assert data["rows"][-1]["hidden_gap"] < 0, "у Крида охват выше ремесла"
     assert len(data["winners"]) == 4
 
 
@@ -204,7 +204,7 @@ def test_wonderkids_blocked():
 
 def test_toty_2017():
     data = formats.toty("2017")
-    slots = {s["pos"]: s["name"] for s in data["slots"]}
+    slots = {pos: pick["name"] if pick else None for pos, pick in data["slots"].items()}
     assert slots["RW"] == "ЛСП" and slots["LW"] == "PHARAOH"
     assert slots["CDM"] == "СКРИПТОНИТ" and slots["CAM"] == "ХАСКИ"
     assert slots["CM"] is None, "в пуле 2017 нет ни одного CM, слот остаётся пустым"
@@ -215,17 +215,17 @@ def test_toty_no_position_swap():
     for year in ("2015", "2017"):
         data = formats.toty(year)
         pool = {r["n"]: r["pos"] for r in season.solve_year(year)["rows"]}
-        for slot in data["slots"]:
-            if slot["name"]:
-                assert pool[slot["name"]] == slot["pos"], f"{year}: {slot['name']} поставлен не на свою позицию"
+        for pos, pick in data["slots"].items():
+            if pick:
+                assert pool[pick["name"]] == pos, f"{year}: {pick['name']} поставлен не на свою позицию"
 
 
 def test_icons_peak_year():
     data = formats.icons()
-    cards = {c["name"]: c for c in data["cards"]}
-    assert cards["СКРИПТОНИТ"]["peak_year"] == "2015"
-    assert cards["PHARAOH"]["peak_year"] == "2017"
-    assert cards["ЛСП"]["peak_year"] == "2017"
+    cards = {c["name"]: c for c in data["rows"]}
+    assert cards["СКРИПТОНИТ"]["peak_year"] == 2015
+    assert cards["PHARAOH"]["peak_year"] == 2017
+    assert cards["ЛСП"]["peak_year"] == 2017
 
 
 def test_rookies_blocked():
