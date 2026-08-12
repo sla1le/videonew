@@ -13,7 +13,7 @@ DECK ?= tm2004
 OUT := build/out/$(DECK)
 PROBE := build/probe_$(DECK).png
 
-.PHONY: help doctor setup check data selfcheck test desc slop neuroslop grammar prose vale verify refs render probe cards deck clean
+.PHONY: help doctor setup check data selfcheck test desc slop neuroslop grammar prose vale visual-test verify refs render probe cards deck clean
 
 help:
 	@echo "make doctor              что стоит в системе: python, node, chromium, magick, vale"
@@ -26,6 +26,7 @@ help:
 	@echo "make neuroslop           структурный neuroslop_score по декам"
 	@echo "make prose               slop + neuroslop + опциональный LanguageTool"
 	@echo "make vale                правила ECHO через Vale, если он установлен"
+	@echo "make visual-test         самотест radar, line, bar, timeline, quadrant"
 	@echo "make refs                перемерить и сверить эталонные кадры"
 	@echo "make clean               убрать временные файлы сборки"
 	@echo ""
@@ -64,6 +65,10 @@ selfcheck:
 test:
 	cd rating && for t in test_*.py; do echo "== $$t"; $(PY) $$t; done
 	$(PY) ops/neuroslop.py --self-test
+	$(PY) build/visuals.py --self-test
+
+visual-test:
+	$(PY) build/visuals.py --self-test
 
 desc:
 	$(PY) ops/desclint.py build/decks
