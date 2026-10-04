@@ -13,7 +13,7 @@ DECK ?= tm2004
 OUT := build/out/$(DECK)
 PROBE := build/probe_$(DECK).png
 
-.PHONY: help doctor setup check data selfcheck test desc slop neuroslop grammar prose vale visual-test verify refs render probe cards deck clean
+.PHONY: help doctor setup check data generated selfcheck test desc slop neuroslop grammar prose vale visual-test visual-check verify refs render probe cards deck clean
 
 help:
 	@echo "make doctor              что стоит в системе: python, node, chromium, magick, vale"
@@ -45,17 +45,20 @@ doctor:
 
 setup:
 	$(PY) -m pip install -r requirements.txt
-	npm install
+	npm ci
 	npx playwright install chromium
 	@echo ""
 	@echo "готово. Проверь среду: make doctor"
 
-check: data selfcheck test desc slop neuroslop verify
+check: data generated selfcheck test desc slop neuroslop visual-check
 	@echo ""
 	@echo "ВСЕ ПРОВЕРКИ ПРОЙДЕНЫ"
 
 data:
 	$(PY) ops/validate_data.py
+
+generated:
+	$(PY) rating/check_generated.py
 
 selfcheck:
 	$(PY) ops/selfcheck.py
@@ -69,6 +72,13 @@ test:
 
 visual-test:
 	$(PY) build/visuals.py --self-test
+
+visual-check:
+	$(PY) build/gen.py build/decks/tm2004.json
+	rm -f build/out/ci_tm2004/*.png
+	node build/render.js build/html/tm2004.html build/out/ci_tm2004
+	$(PY) build/lint.py build/html/tm2004.html build/theme.css
+	$(PY) build/qa.py build/out/ci_tm2004 --max-warnings 3
 
 desc:
 	$(PY) ops/desclint.py build/decks

@@ -7,10 +7,12 @@
 """
 from __future__ import annotations
 
+from copy import deepcopy
 import sys
 import traceback
 
 import core
+import check_generated
 import formats
 import season
 import worldcup
@@ -103,6 +105,10 @@ def test_league_matches_published():
         assert abs(row["raw"] - raw) < 0.005, f"{key}: raw {row['raw']}, ждали {raw}"
 
 
+def test_generated_rating_files_are_fresh():
+    assert check_generated.main() == 0
+
+
 def test_league_order():
     names = [r["name"] for r in core.league()["rows"]]
     assert names == ["ЕГОР КРИД", "OG BUDA", "KAI ANGEL", "9MICE", "LILDRUGHILL", "THRILL PILL"], names
@@ -116,6 +122,26 @@ def test_sources_required():
     except core.DataError:
         return
     raise AssertionError("артист без источников не должен считаться")
+
+
+def test_source_records_are_structured_and_match_inputs():
+    _, artists = core.load_artists()
+    artist = deepcopy(next(item for item in artists if item.get("in_league")))
+    artist["src_top5"] = "Spotify top tracks"
+    try:
+        core.rate(artist)
+    except core.DataError:
+        pass
+    else:
+        raise AssertionError("неструктурированный источник прошёл проверку")
+    artist["src_top5"] = deepcopy(next(item for item in artists if item.get("in_league"))["src_top5"])
+    artist["src_top5"]["value"] += 1
+    try:
+        core.rate(artist)
+    except core.DataError:
+        pass
+    else:
+        raise AssertionError("источник с расходящимся значением прошёл проверку")
 
 
 # ---------------------------------------------------------------- сезон
@@ -146,6 +172,32 @@ def test_season_role_penalty():
     assert abs(core.season_hits(1, "colead") - 93) < 1e-9
     assert abs(core.season_hits(1, "guest") - 87) < 1e-9
     assert core.season_hits(None) == 62 and core.season_hits(11) == 62
+
+
+def test_season_invalid_ranks_and_marks():
+    for rank in (0, -1, 1.5, "bad"):
+        for calculate in (core.season_hits, core.season_influence):
+            try:
+                calculate(rank)
+            except core.DataError:
+                pass
+            else:
+                raise AssertionError(f"{calculate.__name__} принял некорректное место {rank!r}")
+    entry = {"n": "TEST", "pos": "ST", "T": 1000, "S": 70, "D": 70, "tr": 1, "alb": 1}
+    try:
+        core.season_score(entry)
+    except core.DataError:
+        pass
+    else:
+        raise AssertionError("season_score принял балл выше 99")
+
+
+def test_future_birth_date_is_rejected():
+    try:
+        core.age_at("2030-01-01", "2026-08-07")
+    except core.DataError:
+        return
+    raise AssertionError("age_at принял дату рождения позже снимка")
 
 
 def test_season_vote_bonus():
@@ -300,6 +352,32 @@ def test_worldcup_r16_pairs():
     assert matches[15]["top"]["seed"] == 16 and matches[15]["bottom"]["seed"] == 17
     keys = [m["top"]["key"] for m in matches] + [m["bottom"]["key"] for m in matches]
     assert len(set(keys)) == 32
+
+
+def test_worldcup_next_round_uses_previous_winners():
+    seeded = worldcup.round_of(32)
+    winners = [match["bottom"]["key"] for match in seeded["matches"]]
+    advanced = worldcup.round_of(16, winners)
+    assert [m["top"]["key"] for m in advanced["matches"]] == winners[:8]
+    assert [m["bottom"]["key"] for m in advanced["matches"]] == winners[-1:-9:-1]
+    assert all(key in winners for match in advanced["matches"] for key in (match["top"]["key"], match["bottom"]["key"]))
+    assert worldcup.round_of(16)["ready"] is False
+
+
+def test_worldcup_rejects_invalid_winner_state():
+    winners = [row["key"] for row in worldcup.table()["rows"][:16]]
+    for values in (winners[:15], winners[:-1] + [winners[0]], winners[:-1] + ["unknown"]):
+        try:
+            worldcup.round_of(16, values)
+        except core.DataError:
+            pass
+        else:
+            raise AssertionError("турнир принял некорректный список победителей")
+
+
+def test_worldcup_qualifies_predicted_winners():
+    assert worldcup.round_of(32)["winner_basis"] == "rating_projection"
+    assert worldcup.bracket()["winner_basis"] == "rating_projection"
 
 
 def test_worldcup_closest_match_is_last():

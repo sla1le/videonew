@@ -6,54 +6,31 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   repo:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.13'
 
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+
       - name: Зависимости
-        run: python -m pip install --upgrade pip -r requirements.txt
+        run: python -m pip install -r requirements.txt
 
-      - name: Гигиена json
-        run: python ops/validate_data.py
+      - name: Node-зависимости
+        run: npm ci
 
-      - name: Самопроверка репозитория
-        run: python ops/selfcheck.py
-
-      - name: Тесты движка рейтинга
-        working-directory: rating
-        run: |
-          for t in test_*.py; do
-            echo "== $t"
-            python "$t"
-          done
-
-      - name: Тест структурного антислопа
-        run: python ops/neuroslop.py --self-test
-
-      - name: Тест SVG-визуализаций
-        run: python build/visuals.py --self-test
-
-      - name: Линтер описаний
-        run: python ops/desclint.py build/decks
-
-      - name: Стоп-лист фраз
-        run: python ops/slop.py build/decks
-
-      - name: Структурный антислоп
-        run: python ops/neuroslop.py build/decks --max-score 65 --warn-score 25
-
-      - name: Сборка дек без фотографий
-        run: |
-          python build/gen.py build/decks/_template.json
-          python build/lint.py build/html/_template.html build/theme.css
-          python build/gen.py build/decks/tm2004.json
-          python build/lint.py build/html/tm2004.html build/theme.css
-
-      - name: Эталонные кадры
-        run: python refs/verify.py
+      - name: Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Полная проверка репозитория, включая Chromium QA
+        run: make check

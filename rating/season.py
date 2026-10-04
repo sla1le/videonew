@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 
 import core
 
@@ -22,6 +23,14 @@ SEASONS = core._load("seasons_input.json")["seasons"]
 
 def available() -> list[str]:
     return sorted(SEASONS)
+
+
+def current_results() -> dict:
+    return {
+        "version": core.MODEL["version"],
+        "cutoff": core._load("seasons_input.json")["cutoff"],
+        "seasons": {year: solve_year(year) for year in available()},
+    }
 
 
 def solve_year(year: str | int) -> dict:
@@ -34,8 +43,10 @@ def solve_year(year: str | int) -> dict:
                 "blocked_by": season.get("blocked_by", []),
                 "legacy_result": season.get("legacy_result"),
                 "legacy_model": season.get("legacy_model")}
+    source = season.get("source")
+    core.validate_source(source, "source", f"сезон {year}")
     rows = core.season_solve(season["pool"])
-    return {"year": year, "status": "ok", "source": season.get("source"),
+    return {"year": year, "status": "ok", "source": source,
             "scope": season.get("scope"), "excluded": season.get("excluded", []),
             "published_top3": season.get("published_top3"), "rows": rows}
 
@@ -73,7 +84,10 @@ def print_year(result: dict) -> None:
             print(f"  старый результат по дореформенной модели: {result['legacy_result']}")
             print("  эти баллы несравнимы с остальными сезонами, в выпуск их брать нельзя")
         return
-    print(f"ЗОЛОТОЙ МИКРОФОН {year}   источник: {result.get('source')}")
+    source = result["source"]
+    print(f"ЗОЛОТОЙ МИКРОФОН {year}   источник: {source['description']}")
+    if not source["url"]:
+        print("  URL первоисточника не внесён")
     if result.get("scope"):
         print(f"объём оценки: {result['scope']}")
     print("-" * 86)
@@ -122,6 +136,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--all", action="store_true", help="все сезоны")
     parser.add_argument("--toty", action="store_true", help="сборная года")
     parser.add_argument("--json", action="store_true", help="машинный вывод")
+    parser.add_argument("--write", action="store_true", help="обновить data/seasons.json")
     args = parser.parse_args(argv)
 
     years = available() if args.all or not args.year else [args.year]
@@ -132,7 +147,12 @@ def main(argv: list[str] | None = None) -> int:
         if not args.json:
             (print_toty if args.toty else print_year)(item)
             print()
-    if args.json:
+    if args.write:
+        output = current_results()
+        path = Path(__file__).resolve().parent / "data" / "seasons.json"
+        path.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(f"записано {path}")
+    elif args.json:
         print(json.dumps(payload if len(payload) > 1 else payload[0], ensure_ascii=False, indent=2))
     return 0
 

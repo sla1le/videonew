@@ -62,7 +62,10 @@ def print_card(row: dict) -> None:
         print(f"  {core.STAT_LABELS[key]:<9} {value:>3}  {bar(value)}")
     print("-" * 52)
     for name, text in row["sources"].items():
-        print(f"  {name}: {text}")
+        print(f"  {name}: {text['description']}")
+        print(f"    URL: {text['url'] or 'не внесён'}; снимок: {text['captured_at'] or 'не указан'}")
+        if text["archive_url"]:
+            print(f"    Архив: {text['archive_url']}")
 
 
 def check() -> int:
@@ -100,6 +103,12 @@ def check() -> int:
             errors.append(f"{who}: точность {row['accuracy']} вне шкалы")
         for issue in artist.get("open_issues", []):
             warnings.append(f"{who}: {issue}")
+        for key in core.REQUIRED_SOURCES:
+            source = artist[key]
+            if source["status"] == "needs_url":
+                warnings.append(f"{who}: {key} описан, но URL ещё не внесён")
+            elif source["status"] == "editorial":
+                warnings.append(f"{who}: {key} является авторской оценкой")
 
     print(f"проверено артистов: {len(artists)}")
     for text in warnings:

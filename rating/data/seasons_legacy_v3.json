@@ -1,0 +1,42 @@
+{
+  "version": "3.0",
+  "cutoff": "Все официальные итоги сезона, опубликованные до 31 января следующего года",
+  "weights": {"T": 0.15, "S": 0.15, "D": 0.15, "H": 0.25, "I": 0.30},
+  "seasons": {
+    "2015": [
+      {"rank": 1, "name": "СКРИПТОНИТ", "pos": "CDM", "T": 84, "S": 96, "D": 90, "H": 83.32, "I": 96.00, "raw": 90.13, "ovr": 90},
+      {"rank": 2, "name": "ЛСП", "pos": "RW", "T": 84, "S": 86, "D": 82, "H": 96.00, "I": 79.75, "raw": 85.72, "ovr": 86, "tiebreak": {"count": 2, "best": 1}},
+      {"rank": 3, "name": "OXXXYMIRON", "pos": "CAM", "T": 96, "S": 82, "D": 94, "H": 75.32, "I": 89.00, "raw": 86.33, "ovr": 86, "tiebreak": {"count": 2, "best": 2}},
+      {"rank": 4, "name": "ATL", "ovr": 84},
+      {"rank": 5, "name": "КАСПИЙСКИЙ ГРУЗ", "ovr": 80},
+      {"rank": 6, "name": "4 ПОЗИЦИИ БРУНО", "ovr": 78},
+      {"rank": 7, "name": "PHARAOH", "ovr": 78},
+      {"rank": 8, "name": "ВЛАДИ", "ovr": 76},
+      {"rank": 9, "name": "HORUS", "ovr": 77},
+      {"rank": 10, "name": "ГРОТ", "ovr": 75},
+      {"rank": 11, "name": "GUF", "ovr": 74},
+      {"rank": 12, "name": "НОГГАНО", "ovr": 71}
+    ],
+    "2017": [
+      {"rank": 1, "name": "ЛСП", "pos": "RW", "T": 88, "S": 86, "D": 84, "H": 80.00, "I": 99.00, "raw": 88.40, "ovr": 88, "vote": 1},
+      {"rank": 2, "name": "PHARAOH", "pos": "LW", "T": 76, "S": 92, "D": 90, "H": 96.00, "I": 79.75, "raw": 86.62, "ovr": 87},
+      {"rank": 3, "name": "СКРИПТОНИТ", "pos": "CDM", "T": 86, "S": 96, "D": 90, "H": 74.42, "I": 86.00, "raw": 85.21, "ovr": 85, "vote": 2},
+      {"rank": 4, "name": "ХАСКИ", "ovr": 82},
+      {"rank": 5, "name": "ATL", "ovr": 78},
+      {"rank": 6, "name": "ЭЛДЖЕЙ", "ovr": 76},
+      {"rank": 7, "name": "ПОШЛАЯ МОЛЛИ", "ovr": 76},
+      {"rank": 8, "name": "АИГЕЛ", "ovr": 76},
+      {"rank": 9, "name": "FEDUK", "ovr": 75},
+      {"rank": 10, "name": "МАКС КОРЖ", "ovr": 75},
+      {"rank": 11, "name": "25/17", "ovr": 74},
+      {"rank": 12, "name": "КАСПИЙСКИЙ ГРУЗ", "ovr": 74},
+      {"rank": 13, "name": "OXXXYMIRON", "ovr": 75},
+      {"rank": 14, "name": "ГРИБЫ", "ovr": 74},
+      {"rank": 15, "name": "T-FEST", "ovr": 73},
+      {"rank": 16, "name": "СЛАВА КПСС", "ovr": 73},
+      {"rank": 17, "name": "FACE", "ovr": 70},
+      {"rank": 18, "name": "NOIZE MC", "ovr": 70}
+    ]
+  },
+  "legacy_2016_requires_recalculation": {"OXXXYMIRON": 91, "PHARAOH": 88, "БАСТА": 87, "MIYAGI": 82, "ЛСП": 78}
+}

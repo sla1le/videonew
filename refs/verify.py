@@ -7,10 +7,11 @@
 который молча поменялся, перестаёт быть эталоном. Когда картинок нет,
 проверка пропускается и не валит сборку.
 
-    python3 refs/verify.py
+    python3 refs/verify.py [--require-assets]
 """
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import io
@@ -21,6 +22,9 @@ TABLE = ROOT / "frames.csv"
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Сверка кадров с хешами refs/frames.csv")
+    parser.add_argument("--require-assets", action="store_true", help="завалить проверку, если отсутствует хотя бы один эталон")
+    args = parser.parse_args()
     if not TABLE.exists():
         print("НЕТ ЗАМЕРОВ: refs/frames.csv отсутствует, соберите его командой make refs")
         raise SystemExit(1)
@@ -44,12 +48,17 @@ def main() -> None:
 
     if present == 0:
         print(f"ПРОПУСК: картинок рядом нет, замеров в таблице {len(rows)}")
+        if args.require_assets:
+            raise SystemExit(1)
         return
 
     for line in bad:
         print("ПРОВАЛ", line)
     if bad:
         print(f"ЭТАЛОНЫ РАССОГЛАСОВАНЫ: {len(bad)} из {present}")
+        raise SystemExit(1)
+    if args.require_assets and missing:
+        print(f"ЭТАЛОНЫ НЕ ПОЛНЫ: проверено {present}, отсутствует {missing}")
         raise SystemExit(1)
     print(f"ЭТАЛОНЫ СОВПАДАЮТ: проверено {present}, нет на диске {missing}")
 

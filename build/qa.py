@@ -26,7 +26,7 @@
 from __future__ import annotations
 
 import re
-import sys
+import argparse
 from collections import Counter
 from pathlib import Path
 
@@ -181,18 +181,24 @@ def check_image(path: Path, report: Report) -> None:
 
 
 def main() -> None:
-    args = sys.argv[1:]
-    if not args:
-        raise SystemExit("использование: python3 qa.py <out_dir> [slides.html] [theme.css] | --refs <dir>")
+    parser = argparse.ArgumentParser(description="Проверка геометрии кадров ЭХО")
+    parser.add_argument("paths", nargs="*", help="каталог png, html и css либо --refs")
+    parser.add_argument("--refs", metavar="DIR", help="проверить изображения в каталоге")
+    parser.add_argument("--max-warnings", type=int, help="завалить проверку при большем числе предупреждений")
+    args = parser.parse_args()
+    if args.max_warnings is not None and args.max_warnings < 0:
+        parser.error("--max-warnings должен быть >= 0")
+    if args.refs:
+        out_dir = Path(args.refs)
+        html_path = css_path = None
+    elif args.paths:
+        out_dir = Path(args.paths[0])
+        html_path = Path(args.paths[1]) if len(args.paths) > 1 else None
+        css_path = Path(args.paths[2]) if len(args.paths) > 2 else None
+    else:
+        parser.error("передайте каталог кадров или --refs DIR")
 
     report = Report()
-    if args[0] == "--refs":
-        out_dir = Path(args[1])
-        html_path = css_path = None
-    else:
-        out_dir = Path(args[0])
-        html_path = Path(args[1]) if len(args) > 1 else None
-        css_path = Path(args[2]) if len(args) > 2 else None
 
     if html_path:
         check_text(html_path, css_path, report)
@@ -203,6 +209,8 @@ def main() -> None:
     for image in images:
         check_image(image, report)
 
+    if args.max_warnings is not None and len(report.warnings) > args.max_warnings:
+        report.fail(f"предупреждений {len(report.warnings)}, разрешено {args.max_warnings}")
     if report.failures:
         print(f"QA ПРОВАЛЕН: {len(report.failures)}, предупреждений {len(report.warnings)}")
         raise SystemExit(1)
