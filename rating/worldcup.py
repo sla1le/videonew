@@ -174,9 +174,30 @@ def pair_up(rows: list[dict]) -> list[dict]:
     return matches
 
 
-def round_of(size: int = 32) -> dict:
+def round_of(size: int = 32, previous_winners: list[str] | None = None) -> dict:
     data = table()
     rows = data["rows"]
+    if size not in ROUND_NAMES:
+        raise core.DataError(f"размер раунда {size} не поддерживается")
+    if size < 32:
+        previous_size = size * 2
+        if previous_winners is None:
+            return {
+                "format": "КУБОК АЛЬБОМОВ",
+                "ready": False,
+                "round": ROUND_NAMES[size],
+                "blocked_by": [f"передайте {size} победителей раунда {ROUND_NAMES[previous_size]} в порядке матчей"],
+                "matches": [],
+            }
+        if len(previous_winners) != size or len(set(previous_winners)) != size:
+            raise core.DataError(f"для раунда {size} нужно ровно {size} разных победителей")
+        by_key = {row["key"]: row for row in rows}
+        unknown = [key for key in previous_winners if key not in by_key]
+        if unknown:
+            raise core.DataError(f"неизвестные ключи победителей: {', '.join(unknown)}")
+        current = [by_key[key] for key in previous_winners]
+    else:
+        current = rows[:size]
     if size > len(rows):
         return {
             "format": "КУБОК АЛЬБОМОВ",
@@ -184,11 +205,11 @@ def round_of(size: int = 32) -> dict:
             "blocked_by": [f"в пуле {len(rows)} альбомов, для раунда нужно {size}"],
             "matches": [],
         }
-    current = rows[:size]
     return {
         "format": "КУБОК АЛЬБОМОВ",
         "ready": True,
         "round": ROUND_NAMES.get(size, str(size)),
+        "winner_basis": "rating_projection",
         "snapshot": data["snapshot"],
         "formula": data["formula"],
         "matches": pair_up(current),
@@ -217,6 +238,7 @@ def bracket() -> dict:
     return {
         "format": "КУБОК АЛЬБОМОВ",
         "ready": True,
+        "winner_basis": "rating_projection",
         "snapshot": data["snapshot"],
         "formula": data["formula"],
         "rounds": rounds,
@@ -247,6 +269,7 @@ def print_round(data: dict) -> None:
             print(f"  {item}")
         return
     print(f"КУБОК АЛЬБОМОВ  {data['round']}  снимок {data['snapshot']}")
+    print("Победители ниже рассчитаны по рейтингу и служат прогнозом")
     print()
     for match in data["matches"]:
         top, bottom = match["top"], match["bottom"]
@@ -264,6 +287,7 @@ def print_bracket(data: dict) -> None:
         for item in data["blocked_by"]:
             print(f"  {item}")
         return
+    print("Сетка рассчитана как прогноз по рейтингу, результаты голосования не внесены")
     for stage in data["rounds"]:
         print(f"== {stage['round']}")
         for match in stage["matches"]:
@@ -280,8 +304,10 @@ def print_bracket(data: dict) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="КУБОК АЛЬБОМОВ")
-    parser.add_argument("command", choices=["table", "seed", "r16", "r8", "bracket"])
+    parser.add_argument("command", choices=["table", "seed", "r16", "r8", "round", "bracket"])
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--winners", help="ключи победителей прошлого раунда через запятую, в порядке матчей")
+    parser.add_argument("--size", type=int, choices=sorted(ROUND_NAMES), help="число участников для команды round")
     args = parser.parse_args()
 
     if args.command in ("table", "seed"):
@@ -291,7 +317,14 @@ def main() -> None:
         data = round_of(32)
         printer = print_round
     elif args.command == "r8":
-        data = round_of(16)
+        winners = [key.strip() for key in args.winners.split(",") if key.strip()] if args.winners else None
+        data = round_of(16, winners)
+        printer = print_round
+    elif args.command == "round":
+        if args.size is None:
+            parser.error("для round укажите --size")
+        winners = [key.strip() for key in args.winners.split(",") if key.strip()] if args.winners else None
+        data = round_of(args.size, winners)
         printer = print_round
     else:
         data = bracket()

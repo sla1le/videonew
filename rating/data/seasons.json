@@ -1,42 +1,1044 @@
 {
-  "version": "3.0",
-  "cutoff": "Все официальные итоги сезона, опубликованные до 31 января следующего года",
-  "weights": {"T": 0.15, "S": 0.15, "D": 0.15, "H": 0.25, "I": 0.30},
+  "version": "4.1",
+  "cutoff": "Официальные итоги, опубликованные до 31 января следующего года",
   "seasons": {
-    "2015": [
-      {"rank": 1, "name": "СКРИПТОНИТ", "pos": "CDM", "T": 84, "S": 96, "D": 90, "H": 83.32, "I": 96.00, "raw": 90.13, "ovr": 90},
-      {"rank": 2, "name": "ЛСП", "pos": "RW", "T": 84, "S": 86, "D": 82, "H": 96.00, "I": 79.75, "raw": 85.72, "ovr": 86, "tiebreak": {"count": 2, "best": 1}},
-      {"rank": 3, "name": "OXXXYMIRON", "pos": "CAM", "T": 96, "S": 82, "D": 94, "H": 75.32, "I": 89.00, "raw": 86.33, "ovr": 86, "tiebreak": {"count": 2, "best": 2}},
-      {"rank": 4, "name": "ATL", "ovr": 84},
-      {"rank": 5, "name": "КАСПИЙСКИЙ ГРУЗ", "ovr": 80},
-      {"rank": 6, "name": "4 ПОЗИЦИИ БРУНО", "ovr": 78},
-      {"rank": 7, "name": "PHARAOH", "ovr": 78},
-      {"rank": 8, "name": "ВЛАДИ", "ovr": 76},
-      {"rank": 9, "name": "HORUS", "ovr": 77},
-      {"rank": 10, "name": "ГРОТ", "ovr": 75},
-      {"rank": 11, "name": "GUF", "ovr": 74},
-      {"rank": 12, "name": "НОГГАНО", "ovr": 71}
-    ],
-    "2017": [
-      {"rank": 1, "name": "ЛСП", "pos": "RW", "T": 88, "S": 86, "D": 84, "H": 80.00, "I": 99.00, "raw": 88.40, "ovr": 88, "vote": 1},
-      {"rank": 2, "name": "PHARAOH", "pos": "LW", "T": 76, "S": 92, "D": 90, "H": 96.00, "I": 79.75, "raw": 86.62, "ovr": 87},
-      {"rank": 3, "name": "СКРИПТОНИТ", "pos": "CDM", "T": 86, "S": 96, "D": 90, "H": 74.42, "I": 86.00, "raw": 85.21, "ovr": 85, "vote": 2},
-      {"rank": 4, "name": "ХАСКИ", "ovr": 82},
-      {"rank": 5, "name": "ATL", "ovr": 78},
-      {"rank": 6, "name": "ЭЛДЖЕЙ", "ovr": 76},
-      {"rank": 7, "name": "ПОШЛАЯ МОЛЛИ", "ovr": 76},
-      {"rank": 8, "name": "АИГЕЛ", "ovr": 76},
-      {"rank": 9, "name": "FEDUK", "ovr": 75},
-      {"rank": 10, "name": "МАКС КОРЖ", "ovr": 75},
-      {"rank": 11, "name": "25/17", "ovr": 74},
-      {"rank": 12, "name": "КАСПИЙСКИЙ ГРУЗ", "ovr": 74},
-      {"rank": 13, "name": "OXXXYMIRON", "ovr": 75},
-      {"rank": 14, "name": "ГРИБЫ", "ovr": 74},
-      {"rank": 15, "name": "T-FEST", "ovr": 73},
-      {"rank": 16, "name": "СЛАВА КПСС", "ovr": 73},
-      {"rank": 17, "name": "FACE", "ovr": 70},
-      {"rank": 18, "name": "NOIZE MC", "ovr": 70}
-    ]
-  },
-  "legacy_2016_requires_recalculation": {"OXXXYMIRON": 91, "PHARAOH": 88, "БАСТА": 87, "MIYAGI": 82, "ЛСП": 78}
+    "2015": {
+      "year": "2015",
+      "status": "ok",
+      "source": {
+        "kind": "published_annual_lists",
+        "url": null,
+        "captured_at": null,
+        "value": {
+          "year": "2015",
+          "scope": "итоговые списки треков и альбомов"
+        },
+        "archive_url": null,
+        "description": "the-flow.ru, итоги 2015 года, топ треков и топ альбомов",
+        "status": "needs_url"
+      },
+      "scope": null,
+      "excluded": [],
+      "published_top3": [
+        [
+          "СКРИПТОНИТ",
+          90
+        ],
+        [
+          "ЛСП",
+          86
+        ],
+        [
+          "OXXXYMIRON",
+          86
+        ]
+      ],
+      "rows": [
+        {
+          "n": "СКРИПТОНИТ",
+          "pos": "CDM",
+          "T": 84,
+          "S": 96,
+          "D": 90,
+          "tr": 3,
+          "alb": 1,
+          "vote": null,
+          "spots": [
+            3,
+            1
+          ],
+          "H": 83.32,
+          "I": 96.0,
+          "raw": 90.13,
+          "ovr": 90,
+          "tie_count": 2,
+          "tie_best": 1,
+          "place": 1
+        },
+        {
+          "n": "ЛСП",
+          "pos": "RW",
+          "T": 84,
+          "S": 86,
+          "D": 82,
+          "tr": 1,
+          "alb": 5,
+          "vote": null,
+          "role": "lead",
+          "spots": [
+            1,
+            5
+          ],
+          "H": 96.0,
+          "I": 79.75,
+          "raw": 85.72,
+          "ovr": 86,
+          "tie_count": 2,
+          "tie_best": 1,
+          "tiebreak": true,
+          "place": 2
+        },
+        {
+          "n": "OXXXYMIRON",
+          "pos": "CAM",
+          "T": 96,
+          "S": 82,
+          "D": 94,
+          "tr": 6,
+          "alb": 2,
+          "vote": null,
+          "spots": [
+            6,
+            2
+          ],
+          "H": 75.32,
+          "I": 89.0,
+          "raw": 86.33,
+          "ovr": 86,
+          "tie_count": 2,
+          "tie_best": 2,
+          "tiebreak": true,
+          "place": 3
+        },
+        {
+          "n": "ATL",
+          "pos": "CDM",
+          "T": 90,
+          "S": 92,
+          "D": 82,
+          "tr": 5,
+          "alb": 3,
+          "vote": null,
+          "spots": [
+            5,
+            3
+          ],
+          "H": 77.42,
+          "I": 84.91,
+          "raw": 84.43,
+          "ovr": 84,
+          "tie_count": 2,
+          "tie_best": 3,
+          "place": 4
+        },
+        {
+          "n": "КАСПИЙСКИЙ ГРУЗ",
+          "pos": "CB",
+          "T": 86,
+          "S": 84,
+          "D": 84,
+          "tr": 10,
+          "alb": 4,
+          "vote": null,
+          "spots": [
+            10,
+            4
+          ],
+          "H": 69.42,
+          "I": 82.0,
+          "raw": 80.06,
+          "ovr": 80,
+          "tie_count": 2,
+          "tie_best": 4,
+          "place": 5
+        },
+        {
+          "n": "4 ПОЗИЦИИ БРУНО",
+          "pos": "CDM",
+          "T": 80,
+          "S": 88,
+          "D": 72,
+          "tr": 4,
+          "alb": 10,
+          "vote": null,
+          "spots": [
+            4,
+            10
+          ],
+          "H": 80.0,
+          "I": 72.75,
+          "raw": 77.82,
+          "ovr": 78,
+          "tie_count": 2,
+          "tie_best": 4,
+          "tiebreak": true,
+          "place": 6
+        },
+        {
+          "n": "PHARAOH",
+          "pos": "LW",
+          "T": 72,
+          "S": 88,
+          "D": 86,
+          "tr": 2,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            2
+          ],
+          "H": 88.0,
+          "I": 62.0,
+          "raw": 77.5,
+          "ovr": 78,
+          "tie_count": 1,
+          "tie_best": 2,
+          "tiebreak": true,
+          "place": 7
+        },
+        {
+          "n": "ВЛАДИ",
+          "pos": "CAM",
+          "T": 84,
+          "S": 78,
+          "D": 76,
+          "tr": 8,
+          "alb": 7,
+          "vote": null,
+          "role": "colead",
+          "spots": [
+            8,
+            7
+          ],
+          "H": 69.0,
+          "I": 76.35,
+          "raw": 75.85,
+          "ovr": 76,
+          "tie_count": 2,
+          "tie_best": 7,
+          "tiebreak": true,
+          "place": 8
+        },
+        {
+          "n": "HORUS",
+          "pos": "CAM",
+          "T": 88,
+          "S": 82,
+          "D": 76,
+          "tr": 9,
+          "alb": 9,
+          "vote": null,
+          "spots": [
+            9,
+            9
+          ],
+          "H": 70.64,
+          "I": 73.81,
+          "raw": 76.7,
+          "ovr": 77,
+          "tie_count": 2,
+          "tie_best": 9,
+          "tiebreak": true,
+          "place": 9
+        },
+        {
+          "n": "ГРОТ",
+          "pos": "CB",
+          "T": 82,
+          "S": 76,
+          "D": 74,
+          "tr": 8,
+          "alb": 6,
+          "vote": null,
+          "role": "colead",
+          "spots": [
+            8,
+            6
+          ],
+          "H": 69.0,
+          "I": 77.91,
+          "raw": 75.42,
+          "ovr": 75,
+          "tie_count": 2,
+          "tie_best": 6,
+          "place": 10
+        },
+        {
+          "n": "GUF",
+          "pos": "CB",
+          "T": 76,
+          "S": 84,
+          "D": 78,
+          "tr": null,
+          "alb": 8,
+          "vote": null,
+          "spots": [
+            8
+          ],
+          "H": 62.0,
+          "I": 75.0,
+          "raw": 73.7,
+          "ovr": 74,
+          "tie_count": 1,
+          "tie_best": 8,
+          "place": 11
+        },
+        {
+          "n": "НОГГАНО",
+          "pos": "ST",
+          "T": 74,
+          "S": 70,
+          "D": 84,
+          "tr": 7,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            7
+          ],
+          "H": 73.54,
+          "I": 62.0,
+          "raw": 71.19,
+          "ovr": 71,
+          "tie_count": 1,
+          "tie_best": 7,
+          "place": 12
+        }
+      ]
+    },
+    "2016": {
+      "year": "2016",
+      "status": "needs_sources",
+      "rows": [],
+      "blocked_by": [
+        "нужен опубликованный топ-10 треков 2016 года",
+        "нужен опубликованный топ-10 альбомов 2016 года",
+        "нужны судейские баллы ТЕКСТЫ, ЗВУК, ПОДАЧА от автора на весь пул"
+      ],
+      "legacy_result": {
+        "OXXXYMIRON": 91,
+        "PHARAOH": 88,
+        "БАСТА": 87,
+        "MIYAGI": 82,
+        "ЛСП": 78
+      },
+      "legacy_model": "старая модель до v3, баллы несравнимы с 2015 и 2017"
+    },
+    "2017": {
+      "year": "2017",
+      "status": "ok",
+      "source": {
+        "kind": "published_annual_lists",
+        "url": null,
+        "captured_at": null,
+        "value": {
+          "year": "2017",
+          "scope": "итоговые списки треков и альбомов"
+        },
+        "archive_url": null,
+        "description": "the-flow.ru, итоги 2017 года, топ треков и топ альбомов",
+        "status": "needs_url"
+      },
+      "scope": null,
+      "excluded": [],
+      "published_top3": [
+        [
+          "ЛСП",
+          88
+        ],
+        [
+          "PHARAOH",
+          87
+        ],
+        [
+          "СКРИПТОНИТ",
+          85
+        ]
+      ],
+      "rows": [
+        {
+          "n": "ЛСП",
+          "pos": "RW",
+          "T": 88,
+          "S": 86,
+          "D": 84,
+          "tr": 4,
+          "alb": 1,
+          "vote": 1,
+          "spots": [
+            4,
+            1,
+            1
+          ],
+          "H": 80.0,
+          "I": 99.0,
+          "raw": 88.4,
+          "ovr": 88,
+          "tie_count": 3,
+          "tie_best": 1,
+          "place": 1
+        },
+        {
+          "n": "PHARAOH",
+          "pos": "LW",
+          "T": 76,
+          "S": 92,
+          "D": 90,
+          "tr": 1,
+          "alb": 5,
+          "vote": null,
+          "spots": [
+            1,
+            5
+          ],
+          "H": 96.0,
+          "I": 79.75,
+          "raw": 86.62,
+          "ovr": 87,
+          "tie_count": 2,
+          "tie_best": 1,
+          "place": 2
+        },
+        {
+          "n": "СКРИПТОНИТ",
+          "pos": "CDM",
+          "T": 86,
+          "S": 96,
+          "D": 90,
+          "tr": 5,
+          "alb": 4,
+          "vote": 2,
+          "role": "colead",
+          "spots": [
+            5,
+            4,
+            7,
+            2
+          ],
+          "H": 74.42,
+          "I": 86.0,
+          "raw": 85.21,
+          "ovr": 85,
+          "tie_count": 4,
+          "tie_best": 2,
+          "place": 3
+        },
+        {
+          "n": "ХАСКИ",
+          "pos": "CAM",
+          "T": 92,
+          "S": 84,
+          "D": 88,
+          "tr": 10,
+          "alb": 3,
+          "vote": null,
+          "spots": [
+            10,
+            3
+          ],
+          "H": 69.42,
+          "I": 84.91,
+          "raw": 82.43,
+          "ovr": 82,
+          "tie_count": 2,
+          "tie_best": 3,
+          "place": 4
+        },
+        {
+          "n": "ATL",
+          "pos": "CDM",
+          "T": 88,
+          "S": 88,
+          "D": 80,
+          "tr": 8,
+          "alb": 10,
+          "vote": null,
+          "spots": [
+            8,
+            10
+          ],
+          "H": 72.0,
+          "I": 72.75,
+          "raw": 78.22,
+          "ovr": 78,
+          "tie_count": 2,
+          "tie_best": 8,
+          "place": 5
+        },
+        {
+          "n": "ЭЛДЖЕЙ",
+          "pos": "ST",
+          "T": 68,
+          "S": 86,
+          "D": 88,
+          "tr": 2,
+          "alb": null,
+          "vote": null,
+          "role": "colead",
+          "spots": [
+            2
+          ],
+          "H": 85.0,
+          "I": 62.0,
+          "raw": 76.15,
+          "ovr": 76,
+          "tie_count": 1,
+          "tie_best": 2,
+          "tiebreak": true,
+          "place": 6
+        },
+        {
+          "n": "ПОШЛАЯ МОЛЛИ",
+          "pos": "LW",
+          "T": 70,
+          "S": 74,
+          "D": 82,
+          "tr": null,
+          "alb": 2,
+          "vote": null,
+          "spots": [
+            2
+          ],
+          "H": 62.0,
+          "I": 89.0,
+          "raw": 76.1,
+          "ovr": 76,
+          "tie_count": 1,
+          "tie_best": 2,
+          "tiebreak": true,
+          "place": 7
+        },
+        {
+          "n": "АИГЕЛ",
+          "pos": "CAM",
+          "T": 86,
+          "S": 88,
+          "D": 84,
+          "tr": 6,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            6
+          ],
+          "H": 75.32,
+          "I": 62.0,
+          "raw": 76.13,
+          "ovr": 76,
+          "tie_count": 1,
+          "tie_best": 6,
+          "tiebreak": true,
+          "place": 8
+        },
+        {
+          "n": "МАКС КОРЖ",
+          "pos": "ST",
+          "T": 74,
+          "S": 76,
+          "D": 84,
+          "tr": null,
+          "alb": 6,
+          "vote": 3,
+          "spots": [
+            6,
+            3
+          ],
+          "H": 62.0,
+          "I": 80.91,
+          "raw": 74.87,
+          "ovr": 75,
+          "tie_count": 2,
+          "tie_best": 3,
+          "tiebreak": true,
+          "place": 9
+        },
+        {
+          "n": "FEDUK",
+          "pos": "ST",
+          "T": 70,
+          "S": 80,
+          "D": 82,
+          "tr": 2,
+          "alb": null,
+          "vote": null,
+          "role": "colead",
+          "spots": [
+            2
+          ],
+          "H": 85.0,
+          "I": 62.0,
+          "raw": 74.65,
+          "ovr": 75,
+          "tie_count": 1,
+          "tie_best": 2,
+          "tiebreak": true,
+          "place": 10
+        },
+        {
+          "n": "OXXXYMIRON",
+          "pos": "CAM",
+          "T": 96,
+          "S": 80,
+          "D": 92,
+          "tr": null,
+          "alb": null,
+          "vote": 4,
+          "spots": [
+            4
+          ],
+          "H": 62.0,
+          "I": 64.0,
+          "raw": 74.9,
+          "ovr": 75,
+          "tie_count": 1,
+          "tie_best": 4,
+          "tiebreak": true,
+          "place": 11
+        },
+        {
+          "n": "25/17",
+          "pos": "CB",
+          "T": 86,
+          "S": 78,
+          "D": 78,
+          "tr": null,
+          "alb": 8,
+          "vote": null,
+          "spots": [
+            8
+          ],
+          "H": 62.0,
+          "I": 75.0,
+          "raw": 74.3,
+          "ovr": 74,
+          "tie_count": 1,
+          "tie_best": 8,
+          "tiebreak": true,
+          "place": 12
+        },
+        {
+          "n": "КАСПИЙСКИЙ ГРУЗ",
+          "pos": "CB",
+          "T": 84,
+          "S": 80,
+          "D": 80,
+          "tr": null,
+          "alb": 9,
+          "vote": null,
+          "spots": [
+            9
+          ],
+          "H": 62.0,
+          "I": 73.81,
+          "raw": 74.24,
+          "ovr": 74,
+          "tie_count": 1,
+          "tie_best": 9,
+          "tiebreak": true,
+          "place": 13
+        },
+        {
+          "n": "ГРИБЫ",
+          "pos": "ST",
+          "T": 66,
+          "S": 82,
+          "D": 80,
+          "tr": 3,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            3
+          ],
+          "H": 83.32,
+          "I": 62.0,
+          "raw": 73.63,
+          "ovr": 74,
+          "tie_count": 1,
+          "tie_best": 3,
+          "tiebreak": true,
+          "place": 14
+        },
+        {
+          "n": "T-FEST",
+          "pos": "RW",
+          "T": 76,
+          "S": 82,
+          "D": 82,
+          "tr": 5,
+          "alb": null,
+          "vote": null,
+          "role": "colead",
+          "spots": [
+            5
+          ],
+          "H": 74.42,
+          "I": 62.0,
+          "raw": 73.21,
+          "ovr": 73,
+          "tie_count": 1,
+          "tie_best": 5,
+          "tiebreak": true,
+          "place": 15
+        },
+        {
+          "n": "СЛАВА КПСС",
+          "pos": "CAM",
+          "T": 88,
+          "S": 70,
+          "D": 80,
+          "tr": 7,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            7
+          ],
+          "H": 73.54,
+          "I": 62.0,
+          "raw": 72.69,
+          "ovr": 73,
+          "tie_count": 1,
+          "tie_best": 7,
+          "tiebreak": true,
+          "place": 16
+        },
+        {
+          "n": "NOIZE MC",
+          "pos": "CAM",
+          "T": 84,
+          "S": 74,
+          "D": 80,
+          "tr": null,
+          "alb": null,
+          "vote": 5,
+          "spots": [
+            5
+          ],
+          "H": 62.0,
+          "I": 63.0,
+          "raw": 70.1,
+          "ovr": 70,
+          "tie_count": 1,
+          "tie_best": 5,
+          "tiebreak": true,
+          "place": 17
+        },
+        {
+          "n": "FACE",
+          "pos": "ST",
+          "T": 62,
+          "S": 74,
+          "D": 88,
+          "tr": 9,
+          "alb": 48,
+          "vote": null,
+          "spots": [
+            9
+          ],
+          "H": 70.64,
+          "I": 62.0,
+          "raw": 69.86,
+          "ovr": 70,
+          "tie_count": 1,
+          "tie_best": 9,
+          "tiebreak": true,
+          "place": 18
+        }
+      ]
+    },
+    "2018": {
+      "year": "2018",
+      "status": "ok",
+      "source": {
+        "kind": "published_annual_lists",
+        "url": null,
+        "captured_at": null,
+        "value": {
+          "year": "2018",
+          "scope": "в зачёте рэп-сцена"
+        },
+        "archive_url": null,
+        "description": "the-flow.ru, итоги 2018: 50 лучших треков и 50 отечественных альбомов",
+        "status": "needs_url"
+      },
+      "scope": "в зачёте рэп-сцена",
+      "excluded": [
+        {
+          "n": "МОНЕТОЧКА",
+          "tr": 1,
+          "alb": 1,
+          "why": "первые места в обоих топах, вне рэп-зачёта"
+        },
+        {
+          "n": "EIGHTEEN",
+          "tr": 5,
+          "alb": null,
+          "why": "поп-вокал"
+        },
+        {
+          "n": "ГРЕЧКА",
+          "tr": 9,
+          "alb": null,
+          "why": "поп-вокал"
+        }
+      ],
+      "published_top3": [
+        [
+          "GONE.FLUDD",
+          86
+        ],
+        [
+          "MNOGOZNAAL",
+          81
+        ],
+        [
+          "BOULEVARD DEPO",
+          80
+        ]
+      ],
+      "rows": [
+        {
+          "n": "GONE.FLUDD",
+          "pos": "LW",
+          "T": 72,
+          "S": 89,
+          "D": 87,
+          "tr": 2,
+          "alb": 2,
+          "vote": null,
+          "spots": [
+            2,
+            2,
+            7
+          ],
+          "H": 88.0,
+          "I": 89.0,
+          "raw": 85.9,
+          "ovr": 86,
+          "tie_count": 3,
+          "tie_best": 2,
+          "place": 1
+        },
+        {
+          "n": "MNOGOZNAAL",
+          "pos": "CDM",
+          "T": 86,
+          "S": 86,
+          "D": 80,
+          "tr": 10,
+          "alb": 3,
+          "vote": null,
+          "spots": [
+            10,
+            3
+          ],
+          "H": 69.42,
+          "I": 84.91,
+          "raw": 80.63,
+          "ovr": 81,
+          "tie_count": 2,
+          "tie_best": 3,
+          "tiebreak": true,
+          "place": 2
+        },
+        {
+          "n": "BOULEVARD DEPO",
+          "pos": "RW",
+          "T": 80,
+          "S": 86,
+          "D": 85,
+          "tr": 6,
+          "alb": 5,
+          "vote": null,
+          "spots": [
+            6,
+            5
+          ],
+          "H": 75.32,
+          "I": 79.75,
+          "raw": 80.4,
+          "ovr": 80,
+          "tie_count": 2,
+          "tie_best": 5,
+          "tiebreak": true,
+          "place": 3
+        },
+        {
+          "n": "ХАСКИ",
+          "pos": "CAM",
+          "T": 92,
+          "S": 84,
+          "D": 88,
+          "tr": 3,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            3
+          ],
+          "H": 83.32,
+          "I": 62.0,
+          "raw": 79.03,
+          "ovr": 79,
+          "tie_count": 1,
+          "tie_best": 3,
+          "place": 4
+        },
+        {
+          "n": "HORUS",
+          "pos": "CAM",
+          "T": 88,
+          "S": 82,
+          "D": 76,
+          "tr": null,
+          "alb": 4,
+          "vote": null,
+          "spots": [
+            4
+          ],
+          "H": 62.0,
+          "I": 82.0,
+          "raw": 77.0,
+          "ovr": 77,
+          "tie_count": 1,
+          "tie_best": 4,
+          "place": 5
+        },
+        {
+          "n": "ЛАУД",
+          "pos": "CDM",
+          "T": 66,
+          "S": 88,
+          "D": 74,
+          "tr": 6,
+          "alb": 9,
+          "vote": null,
+          "role": "colead",
+          "spots": [
+            6,
+            9
+          ],
+          "H": 72.32,
+          "I": 73.81,
+          "raw": 74.42,
+          "ovr": 74,
+          "tie_count": 2,
+          "tie_best": 6,
+          "tiebreak": true,
+          "place": 6
+        },
+        {
+          "n": "NOIZE MC",
+          "pos": "CAM",
+          "T": 84,
+          "S": 74,
+          "D": 80,
+          "tr": null,
+          "alb": 6,
+          "vote": null,
+          "spots": [
+            6
+          ],
+          "H": 62.0,
+          "I": 77.91,
+          "raw": 74.57,
+          "ovr": 75,
+          "tie_count": 1,
+          "tie_best": 6,
+          "tiebreak": true,
+          "place": 7
+        },
+        {
+          "n": "MARKUL",
+          "pos": "CM",
+          "T": 78,
+          "S": 84,
+          "D": 80,
+          "tr": null,
+          "alb": 8,
+          "vote": null,
+          "spots": [
+            8
+          ],
+          "H": 62.0,
+          "I": 75.0,
+          "raw": 74.3,
+          "ovr": 74,
+          "tie_count": 1,
+          "tie_best": 8,
+          "tiebreak": true,
+          "place": 8
+        },
+        {
+          "n": "BIG BABY TAPE",
+          "pos": "ST",
+          "T": 62,
+          "S": 84,
+          "D": 86,
+          "tr": 4,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            4
+          ],
+          "H": 80.0,
+          "I": 62.0,
+          "raw": 73.4,
+          "ovr": 73,
+          "tie_count": 1,
+          "tie_best": 4,
+          "tiebreak": true,
+          "place": 9
+        },
+        {
+          "n": "ANACONDAZ",
+          "pos": "CB",
+          "T": 84,
+          "S": 74,
+          "D": 78,
+          "tr": null,
+          "alb": 10,
+          "vote": null,
+          "spots": [
+            10
+          ],
+          "H": 62.0,
+          "I": 72.75,
+          "raw": 72.72,
+          "ovr": 73,
+          "tie_count": 1,
+          "tie_best": 10,
+          "tiebreak": true,
+          "place": 10
+        },
+        {
+          "n": "ТИМА БЕЛОРУССКИХ",
+          "pos": "ST",
+          "T": 62,
+          "S": 74,
+          "D": 78,
+          "tr": 7,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            7
+          ],
+          "H": 73.54,
+          "I": 62.0,
+          "raw": 69.09,
+          "ovr": 69,
+          "tie_count": 1,
+          "tie_best": 7,
+          "tiebreak": true,
+          "place": 11
+        },
+        {
+          "n": "MATRANG",
+          "pos": "ST",
+          "T": 64,
+          "S": 80,
+          "D": 78,
+          "tr": 8,
+          "alb": null,
+          "vote": null,
+          "spots": [
+            8
+          ],
+          "H": 72.0,
+          "I": 62.0,
+          "raw": 69.9,
+          "ovr": 70,
+          "tie_count": 1,
+          "tie_best": 8,
+          "tiebreak": true,
+          "place": 12
+        }
+      ]
+    }
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "echorate-videonew",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "private": true,
   "description": "Конвейер рейтинговых видео ЭХО: генератор кадров, рендер и проверки",
   "engines": {
@@ -11,6 +11,6 @@
     "browser": "playwright install chromium"
   },
   "devDependencies": {
-    "playwright": "^1.47.0"
+    "playwright": "1.63.0"
   }
 }
